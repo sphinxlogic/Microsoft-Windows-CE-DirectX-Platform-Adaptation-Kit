@@ -1,0 +1,160 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include <windows.h>
+#include "resource.h"
+#include "support.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include "windows.h"
+#undef APSTUDIO_HIDDEN_SYMBOLS
+#include "dxview.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_DIRECTX             ICON    DISCARDABLE     dxview.ico
+IDI_CAPS                ICON    DISCARDABLE     folder.ico
+IDI_CAPSOPEN            ICON    DISCARDABLE     folderop.ico
+IDI_DIRECTX_NODE        ICON    DISCARDABLE     dxnode.ico
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+ID_MENU MENU DISCARDABLE
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "&About",                      IDM_ABOUT
+        MENUITEM SEPARATOR
+
+#ifdef SUPPORT_FULL_PRINTING
+        MENUITEM "&Print Caps",                 IDM_PRINT
+        MENUITEM "Print &All Caps",             IDM_PRINTALL
+        MENUITEM "Print to &File",              IDM_PRINTTOFILE
+#else
+        MENUITEM "&Print Current View to File", IDM_PRINTTOFILE
+#endif
+        MENUITEM SEPARATOR
+        MENUITEM "E&xit",                       IDM_EXIT
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "A&vailable caps only",        IDM_VIEWAVAIL
+        MENUITEM "&All caps",                   IDM_VIEWALL
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+ABOUT DIALOG DISCARDABLE  0, 0, 191, 80
+STYLE DS_MODALFRAME | WS_VISIBLE | WS_CAPTION | WS_SYSMENU | WS_POPUP
+CAPTION "About DXView"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "&OK",IDOK,132,58,50,14
+    LTEXT           "DirectX Device Viewer for Windows CE",-1,15,14,165,8
+    LTEXT           "Copyright © 1995-2000 Microsoft Corporation",-1,15,28,
+                    165,8
+    LTEXT           "Version",-1,15,42,24,8
+    LTEXT           "1.0",-1,40,42,66,8
+END
+
+IDD_ABORTPRINTDLG DIALOG DISCARDABLE  40, 40, 120, 40
+STYLE WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+FONT 8, "MS Sans Serif"
+BEGIN
+    CTEXT           "Cancel Printing...",-1,4,6,103,12
+    DEFPUSHBUTTON   "&Cancel",IDCANCEL,44,22,32,14,WS_GROUP
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Cursor
+//
+
+IDC_SPLIT               CURSOR  DISCARDABLE     "Split.cur"
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE
+BEGIN
+    "#define APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "#include ""windows.h""\r\n"
+    "#undef APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "#include ""dxview.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE
+BEGIN
+    IDS_PRINT_WARNING       "Print Warning"
+    IDS_PRINT_NEEDSELECT    "Unable to print!  There is no current selection."
+    IDS_PRINT_NOROOT        "Unable to print!  DX View Tree is not properly set up."
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

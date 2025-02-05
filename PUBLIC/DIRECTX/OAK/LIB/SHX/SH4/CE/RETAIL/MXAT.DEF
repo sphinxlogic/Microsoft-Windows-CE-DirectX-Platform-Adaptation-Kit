@@ -1,0 +1,16 @@
+LIBRARY MXAT
+
+EXPORTS
+
+	MIX_Init
+    MIX_Deinit
+    MIX_Open
+    MIX_Close
+    MIX_Read
+    MIX_Write
+    MIX_Seek
+    MIX_PowerDown
+    MIX_PowerUp
+    MIX_IOControl
+
+	DllMain

@@ -1,0 +1,38 @@
+!IF 0
+--------------------------------------------------------------------------------
+
+    Windows CE DSPLAY
+    Wave file player applet for DirectSound
+
+    Copyright (c) 1998, Microsoft Corporation
+
+--------------------------------------------------------------------------------
+!ENDIF
+
+WINCEOEM=1
+
+TARGETNAME=dsplay
+
+INCLUDES=$(_COMMONOAKROOT)\inc
+
+
+!ifdef DOSYSGEN
+
+TARGETTYPE=LIBRARY
+TARGETDEFNAME=$(TARGETNAME)
+
+!else
+
+TARGETTYPE=PROGRAM
+EXEENTRY=WinMain
+
+TARGETLIBS= \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\dsound.lib
+
+!endif
+
+SOURCES= \
+	dsplay.cpp \
+	ceshio.cpp
+

@@ -1,0 +1,28 @@
+TARGETNAME=igs5000
+
+
+!ifdef DOSYSGEN
+
+TARGETTYPE=LIBRARY
+TARGETDEFNAME=$(TARGETNAME)
+WINCETARGETFILE0=$(_RELEASELIBDIR)\$(TARGETDEFNAME).def
+
+!else
+
+
+TARGETTYPE=DYNLINK
+
+TARGETLIBS=$(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib
+SOURCELIBS= \
+   $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\wavemdd.lib \
+   $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib \
+   $(_PUBLICROOT)\directx\oak\lib\$(_CPUINDPATH)\IrqMap.lib 
+   
+DLLENTRY=dllentry
+
+!endif
+
+
+INCLUDES=..\..\inc
+
+SOURCES=wavepdd.c

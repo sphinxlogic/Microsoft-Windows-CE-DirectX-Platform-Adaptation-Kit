@@ -1,0 +1,67 @@
+!IF 0
+-------------------------------------------------------------------
+
+Copyright (c) 1997-2000  Microsoft Corporation
+
+Module Name:
+
+    sources.
+
+Abstract:
+
+        WinCE IGS5000 Display Driver
+
+-------------------------------------------------------------------
+!ENDIF
+
+TARGETNAME=ddi_igs5
+TARGETTYPE=LIBRARY
+TARGETDEFNAME=$(TARGETNAME)
+WINCETARGETFILE0=$(_RELEASELIBDIR)\$(TARGETDEFNAME).def
+
+CDEFINES=$(CDEFINES) -DDDI -D$(_TGTPLAT)
+
+# Enable a number of software-accelerated blts
+
+#-------------------------------------------------------------------
+#1. 2. 3. & 4. below are IGS modified defines, choose one to compile
+#-------------------------------------------------------------------
+
+#1. Microsoft original defines + PCI_BUS
+#CDEFINES=$(CDEFINES) -DFB16BPP  -DTVOUT -DENABLE_EMULATION -DINTERPOLATION -DENABLE_ACCELERATION -DTEST_PERFORMANCE -DPCI_BUS
+CDEFINES=$(CDEFINES) -DFB16BPP  -DTVOUT -DENABLE_EMULATION -DENABLE_ACCELERATION -DTEST_PERFORMANCE -DPCI_BUS -DVIDEOPORT_SUPPORT
+
+#2. Microsoft original defines + PCI_BUS + DUSE_MEMORY_MAPPED_PORTS
+#CDEFINES=$(CDEFINES) -DFB16BPP  -DTVOUT -DENABLE_EMULATION -DINTERPOLATION -DENABLE_ACCELERATION -DTEST_PERFORMANCE -DPCI_BUS -DUSE_MEMORY_MAPPED_PORTS
+
+#3. Microsoft original defines + (for VL bus)
+#CDEFINES=$(CDEFINES) -DFB16BPP  -DTVOUT -DENABLE_EMULATION -DINTERPOLATION -DENABLE_ACCELERATION -DTEST_PERFORMANCE
+
+#4. Microsoft original defines + DUSE_MEMORY_MAPPED_PORTS (for VL Bus)
+#CDEFINES=$(CDEFINES) -DFB16BPP  -DTVOUT -DENABLE_EMULATION -DINTERPOLATION -DENABLE_ACCELERATION -DTEST_PERFORMANCE -DUSE_MEMORY_MAPPED_PORTS
+
+#------------------------------------------------------------------
+
+PRECOMPILED_INCLUDE=precomp.h
+PRECOMPILED_PCH=precomp.pch
+PRECOMPILED_CXX=1
+
+SOURCES= \
+    halvpe.cpp \
+    Config.cpp \
+    Misc.cpp \
+    Cursor.cpp \
+    Blt.cpp \
+    Line.cpp \
+    Surf.cpp \
+    ioport.cpp \
+    gpevga.cpp \
+    halcaps.cpp \
+    haldd.cpp \
+    halsurf.cpp \
+    halpalette.cpp \
+    haligs.cpp
+
+INCLUDES=..\..\..\inc; \
+	 $(_TARGETPLATROOT)\inc; \
+         $(_PUBLICROOT)\directx\oak\drivers\inc;

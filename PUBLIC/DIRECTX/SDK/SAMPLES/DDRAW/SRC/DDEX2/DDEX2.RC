@@ -1,0 +1,4 @@
+#include "resource.h"
+
+BACK            BITMAP  BACK.BMP
+IDI_MAIN_ICON   ICON    "DirectX.ico"

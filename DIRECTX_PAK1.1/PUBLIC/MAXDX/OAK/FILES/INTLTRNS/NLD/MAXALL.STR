@@ -1,0 +1,25 @@
+//------------------------------------------------------------------------------
+//
+//  File for localizing project-specific strings that may be presented to user.
+//
+//------------------------------------------------------------------------------
+
+
+//------------------------------------------------------------------------------
+// [HKEY_LOCAL_MACHINE\Ident]
+#define LOC_IDENT_NAME  "WinCE"
+#define LOC_IDENT_DESC  "WinCE MaxAll Device"
+
+
+//------------------------------------------------------------------------------
+// [HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial]
+#define LOC_FRIENDLY_SERIAL     "Seriele kabel aangesloten op COM poort 1"
+
+//------------------------------------------------------------------------------
+// [HKEY_LOCAL_MACHINE\Drivers\BuiltIn\IrCOMM]
+#define LOC_FRIENDLY_IRCOMM     "Infrarood Poort"
+
+// --- This is some SIP stuff --------------------------------------------------
+// [HKEY_CLASSES_ROOT\CLSID\{42429667-ae04-11d0-a4f8-00aa00a749b9}]
+#define LOC_KEYBOARD "Toetsenbord"
+

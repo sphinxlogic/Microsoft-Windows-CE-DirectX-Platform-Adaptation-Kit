@@ -1,0 +1,206 @@
+MODULES
+;  Name            Path                                        Memory Type
+;  --------------  ------------------------------------------  -----------
+
+IF IMGNODIRECTSHOW !
+; @CESYSGEN IF DIRECTX_MODULES_QUARTZ
+    quartz.dll     $(_FLATRELEASEDIR)\quartz.dll               NK  SH
+; @CESYSGEN ENDIF
+
+; @CESYSGEN IF DIRECTX_MODULES_MMTIMER
+    mmtimer.dll    $(_FLATRELEASEDIR)\mmtimer.dll              NK  SH
+; @CESYSGEN ENDIF
+
+; @CESYSGEN IF DIRECTX_MODULES_AMOVIE
+    amovie.dll     $(_FLATRELEASEDIR)\amovie.dll               NK  SH
+; @CESYSGEN ENDIF
+
+; @CESYSGEN IF DIRECTX_MODULES_MSDXM
+    msdxm.dll      $(_FLATRELEASEDIR)\msdxm.dll                NK  SH
+; @CESYSGEN ENDIF
+
+; @CESYSGEN IF DIRECTX_MODULES_AMCOMPAT
+    amcompat.dll     $(_FLATRELEASEDIR)\amcompat.dll           NK  SH
+; @CESYSGEN ENDIF
+
+; @CESYSGEN IF DIRECTX_MODULES_VRCTL
+    vrctl.dll     $(_FLATRELEASEDIR)\vrctl.dll                 NK  SH
+; @CESYSGEN ENDIF
+
+; @CESYSGEN IF DIRECTX_MODULES_MSACMCE
+    msacmce.dll    $(_FLATRELEASEDIR)\msacmce.dll              NK  SH
+; @CESYSGEN ENDIF
+
+; @CESYSGEN IF DIRECTX_MODULES_MSADPCM
+    msadpcm.dll    $(_FLATRELEASEDIR)\msadpcm.dll              NK  SH
+; @CESYSGEN ENDIF
+
+; @CESYSGEN IF DIRECTX_MODULES_IMAADPCM
+    imaadpcm.dll   $(_FLATRELEASEDIR)\imaadpcm.dll             NK  SH
+; @CESYSGEN ENDIF
+
+; @CESYSGEN IF DIRECTX_MODULES_MSG711
+    msg711.dll     $(_FLATRELEASEDIR)\msg711.dll               NK  SH
+; @CESYSGEN ENDIF
+
+; @CESYSGEN IF DIRECTX_MODULES_MSGSM610
+    msgsm610.dll   $(_FLATRELEASEDIR)\msgsm610.dll             NK  SH
+; @CESYSGEN ENDIF
+
+; @CESYSGEN IF DIRECTX_MODULES_PCMCONV
+    pcmconv.dll    $(_FLATRELEASEDIR)\pcmconv.dll              NK  SH
+; @CESYSGEN ENDIF
+
+; @CESYSGEN IF DIRECTX_MODULES_ICM
+    icm.dll        $(_FLATRELEASEDIR)\icm.dll                  NK  SH
+; @CESYSGEN ENDIF
+
+; @CESYSGEN IF DIRECTX_MODULES_MSRLE32
+    msrle32.dll    $(_FLATRELEASEDIR)\msrle32.dll              NK  SH
+; @CESYSGEN ENDIF
+
+; @CESYSGEN IF DIRECTX_MODULES_ICCVID
+    iccvid.dll     $(_FLATRELEASEDIR)\iccvid.dll               NK  SH
+; @CESYSGEN ENDIF
+
+; @CESYSGEN IF DIRECTX_MODULES_L3FILTER
+    l3filter.dll   $(_FLATRELEASEDIR)\l3filter.dll             NK  SH
+; @CESYSGEN ENDIF
+
+; @CESYSGEN IF DIRECTX_MODULES_AMSTREAM
+    amstream.dll   $(_FLATRELEASEDIR)\amstream.dll             NK  SH
+; @CESYSGEN ENDIF
+
+; @CESYSGEN IF DIRECTX_MODULES_SL_ANET
+    sl_anet.dll    $(_FLATRELEASEDIR)\sl_anet.dll              NK  SH
+; @CESYSGEN ENDIF
+
+ENDIF
+
+;===START=============== WMT40 =====================
+IF IMGNOWMT40 !
+; @CESYSGEN IF DIRECTX_MODULES_DXMASF
+    dxmasf.dll     $(_FLATRELEASEDIR)\dxmasf.dll               NK  SH
+; @CESYSGEN ENDIF
+; @CESYSGEN IF DIRECTX_MODULES_MPEG4V3
+    mpg4ds32.dll   $(_FLATRELEASEDIR)\mpg4ds32.dll             NK  SH
+; @CESYSGEN ENDIF
+; @CESYSGEN IF DIRECTX_MODULES_WMAUDIO
+    msaud32.dll    $(_FLATRELEASEDIR)\msaud32.dll              NK  SH
+; @CESYSGEN ENDIF
+
+IF IMGNODIRECTSHOW
+; @CESYSGEN IF DIRECTX_MODULES_MMTIMER
+    mmtimer.dll    $(_FLATRELEASEDIR)\mmtimer.dll              NK  SH
+; @CESYSGEN ENDIF
+ENDIF
+
+ENDIF
+;===FINISH=============== WMT40 ====================
+
+IF IMGNODIRECTDRAW !
+; @CESYSGEN IF DIRECTX_MODULES_DIRECTDRAW
+    ddraw.dll      $(_FLATRELEASEDIR)\ddraw.dll                NK  SH
+    ddcore.dll     $(_FLATRELEASEDIR)\ddcore.dll               NK  SH
+    ddstub.dll     $(_FLATRELEASEDIR)\ddstub.dll               NK  SH
+; @CESYSGEN ENDIF
+; @CESYSGEN IF DIRECTX_MODULES_DDHEL
+    ddhel.dll      $(_FLATRELEASEDIR)\ddhel.dll                NK  SH
+; @CESYSGEN ENDIF
+
+; @CESYSGEN IF DIRECTX_MODULES_DDI_DS3V
+IF DDHAL_S3VIRGE
+    ddi.dll        $(_FLATRELEASEDIR)\ddi_ds3v.dll             NK  SH
+ENDIF
+; @CESYSGEN ENDIF
+
+; @CESYSGEN IF DIRECTX_MODULES_DDI_IGS5
+IF DDHAL_IGS5000
+    ddi.dll        $(_FLATRELEASEDIR)\ddi_igs5.dll             NK  SH
+ENDIF
+; @CESYSGEN ENDIF
+
+
+IF IMGNODIRECTSOUND !
+; @CESYSGEN IF DIRECTX_MODULES_DIRECTSOUND
+    dsound.dll     $(_FLATRELEASEDIR)\dsound.dll               NK  SH
+    dsounds.dll    $(_FLATRELEASEDIR)\dsounds.dll              NK  SH
+; @CESYSGEN ENDIF
+
+; Decide which DirectSound compatible wavedev driver to include in
+; the image based on which environment variable was set.
+
+; @CESYSGEN IF DIRECTX_MODULES_IGS5000
+IF DSWAVE_IGS5000
+    igs5000.dll    $(_FLATRELEASEDIR)\igs5000.dll              NK  SH
+ENDIF
+; @CESYSGEN ENDIF
+
+; @CESYSGEN IF DIRECTX_MODULES_ES1371
+IF DSWAVE_ES1371
+    es1371.dll     $(_FLATRELEASEDIR)\es1371.dll               NK  SH
+ENDIF
+; @CESYSGEN ENDIF
+
+; @CESYSGEN IF DIRECTX_MODULES_IDSES1371
+IF DSHAL_ES1371
+    IDSES1371.dll  $(_FLATRELEASEDIR)\IDSES1371.dll            NK  SH
+ENDIF
+; @CESYSGEN ENDIF
+
+; @CESYSGEN IF DIRECTX_MODULES_IDSWAVE
+IF DSHAL_WAVEDEV
+    idswave.dll    $(_FLATRELEASEDIR)\idswave.dll              NK  SH
+ENDIF
+; @CESYSGEN ENDIF
+; @CESYSGEN IF DIRECTX_MODULES_WAVEBUFF
+    wavebuff.dll   $(_FLATRELEASEDIR)\wavebuff.dll             NK  SH
+; @CESYSGEN ENDIF
+
+; @CESYSGEN IF DIRECTX_MODULES_MIXERAPI
+    mixerapi.dll   $(_FLATRELEASEDIR)\mixerapi.dll             NK  SH
+; @CESYSGEN ENDIF
+
+; @CESYSGEN IF DIRECTX_MODULES_MXAT
+	mxat.dll       $(_FLATRELEASEDIR)\mxat.dll                 NK  SH
+; @CESYSGEN ENDIF
+
+ENDIF
+
+
+IF IMGNODIRECTMUSIC !
+; @CESYSGEN IF DIRECTX_MODULES_DMUSIC
+    dmusic.dll     $(_FLATRELEASEDIR)\dmusic.dll               NK  SH
+; @CESYSGEN ENDIF
+; @CESYSGEN IF DIRECTX_MODULES_DMSYNTH
+    dmsynth.dll    $(_FLATRELEASEDIR)\dmsynth.dll              NK  SH
+; @CESYSGEN ENDIF
+; @CESYSGEN IF DIRECTX_MODULES_DMCOMPOS
+    dmcompos.dll   $(_FLATRELEASEDIR)\dmcompos.dll             NK  SH
+; @CESYSGEN ENDIF
+ENDIF
+
+
+IF IMGNOWDM !
+; @CESYSGEN IF DIRECTX_MODULES_WDM
+    wdevice.exe    $(_FLATRELEASEDIR)\wdevice.exe              NK  SH
+    wdmlib.dll     $(_FLATRELEASEDIR)\wdmlib.dll               NK  SH
+    watapi.dll     $(_FLATRELEASEDIR)\watapi.dll               NK  SH
+    wcdrom.dll     $(_FLATRELEASEDIR)\wcdrom.dll               NK  SH
+    wdisk.dll      $(_FLATRELEASEDIR)\wdisk.dll                NK  SH
+    wudfs.dll      $(_FLATRELEASEDIR)\wudfs.dll                NK  SH
+; @CESYSGEN ENDIF
+ENDIF
+
+
+FILES
+;  Name            Path                                        Memory Type
+;  --------------  ------------------------------------------  -----------
+; @CESYSGEN IF DIRECTX_MODULES_RLDDLS
+    gm.dls         $(_FLATRELEASEDIR)\gm.dls                   NK SHU
+; @CESYSGEN ENDIF
+
+; @CESYSGEN IF DIRECTX_MODULES_MSDLS
+    wince_gm.dls   $(_FLATRELEASEDIR)\wince_gm.dls             NK SHU
+; @CESYSGEN ENDIF
+

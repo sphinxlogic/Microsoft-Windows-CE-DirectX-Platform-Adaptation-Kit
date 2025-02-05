@@ -1,0 +1,34 @@
+!IF 0
+--------------------------------------------------------------------------------
+
+    Windows CE PlayWnd Executable
+    Copyright (c) 1998, Microsoft Corporation
+
+--------------------------------------------------------------------------------
+!ENDIF
+
+WINCEOEM=1
+
+TARGETNAME=PlayWnd
+
+!ifdef DOSYSGEN
+
+TARGETTYPE=LIBRARY
+TARGETDEFNAME=$(TARGETNAME)
+
+!else
+
+TARGETTYPE=PROGRAM
+
+TARGETLIBS=\
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\Ole32.lib          \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib        \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\commctrl.lib       \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\commdlg.lib        \
+    $(_DSHOWSDKROOT)\lib\$(_CPUINDPATH)\strmiids.lib
+
+!endif
+
+SOURCES=\
+    playwnd.cpp    \
+    playwnd.rc

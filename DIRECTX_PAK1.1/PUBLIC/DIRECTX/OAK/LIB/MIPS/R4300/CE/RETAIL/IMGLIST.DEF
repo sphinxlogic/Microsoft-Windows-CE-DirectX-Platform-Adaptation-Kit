@@ -1,0 +1,36 @@
+LIBRARY IMGLIST
+
+EXPORTS
+;   ImageList_Add
+   ImageList_AddMasked		
+;   ImageList_BeginDrag
+;   ImageList_CopyDitherImage
+   ImageList_Create		
+   ImageList_Destroy		
+;   ImageList_DragEnter
+;   ImageList_DragLeave
+;   ImageList_DragMove
+;   ImageList_DragShowNolock
+   ImageList_Draw		
+;   ImageList_DrawEx
+;   ImageList_DrawIndirect
+;   ImageList_EndDrag
+;   ImageList_GetBkColor
+;   ImageList_GetDragImage
+;   ImageList_GetIcon
+;   ImageList_GetIconSize
+;   ImageList_GetImageCount
+;   ImageList_GetImageInfo
+;   ImageList_LoadImage
+;   ImageList_Merge
+   ImageList_Remove		
+;   ImageList_Replace
+;   ImageList_ReplaceIcon
+;   ImageList_SetBkColor
+;   ImageList_SetDragCursorImage
+;   ImageList_SetIconSize
+;   ImageList_SetOverlayImage
+;   ImageList_Copy
+;   ImageList_Duplicate
+;   ImageList_SetImageCount
+

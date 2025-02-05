@@ -1,0 +1,9 @@
+LIBRARY		NSDLL
+EXPORTS
+                DllGetClassObject PRIVATE
+                DllCanUnloadNow PRIVATE
+
+;                UtilLoadImage PRIVATE
+
+
+

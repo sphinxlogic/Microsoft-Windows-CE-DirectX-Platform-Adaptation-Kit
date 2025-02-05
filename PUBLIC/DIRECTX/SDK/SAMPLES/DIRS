@@ -1,0 +1,4 @@
+DIRS=ddraw \
+     dsound \
+	 mixer \
+     dshow

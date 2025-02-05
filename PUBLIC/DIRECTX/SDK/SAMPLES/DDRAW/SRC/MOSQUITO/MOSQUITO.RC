@@ -1,0 +1,17 @@
+#include "resource.h"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_BUGIMAGE1           BITMAP  mosquit1.bmp
+IDB_BUGIMAGE2           BITMAP  mosquit2.bmp
+IDB_BUGIMAGE3           BITMAP  mosquit3.bmp
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+IDI_MAIN_ICON           ICON    "mosquito.ico"

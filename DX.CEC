@@ -1,0 +1,22 @@
+ComponentType (
+  Name( coreos )
+  GUID( {B3509C13-F1E4-11d2-85F6-004005365450} )
+
+  Implementations(
+
+    Implementation(
+       Name( MAXDX )
+       GUID( {BABC1214-F1E4-11d2-85F6-004005365450} )
+       Description( "MaxDX" )
+       BuildMethods(
+            BuildMethod(
+                 Step("CESYSGEN")
+                 GUID( {B3509C15-F1E4-11d2-85F6-004005365452} )
+                 InputFiles( "$(_PROJECTROOT)\oak\misc\cesysgen.bat" )
+                 OutputFiles( )                 
+          )
+       )
+    )
+
+  )
+)

@@ -1,0 +1,4 @@
+IF IMGIESAMPLE
+Directory("\Windows\LOC_DESKTOP_DIR"):-File("LOC_INTERNETEXPLORER_LNK", "\Windows\iesample.lnk")
+Directory("\Windows\LOC_PROGRAMS_DIR"):-File("LOC_INTERNETEXPLORER_LNK", "\Windows\iesample.lnk")
+ENDIF

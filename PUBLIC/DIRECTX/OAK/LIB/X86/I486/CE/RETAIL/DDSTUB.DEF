@@ -1,0 +1,7 @@
+LIBRARY DDSTUB
+; DESCRIPTION 'DirectDraw server-side'
+
+; Insure that our code is not 'optimized' away by exporting
+; something.
+EXPORTS
+	Dummy

@@ -1,0 +1,4 @@
+LIBRARY         quartz
+EXPORTS
+                DllGetClassObject       PRIVATE
+                DllCanUnloadNow         PRIVATE

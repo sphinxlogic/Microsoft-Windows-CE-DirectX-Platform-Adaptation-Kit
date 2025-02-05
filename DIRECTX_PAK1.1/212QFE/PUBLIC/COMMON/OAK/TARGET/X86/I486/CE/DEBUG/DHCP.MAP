@@ -1,0 +1,295 @@
+ dhcp
+
+ Timestamp is 38178396 (Wed Oct 27 15:58:30 1999)
+
+ Preferred load address is 10000000
+
+ Start         Length     Name                   Class
+ 0001:00000000 00001accH .rdata                  CODE
+ 0001:00001ad0 0000527aH .text                   CODE
+ 0001:00006d4c 00000028H .idata$2                CODE
+ 0001:00006d74 00000014H .idata$3                CODE
+ 0001:00006d88 000000d0H .idata$4                CODE
+ 0001:00006e58 000000d6H .idata$6                CODE
+ 0001:00006f30 0000006aH .edata                  CODE
+ 0002:00000000 000000d0H .idata$5                DATA
+ 0002:000000d0 0000044dH .data                   DATA
+ 0002:0000051d 0000004fH .bss                    DATA
+
+  Address         Publics by Value              Rva+Base     Lib:Object
+
+ 0001:0000001c       ??_C@_1DE@EJKG@?$AA?9?$AAD?$AAh?$AAc?$AAp?$AAR?$AAe?$AAg?$AAi?$AAs?$AAt?$AAe?$AAr?$AA?3?$AA?5?$AAR?$AAe?$AAt?$AA?5?$AA?$DN@ 1000101c     init.obj
+ 0001:00000050       ??_C@_1CC@ELII@?$AA?$CL?$AAD?$AAh?$AAc?$AAp?$AAR?$AAe?$AAg?$AAi?$AAs?$AAt?$AAe?$AAr?$AA?3?$AA?$AN?$AA?6?$AA?$AA@ 10001050     init.obj
+ 0001:00000074       ??_C@_1CM@LICO@?$AAD?$AAh?$AAc?$AAp?$AA?3?$AA?5?$AAd?$AAl?$AAl?$AAe?$AAn?$AAt?$AAr?$AAy?$AA?$CI?$AA?$CJ?$AA?5?$AA?$CF?$AAd?$AA?$AN@ 10001074     init.obj
+ 0001:000000a0       ??_C@_1DO@MHBE@?$AAS?$AAt?$AAa?$AAt?$AAi?$AAc?$AA?5?$AAI?$AAn?$AAt?$AAe?$AAr?$AAf?$AAa?$AAc?$AAe?$AA?5?$AAC?$AAo?$AAn@ 100010a0     init.obj
+ 0001:000000e0       ??_C@_1GC@IEMA@?$AA?5?$AAC?$AAh?$AAe?$AAc?$AAk?$AAI?$AAn?$AAi?$AAt?$AAA?$AAd?$AAa?$AAp?$AAt?$AAe?$AAr?$AAs?$AA?3?$AA?5@ 100010e0     init.obj
+ 0001:00000144       ??_C@_1CG@HHNM@?$AAI?$AAP?$AAI?$AAn?$AAt?$AAe?$AAr?$AAf?$AAa?$AAc?$AAe?$AAC?$AAo?$AAn?$AAt?$AAe?$AAx?$AAt?$AA?$AA@ 10001144     init.obj
+ 0001:0000016c       ??_C@_1GE@FMHK@?$AA?5?$AAC?$AAh?$AAe?$AAc?$AAk?$AAI?$AAn?$AAi?$AAt?$AAA?$AAd?$AAa?$AAp?$AAt?$AAe?$AAr?$AAs?$AA?3?$AA?5@ 1000116c     init.obj
+ 0001:000001d0       ??_C@_1BG@HOCG@?$AAE?$AAn?$AAa?$AAb?$AAl?$AAe?$AAD?$AAH?$AAC?$AAP?$AA?$AA@ 100011d0     init.obj
+ 0001:000001e8       ??_C@_1FE@BHGK@?$AA?5?$AAC?$AAh?$AAe?$AAc?$AAk?$AAI?$AAn?$AAi?$AAt?$AAA?$AAd?$AAa?$AAp?$AAt?$AAe?$AAr?$AAs?$AA?3?$AA?5@ 100011e8     init.obj
+ 0001:0000023c       ??_C@_1BI@OODD@?$AAP?$AAa?$AAr?$AAm?$AAs?$AA?2?$AAT?$AAc?$AAp?$AAI?$AAp?$AA?$AA@ 1000123c     init.obj
+ 0001:00000254       ??_C@_1FE@KCAE@?$AA?5?$AAC?$AAh?$AAe?$AAc?$AAk?$AAI?$AAn?$AAi?$AAt?$AAA?$AAd?$AAa?$AAp?$AAt?$AAe?$AAr?$AAs?$AA?3?$AA?5@ 10001254     init.obj
+ 0001:000002a8       ??_C@_19OIGE@?$AAN?$AAD?$AAI?$AAS?$AA?$AA@ 100012a8     init.obj
+ 0001:000002b4       ??_C@_1FE@HGAK@?$AA?5?$AAC?$AAh?$AAe?$AAc?$AAk?$AAI?$AAn?$AAi?$AAt?$AAA?$AAd?$AAa?$AAp?$AAt?$AAe?$AAr?$AAs?$AA?3?$AA?5@ 100012b4     init.obj
+ 0001:00000308       ??_C@_1M@EONE@?$AAG?$AAr?$AAo?$AAu?$AAp?$AA?$AA@ 10001308     init.obj
+ 0001:00000314       ??_C@_1FC@EBAA@?$AA?5?$AAC?$AAh?$AAe?$AAc?$AAk?$AAI?$AAn?$AAi?$AAt?$AAA?$AAd?$AAa?$AAp?$AAt?$AAe?$AAr?$AAs?$AA?3?$AA?5@ 10001314     init.obj
+ 0001:00000368       ??_C@_1FK@NHBK@?$AAC?$AAh?$AAe?$AAc?$AAk?$AAI?$AAn?$AAi?$AAt?$AAA?$AAd?$AAa?$AAp?$AAt?$AAe?$AAr?$AAs?$AA?3?$AA?5?$AAu@ 10001368     init.obj
+ 0001:000003c4       ??_C@_19HPKI@?$AAC?$AAo?$AAm?$AAm?$AA?$AA@ 100013c4     init.obj
+ 0001:000003d0       ??_C@_1FM@KBFK@?$AAC?$AAh?$AAe?$AAc?$AAk?$AAI?$AAn?$AAi?$AAt?$AAA?$AAd?$AAa?$AAp?$AAt?$AAe?$AAr?$AAs?$AA?3?$AA?5?$AAD@ 100013d0     init.obj
+ 0001:0000042c       ??_C@_1EA@FBLB@?$AA?7?$AAD?$AAh?$AAc?$AAp?$AA?3?$AAR?$AAe?$AAg?$AAi?$AAs?$AAt?$AAe?$AAr?$AA?3?$AA?5?$AAF?$AAT?$AA?5?$AA?$CF@ 1000142c     init.obj
+ 0001:0000046c       ??_C@_1FA@DKJC@?$AA?9?$AAB?$AAu?$AAi?$AAl?$AAd?$AAD?$AAh?$AAc?$AAp?$AAP?$AAk?$AAt?$AA?3?$AA?5?$AAp?$AAD?$AAh?$AAc?$AAp@ 1000146c     packet.obj
+ 0001:000004bc       ??_C@_1GK@JKNJ@?$AA?7?$AA?$CB?$AAB?$AAu?$AAi?$AAl?$AAd?$AAD?$AAh?$AAc?$AAp?$AAP?$AAk?$AAt?$AA?3?$AA?5?$AAu?$AAn?$AAk?$AAn@ 100014bc     packet.obj
+ 0001:00000528       ??_C@_1EC@GLPI@?$AA?$CL?$AAB?$AAu?$AAi?$AAl?$AAd?$AAD?$AAh?$AAc?$AAp?$AAP?$AAk?$AAt?$AA?3?$AA?5?$AAp?$AAD?$AAh?$AAc?$AAp@ 10001528     packet.obj
+ 0001:0000056c       ??_C@_1FG@ONLK@?$AA?9?$AAT?$AAr?$AAa?$AAn?$AAs?$AAl?$AAa?$AAt?$AAe?$AAP?$AAk?$AAt?$AA?3?$AA?5?$AAp?$AAD?$AAh?$AAc?$AAp@ 1000156c     packet.obj
+ 0001:000005c4       ??_C@_1EO@GLBB@?$AA?7?$AA?$CB?$AAT?$AAr?$AAa?$AAn?$AAs?$AAl?$AAa?$AAt?$AAe?$AAP?$AAk?$AAt?$AA?3?$AA?5?$AAU?$AAn?$AAe?$AAx@ 100015c4     packet.obj
+ 0001:00000614       ??_C@_1EK@GIHC@?$AA?7?$AAT?$AAr?$AAa?$AAn?$AAs?$AAl?$AAa?$AAt?$AAe?$AAP?$AAa?$AAc?$AAk?$AAe?$AAt?$AA?3?$AA?5?$AAS?$AAa@ 10001614     packet.obj
+ 0001:00000660       ??_C@_1DC@FPDL@?$AA?2?$AAP?$AAa?$AAr?$AAm?$AAs?$AA?2?$AAT?$AAc?$AAp?$AAI?$AAp?$AA?2?$AAD?$AAh?$AAc?$AAp?$AAO?$AAp?$AAt@ 10001660     packet.obj
+ 0001:00000694       ??_C@_1M@NNCO@?$AAC?$AAo?$AAm?$AAm?$AA?2?$AA?$AA@ 10001694     packet.obj
+ 0001:000006a0       ??_C@_1FK@FL@?$AA?$CF?$AAs?$AA?3?$AA?5?$AAD?$AAE?$AAB?$AAU?$AAG?$AAC?$AAH?$AAK?$AA?5?$AAf?$AAa?$AAi?$AAl?$AAe?$AAd?$AA?5@ 100016a0     packet.obj
+ 0001:000006fc       ??_C@_1BA@JDJI@?$AAU?$AAn?$AAk?$AAn?$AAo?$AAw?$AAn?$AA?$AA@ 100016fc     packet.obj
+ 0001:0000070c       ??_C@_1FM@PJAO@?$AAE?$AA?3?$AA?2?$AAw?$AAi?$AAn?$AAc?$AAe?$AA?2?$AAp?$AAr?$AAi?$AAv?$AAa?$AAt?$AAe?$AA?2?$AAw?$AAi?$AAn@ 1000170c     packet.obj
+ 0001:00000768       ??_C@_1HK@NAGH@?$AA?7?$AAT?$AAr?$AAa?$AAn?$AAs?$AAl?$AAa?$AAt?$AAe?$AAP?$AAk?$AAt?$AA?3?$AA?5?$AAM?$AAi?$AAs?$AAm?$AAa@ 10001768     packet.obj
+ 0001:000007e4       ??_C@_1HM@FALG@?$AA?7?$AAT?$AAr?$AAa?$AAn?$AAs?$AAl?$AAa?$AAt?$AAe?$AAP?$AAk?$AAt?$AA?3?$AA?5?$AAM?$AAi?$AAs?$AAm?$AAa@ 100017e4     packet.obj
+ 0001:00000860       ??_C@_1GM@CKGM@?$AA?$CL?$AAT?$AAr?$AAa?$AAn?$AAs?$AAl?$AAa?$AAt?$AAe?$AAP?$AAk?$AAt?$AA?3?$AA?5?$AAp?$AAD?$AAh?$AAc?$AAp@ 10001860     packet.obj
+ 0001:000008cc       ??_C@_1GE@BAJG@?$AA?$CK?$AAD?$AAh?$AAc?$AAp?$AAS?$AAe?$AAn?$AAd?$AAD?$AAo?$AAw?$AAn?$AA?3?$AA?5?$AAD?$AAe?$AAs?$AAt?$AA?5@ 100018cc     packet.obj
+ 0001:00000930       ??_C@_1FC@NPLJ@?$AA?9?$AAS?$AAe?$AAn?$AAd?$AAD?$AAh?$AAc?$AAp?$AAP?$AAk?$AAt?$AA?3?$AA?5?$AAp?$AAD?$AAh?$AAc?$AAp?$AA?5@ 10001930     packet.obj
+ 0001:00000984       ??_C@_1EC@PHDG@?$AA?$CL?$AAS?$AAe?$AAn?$AAd?$AAD?$AAh?$AAc?$AAp?$AAP?$AAk?$AAt?$AA?3?$AA?5?$AAp?$AAD?$AAh?$AAc?$AAp?$AA?5@ 10001984     packet.obj
+ 0001:000009c8       ??_C@_1CI@IMAO@?$AA?$CK?$AAF?$AAr?$AAe?$AAe?$AAD?$AAh?$AAc?$AAp?$AAI?$AAn?$AAf?$AAo?$AA?3?$AA?5?$AA?$CF?$AAX?$AA?$AN?$AA?6?$AA?$AA@ 100019c8     dhcp.obj
+ 0001:000009f0       ??_C@_1DK@ECII@?$AAC?$AAo?$AAn?$AAv?$AAe?$AAr?$AAt?$AAe?$AAd?$AA?5?$AA?$CF?$AAs?$AA?5?$AAt?$AAo?$AA?5?$AAa?$AAd?$AAd?$AAr@ 100019f0     dhcp.obj
+ 0001:00000a2c       ??_C@_1EE@FGCP@?$AAU?$AAn?$AAa?$AAb?$AAl?$AAe?$AA?5?$AAt?$AAo?$AA?5?$AAc?$AAo?$AAn?$AAv?$AAe?$AAr?$AAt?$AA?5?$AA?$CF?$AAs@ 10001a2c     dhcp.obj
+ 0001:00000a70       ??_C@_1CO@OAKC@?$AA?9?$AAA?$AAd?$AAd?$AAr?$AAT?$AAo?$AAS?$AAt?$AAr?$AAi?$AAn?$AAg?$AA?3?$AA?5?$AA?$CF?$AAX?$AA?5?$AA?$CF?$AAs@ 10001a70     dhcp.obj
+ 0001:00000aa0       ??_C@_1CI@LNCB@?$AA?$CL?$AAA?$AAd?$AAd?$AAr?$AAT?$AAo?$AAS?$AAt?$AAr?$AAi?$AAn?$AAg?$AA?3?$AA?5?$AA?$CF?$AAX?$AA?$AN?$AA?6?$AA?$AA@ 10001aa0     dhcp.obj
+ 0001:00000ac8       ??_C@_1CA@LJOI@?$AAD?$AAh?$AAc?$AAp?$AAS?$AAe?$AAn?$AAd?$AAO?$AAp?$AAt?$AAi?$AAo?$AAn?$AAs?$AA?$AA@ 10001ac8     dhcp.obj
+ 0001:00000ae8       ??_C@_1FK@LGIO@?$AA?7?$AAG?$AAe?$AAt?$AAR?$AAe?$AAq?$AAO?$AAp?$AAt?$AAi?$AAo?$AAn?$AAs?$AA?0?$AA?5?$AAd?$AAe?$AAt?$AAe@ 10001ae8     dhcp.obj
+ 0001:00000b44       ??_C@_1FI@CDMB@?$AAE?$AA?3?$AA?2?$AAw?$AAi?$AAn?$AAc?$AAe?$AA?2?$AAp?$AAr?$AAi?$AAv?$AAa?$AAt?$AAe?$AA?2?$AAw?$AAi?$AAn@ 10001b44     dhcp.obj
+ 0001:00000b9c       ??_C@_1BO@MMAD@?$AAP?$AAr?$AAe?$AAv?$AAR?$AAe?$AAq?$AAO?$AAp?$AAt?$AAi?$AAo?$AAn?$AAs?$AA?$AA@ 10001b9c     dhcp.obj
+ 0001:00000bbc       ??_C@_1BI@BFOG@?$AAD?$AAh?$AAc?$AAp?$AAO?$AAp?$AAt?$AAi?$AAo?$AAn?$AAs?$AA?$AA@ 10001bbc     dhcp.obj
+ 0001:00000bd4       ??_C@_1CE@BDHI@?$AA?9?$AAG?$AAe?$AAt?$AAD?$AAh?$AAc?$AAp?$AAC?$AAo?$AAn?$AAf?$AAi?$AAg?$AA?3?$AA?$AN?$AA?6?$AA?$AA@ 10001bd4     dhcp.obj
+ 0001:00000bf8       ??_C@_1CE@FCMH@?$AAD?$AAh?$AAc?$AAp?$AAR?$AAe?$AAt?$AAr?$AAy?$AAD?$AAi?$AAa?$AAl?$AAo?$AAg?$AAu?$AAe?$AA?$AA@ 10001bf8     dhcp.obj
+ 0001:00000c1c       ??_C@_1CM@CMFI@?$AAD?$AAh?$AAc?$AAp?$AAI?$AAn?$AAi?$AAt?$AAD?$AAe?$AAl?$AAa?$AAy?$AAI?$AAn?$AAt?$AAe?$AAr?$AAv?$AAa@ 10001c1c     dhcp.obj
+ 0001:00000c48       ??_C@_1BK@JKOL@?$AAD?$AAh?$AAc?$AAp?$AAM?$AAa?$AAx?$AAR?$AAe?$AAt?$AAr?$AAy?$AA?$AA@ 10001c48     dhcp.obj
+ 0001:00000c64       ??_C@_15EMAG@?$AAT?$AA2?$AA?$AA@ 10001c64     dhcp.obj
+ 0001:00000c6c       ??_C@_15LKDN@?$AAT?$AA1?$AA?$AA@ 10001c6c     dhcp.obj
+ 0001:00000c74       ??_C@_1M@CGGJ@?$AAL?$AAe?$AAa?$AAs?$AAe?$AA?$AA@ 10001c74     dhcp.obj
+ 0001:00000c80       ??_C@_1CE@HJMD@?$AAL?$AAe?$AAa?$AAs?$AAe?$AAO?$AAb?$AAt?$AAa?$AAi?$AAn?$AAe?$AAd?$AAH?$AAi?$AAg?$AAh?$AA?$AA@ 10001c80     dhcp.obj
+ 0001:00000ca4       ??_C@_1CC@LLMC@?$AAL?$AAe?$AAa?$AAs?$AAe?$AAO?$AAb?$AAt?$AAa?$AAi?$AAn?$AAe?$AAd?$AAL?$AAo?$AAw?$AA?$AA@ 10001ca4     dhcp.obj
+ 0001:00000cc8       ??_C@_1BC@HCBF@?$AAD?$AAh?$AAc?$AAp?$AAW?$AAI?$AAN?$AAS?$AA?$AA@ 10001cc8     dhcp.obj
+ 0001:00000cdc       ??_C@_1BA@OIEN@?$AAD?$AAh?$AAc?$AAp?$AAD?$AAN?$AAS?$AA?$AA@ 10001cdc     dhcp.obj
+ 0001:00000cec       ??_C@_1CG@HHLB@?$AAD?$AAh?$AAc?$AAp?$AAD?$AAe?$AAf?$AAa?$AAu?$AAl?$AAt?$AAG?$AAa?$AAt?$AAe?$AAw?$AAa?$AAy?$AA?$AA@ 10001cec     dhcp.obj
+ 0001:00000d14       ??_C@_1BG@MBJG@?$AAD?$AAh?$AAc?$AAp?$AAS?$AAe?$AAr?$AAv?$AAe?$AAr?$AA?$AA@ 10001d14     dhcp.obj
+ 0001:00000d2c       ??_C@_1BO@CCEO@?$AAD?$AAh?$AAc?$AAp?$AAS?$AAu?$AAb?$AAn?$AAe?$AAt?$AAM?$AAa?$AAs?$AAk?$AA?$AA@ 10001d2c     dhcp.obj
+ 0001:00000d4c       ??_C@_1BM@DFEG@?$AAD?$AAh?$AAc?$AAp?$AAI?$AAP?$AAA?$AAd?$AAd?$AAr?$AAe?$AAs?$AAs?$AA?$AA@ 10001d4c     dhcp.obj
+ 0001:00000d68       ??_C@_1BK@CNHJ@?$AA?2?$AAP?$AAa?$AAr?$AAm?$AAs?$AA?2?$AAT?$AAc?$AAp?$AAI?$AAp?$AA?$AA@ 10001d68     dhcp.obj
+ 0001:00000d84       ??_C@_1CE@BFKE@?$AA?$CL?$AAG?$AAe?$AAt?$AAD?$AAh?$AAc?$AAp?$AAC?$AAo?$AAn?$AAf?$AAi?$AAg?$AA?3?$AA?$AN?$AA?6?$AA?$AA@ 10001d84     dhcp.obj
+ 0001:00000da8       ??_C@_1CE@FKPO@?$AA?9?$AAS?$AAe?$AAt?$AAD?$AAh?$AAc?$AAp?$AAC?$AAo?$AAn?$AAf?$AAi?$AAg?$AA?3?$AA?$AN?$AA?6?$AA?$AA@ 10001da8     dhcp.obj
+ 0001:00000dcc       ??_C@_1BE@EIFH@?$AAD?$AAN?$AAS?$AAD?$AAo?$AAm?$AAa?$AAi?$AAn?$AA?$AA@ 10001dcc     dhcp.obj
+ 0001:00000de0       ??_C@_1BI@KPCK@?$AAT?$AAc?$AAp?$AAI?$AAp?$AA?2?$AAP?$AAa?$AAr?$AAm?$AAs?$AA?$AA@ 10001de0     dhcp.obj
+ 0001:00000df8       ??_C@_1EO@LAGI@?$AA?7?$AAS?$AAe?$AAt?$AAD?$AAh?$AAc?$AAp?$AAC?$AAo?$AAn?$AAf?$AAi?$AAg?$AA?3?$AA?5?$AAT?$AA1?$AA?5?$AA?$CF@ 10001df8     dhcp.obj
+ 0001:00000e48       ??_C@_1FE@MMGD@?$AA?7?$AAS?$AAe?$AAt?$AAD?$AAh?$AAc?$AAp?$AAC?$AAo?$AAn?$AAf?$AAi?$AAg?$AA?3?$AA?5?$AAs?$AAe?$AAt?$AA?5@ 10001e48     dhcp.obj
+ 0001:00000e9c       ??_C@_1EA@GCNO@?$AA?7?$AAS?$AAe?$AAt?$AAD?$AAh?$AAc?$AAp?$AAC?$AAo?$AAn?$AAf?$AAi?$AAg?$AA?3?$AA?5?$AAs?$AAe?$AAt?$AA?5@ 10001e9c     dhcp.obj
+ 0001:00000edc       ??_C@_1CE@FMCC@?$AA?$CL?$AAS?$AAe?$AAt?$AAD?$AAh?$AAc?$AAp?$AAC?$AAo?$AAn?$AAf?$AAi?$AAg?$AA?3?$AA?$AN?$AA?6?$AA?$AA@ 10001edc     dhcp.obj
+ 0001:00000f00       ??_C@_1FM@BJJL@?$AA?$CB?$AAT?$AAa?$AAk?$AAe?$AAN?$AAe?$AAt?$AAD?$AAo?$AAw?$AAn?$AA?3?$AA?5?$AAo?$AAu?$AAr?$AA?5?$AAD?$AAh@ 10001f00     dhcp.obj
+ 0001:00000f5c       ??_C@_1EE@GBBH@?$AA?$CK?$AAT?$AAa?$AAk?$AAe?$AAN?$AAe?$AAt?$AAD?$AAo?$AAw?$AAn?$AA?3?$AA?5?$AAp?$AAD?$AAh?$AAc?$AAp?$AA?5@ 10001f5c     dhcp.obj
+ 0001:00000fa0       ??_C@_1FO@GHMK@?$AA?$CB?$AAR?$AAe?$AAq?$AAu?$AAe?$AAs?$AAt?$AAD?$AAH?$AAC?$AAP?$AAA?$AAd?$AAd?$AAr?$AA?3?$AA?5?$AAc?$AAa@ 10001fa0     dhcp.obj
+ 0001:00001000       ??_C@_1DK@GMPJ@?$AA?9?$AAP?$AAr?$AAo?$AAc?$AAe?$AAs?$AAs?$AAE?$AAx?$AAp?$AAi?$AAr?$AAe?$AA?3?$AA?5?$AAp?$AAD?$AAh?$AAc@ 10002000     dhcp.obj
+ 0001:0000103c       ??_C@_1FI@LEKH@?$AA?$CB?$AAL?$AAe?$AAa?$AAs?$AAe?$AA?5?$AAT?$AAi?$AAm?$AAe?$AA?5?$AAE?$AAx?$AAp?$AAi?$AAr?$AAe?$AAd?$AA?0@ 1000203c     dhcp.obj
+ 0001:00001094       ??_C@_1DK@HNEP@?$AA?$CL?$AAP?$AAr?$AAo?$AAc?$AAe?$AAs?$AAs?$AAE?$AAx?$AAp?$AAi?$AAr?$AAe?$AA?3?$AA?5?$AAp?$AAD?$AAh?$AAc@ 10002094     dhcp.obj
+ 0001:000010d0       ??_C@_1GA@DKJI@?$AA?$CK?$AAC?$AAa?$AAl?$AAc?$AAM?$AAi?$AAd?$AAw?$AAa?$AAy?$AAT?$AAi?$AAm?$AAe?$AA?3?$AA?5?$AAs?$AAt?$AAa@ 100020d0     dhcp.obj
+ 0001:00001130       ??_C@_1FI@GLDA@?$AA?$CK?$AAC?$AAa?$AAl?$AAc?$AAM?$AAi?$AAd?$AAw?$AAa?$AAy?$AAT?$AAi?$AAm?$AAe?$AA?3?$AA?5?$AAs?$AAt?$AAa@ 10002130     dhcp.obj
+ 0001:00001188       ??_C@_1HA@FCJP@?$AA?$CK?$AAC?$AAa?$AAl?$AAc?$AAM?$AAi?$AAd?$AAw?$AAa?$AAy?$AAT?$AAi?$AAm?$AAe?$AA?3?$AA?5?$AAC?$AAu?$AAr@ 10002188     dhcp.obj
+ 0001:000011f8       ??_C@_1GO@PICK@?$AA?$CK?$AAC?$AAa?$AAl?$AAc?$AAM?$AAi?$AAd?$AAw?$AAa?$AAy?$AAT?$AAi?$AAm?$AAe?$AA?3?$AA?5?$AAl?$AAa?$AAt@ 100021f8     dhcp.obj
+ 0001:00001268       ??_C@_1FA@LKMC@?$AA?$CK?$AAC?$AAa?$AAl?$AAc?$AAT?$AA1?$AAT?$AAi?$AAm?$AAe?$AA?3?$AA?5?$AAi?$AAn?$AAi?$AAt?$AA?5?$AAL?$AAO@ 10002268     dhcp.obj
+ 0001:000012b8       ??_C@_1FC@OFGK@?$AA?9?$AAD?$AAh?$AAc?$AAp?$AAI?$AAn?$AAi?$AAt?$AAS?$AAo?$AAc?$AAk?$AA?3?$AA?5?$AAp?$AAI?$AAn?$AAf?$AAo@ 100022b8     dhcp.obj
+ 0001:0000130c       ??_C@_1DK@JHKC@?$AA?7?$AA?$CB?$AAD?$AAh?$AAc?$AAp?$AAI?$AAn?$AAi?$AAt?$AAS?$AAo?$AAc?$AAk?$AA?3?$AA?5?$AAf?$AAa?$AAi?$AAl@ 1000230c     dhcp.obj
+ 0001:00001348       ??_C@_1DI@MBAD@?$AA?$CL?$AAD?$AAh?$AAc?$AAp?$AAI?$AAn?$AAi?$AAt?$AAS?$AAo?$AAc?$AAk?$AA?3?$AA?5?$AAp?$AAI?$AAn?$AAf?$AAo@ 10002348     dhcp.obj
+ 0001:00001380       ??_C@_1DC@DNFD@?$AA?9?$AAP?$AAr?$AAo?$AAc?$AAe?$AAs?$AAs?$AAT?$AA2?$AA?3?$AA?5?$AAp?$AAD?$AAh?$AAc?$AAp?$AA?5?$AA0?$AAx@ 10002380     dhcp.obj
+ 0001:000013b4       ??_C@_1FA@LNBK@?$AA?7?$AA?$CB?$AAP?$AAr?$AAo?$AAc?$AAe?$AAs?$AAs?$AAT?$AA2?$AA?3?$AA?5?$AAD?$AAh?$AAc?$AAp?$AAI?$AAn?$AAi@ 100023b4     dhcp.obj
+ 0001:00001404       ??_C@_1DK@IPH@?$AA?7?$AA?$CB?$AAP?$AAr?$AAo?$AAc?$AAe?$AAs?$AAs?$AAT?$AA2?$AA?3?$AA?5?$AAT?$AAa?$AAk?$AAe?$AA?5?$AAN?$AAe@ 10002404     dhcp.obj
+ 0001:00001440       ??_C@_1DM@MBBE@?$AA?7?$AAP?$AAr?$AAo?$AAc?$AAe?$AAs?$AAs?$AA?5?$AAT?$AA2?$AA?3?$AA?5?$AAC?$AAu?$AAr?$AAT?$AAi?$AAm?$AAe@ 10002440     dhcp.obj
+ 0001:0000147c       ??_C@_1DC@MCLN@?$AA?$CL?$AAP?$AAr?$AAo?$AAc?$AAe?$AAs?$AAs?$AAT?$AA2?$AA?3?$AA?5?$AAp?$AAD?$AAh?$AAc?$AAp?$AA?5?$AA0?$AAx@ 1000247c     dhcp.obj
+ 0001:000014b0       ??_C@_1DC@KBFM@?$AA?9?$AAP?$AAr?$AAo?$AAc?$AAe?$AAs?$AAs?$AAT?$AA1?$AA?3?$AA?5?$AAp?$AAD?$AAh?$AAc?$AAp?$AA?5?$AA0?$AAx@ 100024b0     dhcp.obj
+ 0001:000014e4       ??_C@_1FA@HKOI@?$AA?7?$AA?$CB?$AAP?$AAr?$AAo?$AAc?$AAe?$AAs?$AAs?$AAT?$AA1?$AA?3?$AA?5?$AAD?$AAh?$AAc?$AAp?$AAI?$AAn?$AAi@ 100024e4     dhcp.obj
+ 0001:00001534       ??_C@_1DK@JHHB@?$AA?7?$AA?$CB?$AAP?$AAr?$AAo?$AAc?$AAe?$AAs?$AAs?$AAT?$AA1?$AA?3?$AA?5?$AAT?$AAa?$AAk?$AAe?$AA?5?$AAN?$AAe@ 10002534     dhcp.obj
+ 0001:00001570       ??_C@_1DM@LADD@?$AA?7?$AAP?$AAr?$AAo?$AAc?$AAe?$AAs?$AAs?$AA?5?$AAT?$AA1?$AA?3?$AA?5?$AAC?$AAu?$AAr?$AAT?$AAi?$AAm?$AAe@ 10002570     dhcp.obj
+ 0001:000015ac       ??_C@_1DC@FOLC@?$AA?$CL?$AAP?$AAr?$AAo?$AAc?$AAe?$AAs?$AAs?$AAT?$AA1?$AA?3?$AA?5?$AAp?$AAD?$AAh?$AAc?$AAp?$AA?5?$AA0?$AAx@ 100025ac     dhcp.obj
+ 0001:000015e0       ??_C@_1EC@HCFJ@?$AA?9?$AAG?$AAe?$AAt?$AAP?$AAa?$AAr?$AAa?$AAm?$AAs?$AA?3?$AA?5?$AAp?$AAD?$AAh?$AAc?$AAp?$AA?5?$AA0?$AAx@ 100025e0     dhcp.obj
+ 0001:00001624       ??_C@_1EO@BHPJ@?$AAD?$AAH?$AAC?$AAP?$AA?3?$AA?5?$AAG?$AAe?$AAt?$AAP?$AAa?$AAr?$AAa?$AAm?$AAs?$AA?3?$AA?5?$AAa?$AAd?$AAa@ 10002624     dhcp.obj
+ 0001:00001674       ??_C@_1DI@OAOK@?$AA?7?$AAG?$AAe?$AAt?$AAP?$AAa?$AAr?$AAa?$AAm?$AAs?$AA?3?$AA?5?$AAf?$AAa?$AAi?$AAl?$AAe?$AAd?$AA?5?$AAb@ 10002674     dhcp.obj
+ 0001:000016ac       ??_C@_1EM@LOF@?$AA?7?$AAG?$AAe?$AAt?$AAP?$AAa?$AAr?$AAa?$AAm?$AAs?$AA?3?$AA?5?$AAu?$AAs?$AAi?$AAn?$AAg?$AA?5?$AAc?$AAa@ 100026ac     dhcp.obj
+ 0001:000016f8       ??_C@_1DM@LNNB@?$AA?$CL?$AAG?$AAe?$AAt?$AAP?$AAa?$AAr?$AAa?$AAm?$AAs?$AA?3?$AA?5?$AAp?$AAD?$AAh?$AAc?$AAp?$AA?5?$AA0?$AAx@ 100026f8     dhcp.obj
+ 0001:00001734       ??_C@_1CK@CLBG@?$AAC?$AAa?$AAn?$AA?8?$AAt?$AA?5?$AAl?$AAo?$AAa?$AAd?$AA?5?$AAn?$AAe?$AAt?$AAu?$AAi?$AA?4?$AAd?$AAl?$AAl@ 10002734     dhcp.obj
+ 0001:00001760       ??_C@_1CK@LMAB@?$AAC?$AAa?$AAn?$AA?8?$AAt?$AA?5?$AAf?$AAi?$AAn?$AAd?$AA?5?$AAN?$AAe?$AAt?$AAM?$AAs?$AAg?$AAB?$AAo?$AAx@ 10002760     dhcp.obj
+ 0001:0000178c       ??_C@_1GG@GILJ@?$AA?$CB?$AAC?$AAa?$AAl?$AAl?$AAN?$AAe?$AAt?$AAM?$AAs?$AAg?$AAB?$AAo?$AAx?$AA?3?$AA?5?$AAE?$AAr?$AAr?$AAo@ 1000278c     dhcp.obj
+ 0001:000017f4       ??_C@_1BE@NCEK@?$AAN?$AAe?$AAt?$AAM?$AAs?$AAg?$AAB?$AAo?$AAx?$AA?$AA@ 100027f4     dhcp.obj
+ 0001:00001808       ??_C@_1BE@HHPB@?$AAn?$AAe?$AAt?$AAu?$AAi?$AA?4?$AAd?$AAl?$AAl?$AA?$AA@ 10002808     dhcp.obj
+ 0001:0000181c       ??_C@_1DA@HHCG@?$AAC?$AAa?$AAn?$AA?8?$AAt?$AA?5?$AAf?$AAi?$AAn?$AAd?$AA?5?$AAG?$AAe?$AAt?$AAN?$AAe?$AAt?$AAS?$AAt?$AAr@ 1000281c     dhcp.obj
+ 0001:0000184c       ??_C@_1BK@CJFM@?$AAG?$AAe?$AAt?$AAN?$AAe?$AAt?$AAS?$AAt?$AAr?$AAi?$AAn?$AAg?$AA?$AA@ 1000284c     dhcp.obj
+ 0001:00001868       ??_C@_1DO@CPOG@?$AA?9?$AAR?$AAe?$AAq?$AAu?$AAe?$AAs?$AAt?$AAD?$AAH?$AAC?$AAP?$AAA?$AAd?$AAd?$AAr?$AA?3?$AA?5?$AAC?$AAo@ 10002868     dhcp.obj
+ 0001:000018a8       ??_C@_1GK@OMNM@?$AA?$CB?$AAR?$AAe?$AAq?$AAu?$AAe?$AAs?$AAt?$AAD?$AAH?$AAC?$AAP?$AAA?$AAd?$AAd?$AAr?$AA?3?$AA?5?$AAf?$AAo@ 100028a8     dhcp.obj
+ 0001:00001914       ??_C@_1EE@IKHI@?$AA?$CL?$AAR?$AAe?$AAq?$AAu?$AAe?$AAs?$AAt?$AAD?$AAH?$AAC?$AAP?$AAA?$AAd?$AAd?$AAr?$AA?3?$AA?5?$AA?$CF?$AAs@ 10002914     dhcp.obj
+ 0001:00001958       ??_C@_1EM@NEGB@?$AA?9?$AAD?$AAh?$AAc?$AAp?$AAW?$AAo?$AAr?$AAk?$AAe?$AAr?$AAT?$AAh?$AAr?$AAe?$AAa?$AAd?$AA?3?$AA?5?$AAW@ 10002958     dhcp.obj
+ 0001:000019a4       ??_C@_1FM@JNCH@?$AA?7?$AAD?$AAh?$AAc?$AAp?$AAW?$AAo?$AAr?$AAk?$AAe?$AAr?$AAT?$AAh?$AAr?$AAe?$AAa?$AAd?$AA?3?$AA?5?$AAl@ 100029a4     dhcp.obj
+ 0001:00001a00       ??_C@_1II@OHLB@?$AA?7?$AAD?$AAh?$AAc?$AAp?$AAW?$AAo?$AAr?$AAk?$AAe?$AAr?$AAT?$AAh?$AAr?$AAe?$AAa?$AAd?$AA?3?$AA?5?$AAc@ 10002a00     dhcp.obj
+ 0001:00001a88       ??_C@_1EE@IKDK@?$AAP?$AAu?$AAt?$AA?5?$AAA?$AAd?$AAa?$AAp?$AAt?$AAe?$AAr?$AA?5?$AAi?$AAn?$AA?5?$AAE?$AAs?$AAt?$AAa?$AAb@ 10002a88     dhcp.obj
+ 0001:00001ad0       _DhcpRegister              10002ad0 f   init.obj
+ 0001:00001b6f       _dllentry                  10002b6f f   init.obj
+ 0001:00001bdc       _CheckInitAdapters         10002bdc f   init.obj
+ 0001:0000202a       _Dhcp                      1000302a f   init.obj
+ 0001:00002170       _BuildDhcpPkt              10003170 f   packet.obj
+ 0001:0000265e       _Tvert                     1000365e f   packet.obj
+ 0001:000026db       _TranslatePkt              100036db f   packet.obj
+ 0001:0000304f       _DhcpSendDown              1000404f f   packet.obj
+ 0001:000030f8       _SendDhcpPkt               100040f8 f   packet.obj
+ 0001:00003540       _DebugBreak                10004540 f i packet.obj
+ 0001:00003550       _mul64_32_64               10004550 f   dhcp.obj
+ 0001:000035cb       _add64_32_64               100045cb f   dhcp.obj
+ 0001:00003600       _add64_64_64               10004600 f   dhcp.obj
+ 0001:00003688       _sub64_64_64               10004688 f   dhcp.obj
+ 0001:00003710       _div64_32_64               10004710 f   dhcp.obj
+ 0001:000037dc       _GetXid                    100047dc f   dhcp.obj
+ 0001:00003858       _NewDhcpInfo               10004858 f   dhcp.obj
+ 0001:00003898       _FreeDhcpInfo              10004898 f   dhcp.obj
+ 0001:00003917       __FindDhcp                 10004917 f   dhcp.obj
+ 0001:000039a5       _StringToAddr              100049a5 f   dhcp.obj
+ 0001:00003b96       _AddrToString              10004b96 f   dhcp.obj
+ 0001:00003ce6       _InsSort                   10004ce6 f   dhcp.obj
+ 0001:00003d67       _Convert                   10004d67 f   dhcp.obj
+ 0001:00003de4       _GetReqOptions             10004de4 f   dhcp.obj
+ 0001:000042f5       _GetDhcpConfig             100052f5 f   dhcp.obj
+ 0001:000049e6       _SetDhcpConfig             100059e6 f   dhcp.obj
+ 0001:00005208       _TakeNetDown               10006208 f   dhcp.obj
+ 0001:0000537c       _PutInWorkerQ              1000637c f   dhcp.obj
+ 0001:000053eb       _ProcessExpire             100063eb f   dhcp.obj
+ 0001:0000550f       _CalcMidwayTime            1000650f f   dhcp.obj
+ 0001:00005700       _CalcT1Time                10006700 f   dhcp.obj
+ 0001:000057a6       _DhcpInitSock              100067a6 f   dhcp.obj
+ 0001:00005944       _ProcessT2                 10006944 f   dhcp.obj
+ 0001:00005c8a       _ProcessT1                 10006c8a f   dhcp.obj
+ 0001:00005fd0       _PutNetUp                  10006fd0 f   dhcp.obj
+ 0001:00006180       _GetParams                 10007180 f   dhcp.obj
+ 0001:000065fd       _RequestDHCPAddr           100075fd f   dhcp.obj
+ 0001:000067a9       _DhcpWorkerThread          100077a9 f   dhcp.obj
+ 0001:000069e0       _CallNetMsgBox             100079e0 f i dhcp.obj
+ 0001:00006b60       _CallGetNetString          10007b60 f i dhcp.obj
+ 0001:00006c1e       _NKDbgPrintfW              10007c1e f   coredll:COREDLL.dll
+ 0001:00006c24       _RegisterDbgZones          10007c24 f   coredll:COREDLL.dll
+ 0001:00006c2a       _wcscmp                    10007c2a f   coredll:COREDLL.dll
+ 0001:00006c30       _RegCloseKey               10007c30 f   coredll:COREDLL.dll
+ 0001:00006c36       _RegEnumKeyExW             10007c36 f   coredll:COREDLL.dll
+ 0001:00006c3c       _RegOpenKeyExW             10007c3c f   coredll:COREDLL.dll
+ 0001:00006c42       _wcslen                    10007c42 f   coredll:COREDLL.dll
+ 0001:00006c48       _wcscpy                    10007c48 f   coredll:COREDLL.dll
+ 0001:00006c4e       _SetLastError              10007c4e f   coredll:COREDLL.dll
+ 0001:00006c54       _Random                    10007c54 f   coredll:COREDLL.dll
+ 0001:00006c5a       _QueryPerformanceCounter   10007c5a f   coredll:COREDLL.dll
+ 0001:00006c60       _GetCurrentFT              10007c60 f   coredll:COREDLL.dll
+ 0001:00006c66       _CloseHandle               10007c66 f   coredll:COREDLL.dll
+ 0001:00006c6c       _CreateThread              10007c6c f   coredll:COREDLL.dll
+ 0001:00006c72       _InitializeCriticalSection 10007c72 f   coredll:COREDLL.dll
+ 0001:00006c78       _memcpy                    10007c78 f   coredll:COREDLL.dll
+ 0001:00006c7e       _memset                    10007c7e f   coredll:COREDLL.dll
+ 0001:00006c84       _RegQueryValueExW          10007c84 f   coredll:COREDLL.dll
+ 0001:00006c8a       _wcscat                    10007c8a f   coredll:COREDLL.dll
+ 0001:00006c90       _memcmp                    10007c90 f   coredll:COREDLL.dll
+ 0001:00006c96       _EnterCriticalSection      10007c96 f   coredll:COREDLL.dll
+ 0001:00006c9c       _GetTickCount              10007c9c f   coredll:COREDLL.dll
+ 0001:00006ca2       _LeaveCriticalSection      10007ca2 f   coredll:COREDLL.dll
+ 0001:00006ca8       __allshr                   10007ca8 f   coredll:COREDLL.dll
+ 0001:00006cae       __allshl                   10007cae f   coredll:COREDLL.dll
+ 0001:00006cb4       __allmul                   10007cb4 f   coredll:COREDLL.dll
+ 0001:00006cba       _LocalAlloc                10007cba f   coredll:COREDLL.dll
+ 0001:00006cc0       _LocalFree                 10007cc0 f   coredll:COREDLL.dll
+ 0001:00006cc6       _DeleteCriticalSection     10007cc6 f   coredll:COREDLL.dll
+ 0001:00006ccc       _RegEnumValueW             10007ccc f   coredll:COREDLL.dll
+ 0001:00006cd2       _mbstowcs                  10007cd2 f   coredll:COREDLL.dll
+ 0001:00006cd8       _RegDeleteValueW           10007cd8 f   coredll:COREDLL.dll
+ 0001:00006cde       _CompareFileTime           10007cde f   coredll:COREDLL.dll
+ 0001:00006ce4       _GetLastError              10007ce4 f   coredll:COREDLL.dll
+ 0001:00006cea       _Sleep                     10007cea f   coredll:COREDLL.dll
+ 0001:00006cf0       _FreeLibrary               10007cf0 f   coredll:COREDLL.dll
+ 0001:00006cf6       _FormatMessageW            10007cf6 f   coredll:COREDLL.dll
+ 0001:00006cfc       _GetProcAddressW           10007cfc f   coredll:COREDLL.dll
+ 0001:00006d02       _LoadLibraryW              10007d02 f   coredll:COREDLL.dll
+ 0001:00006d08       _IsAPIReady                10007d08 f   coredll:COREDLL.dll
+ 0001:00006d0e       _GetRegDWORDValue          10007d0e f   cxport:CXPORT.dll
+ 0001:00006d14       _GetRegSZValue             10007d14 f   cxport:CXPORT.dll
+ 0001:00006d1a       _SetRegBinaryValue         10007d1a f   cxport:CXPORT.dll
+ 0001:00006d20       _CTEStopFTimer             10007d20 f   cxport:CXPORT.dll
+ 0001:00006d26       _GetRegBinaryValue         10007d26 f   cxport:CXPORT.dll
+ 0001:00006d2c       _GetRegMultiSZValue        10007d2c f   cxport:CXPORT.dll
+ 0001:00006d32       _SetRegMultiSZValue        10007d32 f   cxport:CXPORT.dll
+ 0001:00006d38       _SetRegSZValue             10007d38 f   cxport:CXPORT.dll
+ 0001:00006d3e       _SetRegDWORDValue          10007d3e f   cxport:CXPORT.dll
+ 0001:00006d44       _CTEStartFTimer            10007d44 f   cxport:CXPORT.dll
+ 0001:00006d4c       __IMPORT_DESCRIPTOR_COREDLL 10007d4c     coredll:COREDLL.dll
+ 0001:00006d60       __IMPORT_DESCRIPTOR_CXPORT 10007d60     cxport:CXPORT.dll
+ 0001:00006d74       __NULL_IMPORT_DESCRIPTOR   10007d74     coredll:COREDLL.dll
+ 0002:00000000       __imp__LocalAlloc          10008000     coredll:COREDLL.dll
+ 0002:00000004       __imp__RegisterDbgZones    10008004     coredll:COREDLL.dll
+ 0002:00000008       __imp__wcscmp              10008008     coredll:COREDLL.dll
+ 0002:0000000c       __imp__RegCloseKey         1000800c     coredll:COREDLL.dll
+ 0002:00000010       __imp__RegEnumKeyExW       10008010     coredll:COREDLL.dll
+ 0002:00000014       __imp__RegOpenKeyExW       10008014     coredll:COREDLL.dll
+ 0002:00000018       __imp__wcslen              10008018     coredll:COREDLL.dll
+ 0002:0000001c       __imp__wcscpy              1000801c     coredll:COREDLL.dll
+ 0002:00000020       __imp__SetLastError        10008020     coredll:COREDLL.dll
+ 0002:00000024       __imp__Random              10008024     coredll:COREDLL.dll
+ 0002:00000028       __imp__QueryPerformanceCounter 10008028     coredll:COREDLL.dll
+ 0002:0000002c       __imp__GetCurrentFT        1000802c     coredll:COREDLL.dll
+ 0002:00000030       __imp__CloseHandle         10008030     coredll:COREDLL.dll
+ 0002:00000034       __imp__CreateThread        10008034     coredll:COREDLL.dll
+ 0002:00000038       __imp__InitializeCriticalSection 10008038     coredll:COREDLL.dll
+ 0002:0000003c       __imp__memcpy              1000803c     coredll:COREDLL.dll
+ 0002:00000040       __imp__memset              10008040     coredll:COREDLL.dll
+ 0002:00000044       __imp__RegQueryValueExW    10008044     coredll:COREDLL.dll
+ 0002:00000048       __imp__wcscat              10008048     coredll:COREDLL.dll
+ 0002:0000004c       __imp__memcmp              1000804c     coredll:COREDLL.dll
+ 0002:00000050       __imp__EnterCriticalSection 10008050     coredll:COREDLL.dll
+ 0002:00000054       __imp__GetTickCount        10008054     coredll:COREDLL.dll
+ 0002:00000058       __imp__LeaveCriticalSection 10008058     coredll:COREDLL.dll
+ 0002:0000005c       __imp___allshr             1000805c     coredll:COREDLL.dll
+ 0002:00000060       __imp___allshl             10008060     coredll:COREDLL.dll
+ 0002:00000064       __imp___allmul             10008064     coredll:COREDLL.dll
+ 0002:00000068       __imp__NKDbgPrintfW        10008068     coredll:COREDLL.dll
+ 0002:0000006c       __imp__LocalFree           1000806c     coredll:COREDLL.dll
+ 0002:00000070       __imp__DeleteCriticalSection 10008070     coredll:COREDLL.dll
+ 0002:00000074       __imp__RegEnumValueW       10008074     coredll:COREDLL.dll
+ 0002:00000078       __imp__mbstowcs            10008078     coredll:COREDLL.dll
+ 0002:0000007c       __imp__RegDeleteValueW     1000807c     coredll:COREDLL.dll
+ 0002:00000080       __imp__CompareFileTime     10008080     coredll:COREDLL.dll
+ 0002:00000084       __imp__GetLastError        10008084     coredll:COREDLL.dll
+ 0002:00000088       __imp__Sleep               10008088     coredll:COREDLL.dll
+ 0002:0000008c       __imp__FreeLibrary         1000808c     coredll:COREDLL.dll
+ 0002:00000090       __imp__FormatMessageW      10008090     coredll:COREDLL.dll
+ 0002:00000094       __imp__GetProcAddressW     10008094     coredll:COREDLL.dll
+ 0002:00000098       __imp__LoadLibraryW        10008098     coredll:COREDLL.dll
+ 0002:0000009c       __imp__IsAPIReady          1000809c     coredll:COREDLL.dll
+ 0002:000000a0       \177COREDLL_NULL_THUNK_DATA 100080a0     coredll:COREDLL.dll
+ 0002:000000a4       __imp__GetRegMultiSZValue  100080a4     cxport:CXPORT.dll
+ 0002:000000a8       __imp__GetRegSZValue       100080a8     cxport:CXPORT.dll
+ 0002:000000ac       __imp__SetRegBinaryValue   100080ac     cxport:CXPORT.dll
+ 0002:000000b0       __imp__CTEStopFTimer       100080b0     cxport:CXPORT.dll
+ 0002:000000b4       __imp__GetRegBinaryValue   100080b4     cxport:CXPORT.dll
+ 0002:000000b8       __imp__GetRegDWORDValue    100080b8     cxport:CXPORT.dll
+ 0002:000000bc       __imp__SetRegMultiSZValue  100080bc     cxport:CXPORT.dll
+ 0002:000000c0       __imp__SetRegSZValue       100080c0     cxport:CXPORT.dll
+ 0002:000000c4       __imp__SetRegDWORDValue    100080c4     cxport:CXPORT.dll
+ 0002:000000c8       __imp__CTEStartFTimer      100080c8     cxport:CXPORT.dll
+ 0002:000000cc       \177CXPORT_NULL_THUNK_DATA 100080cc     cxport:CXPORT.dll
+ 0002:000000d0       _dpCurSettings             100080d0     init.obj
+ 0002:00000514       _v_aDftReqOptions          10008514     dhcp.obj
+ 0002:00000520       _v_cXid                    10008520     <common>
+ 0002:00000524       _v_fWorkerThread           10008524     <common>
+ 0002:00000528       _v_pEstablishedList        10008528     <common>
+ 0002:00000540       _v_GlobalListLock          10008540     <common>
+ 0002:00000554       _v_pWaitingList            10008554     <common>
+ 0002:00000558       _v_fXidInit                10008558     <common>
+ 0002:0000055c       _v_apAfdFns                1000855c     <common>
+ 0002:00000560       _pfnIPSetNTEAddr           10008560     <common>
+ 0002:00000564       _pfnSetDHCPNTE             10008564     <common>
+ 0002:00000568       _v_apSocketFns             10008568     <common>
+
+ entry point at        0001:00001b6f
+
+ Static symbols
+

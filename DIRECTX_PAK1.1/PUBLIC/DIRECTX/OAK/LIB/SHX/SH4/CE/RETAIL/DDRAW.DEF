@@ -1,0 +1,16 @@
+LIBRARY DDRAW
+
+; DESCRIPTION 'DirectDraw client-side'
+
+EXPORTS
+    DirectDrawCreate
+    DirectDrawCreateClipper
+    DirectDrawEnumerateA
+    DirectDrawEnumerateW
+    DirectDrawEnumerateExA
+    DirectDrawEnumerateExW
+
+
+
+
+

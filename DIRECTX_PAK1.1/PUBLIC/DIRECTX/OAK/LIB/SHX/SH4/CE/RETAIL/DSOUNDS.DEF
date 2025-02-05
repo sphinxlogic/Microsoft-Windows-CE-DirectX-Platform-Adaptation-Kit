@@ -1,0 +1,13 @@
+LIBRARY 	DSOUNDS
+
+EXPORTS DSS_Init
+	DSS_Deinit
+	DSS_Open
+	DSS_Close
+	DSS_Read
+	DSS_Write
+	DSS_Seek
+	DSS_IOControl
+	DSS_PowerDown
+	DSS_PowerUp
+	DSoundSDllEntry

@@ -1,0 +1,22 @@
+TARGETNAME=iesample
+TARGETTYPE=PROGRAM
+RELEASETYPE=OAK
+EXEENTRY=WinMain
+
+TARGETLIBS=	$(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
+		$(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\ole32.lib	 \
+		$(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\oleaut32.lib \
+		$(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\commctrl.lib \
+		$(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\uuid.lib \
+		$(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\wininet.lib
+
+PRECOMPILED_INCLUDE=Precomp.h
+PRECOMPILED_CXX=1
+RCADDNULL=1
+
+LDEFSTACK=/STACK:100000
+
+SOURCES=mainwnd.cpp	\
+	options.cpp	\
+	animthrd.cpp	\
+	iesample.rc

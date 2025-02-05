@@ -1,0 +1,10 @@
+DIRS=           \
+    DDUtil      \
+    DDex1	\
+    DDex2       \
+    DDex3       \
+    DDex4	\
+    Mosquito    \
+    Donuts
+    
+

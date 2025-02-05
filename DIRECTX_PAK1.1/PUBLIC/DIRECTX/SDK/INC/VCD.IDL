@@ -1,0 +1,106 @@
+import "unknwn.idl";
+
+typedef struct _REPEAT_AB {
+    int  iPlayItem;
+    long lStart;
+    long lStop;
+} REPEAT_AB, *PREPEAT_AB;
+ 
+typedef struct _STRIDE {
+    int  iPlayItem;
+    BOOL bForward;
+    int  iStep;
+} STRIDE, *PSTRIDE;
+ 
+[
+object,
+uuid(71b0aca0-b5f4-11d0-88b8-08002be53f4a),
+pointer_default(unique)
+]
+interface IVideoCDPlaybackSource: IUnknown
+{
+        HRESULT CheckPlayNext();
+        HRESULT PlayNext();
+
+        HRESULT CheckPlayPrevious();
+        HRESULT PlayPrevious();
+
+        HRESULT CheckPlayReturn();
+        HRESULT PlayReturn();
+
+        HRESULT PlayDefault();
+
+        HRESULT PlayNumeric([in] int iNum);
+
+        HRESULT CheckPlayTrack([in] int iNum, [in] long lOffset);
+        HRESULT PlayTrack([in] int iNum, [in] long lOffset);
+
+        HRESULT CheckRepeatAB([in] PREPEAT_AB pAB);
+        HRESULT RepeatAB([in] PREPEAT_AB pAB);
+
+        HRESULT CheckStride([in] PSTRIDE pStride);
+        HRESULT Stride([in] PSTRIDE pStride);
+}
+
+[
+object,
+uuid(71b0aca1-b5f4-11d0-88b8-08002be53f4a),
+pointer_default(unique)
+]
+interface IVideoCDPlaybackRendering: IUnknown
+{
+        HRESULT GetPlayItem([out] int *pPlayItem); 
+        HRESULT GetTrack([out] int *pTrackNum); 
+        HRESULT GetMediaTime([out] long *pSeconds);
+        HRESULT DisplayStillFrame();
+        HRESULT SlowForward([in] double dRate);
+}
+
+[
+object,
+uuid(15818aa0-a6da-11d0-88b8-08002be53f4a),
+pointer_default(unique)
+]
+interface IVideoCDManager: IUnknown
+{
+        //
+        // IMediaControl methods(incmplete)
+        //
+        HRESULT Run();
+        HRESULT Pause();
+        HRESULT Stop();
+
+        //
+        // IMediaEvent methods
+        //
+        HRESULT GetEventHandle([out] HEVENT * hEvent);
+        HRESULT GetEvent([out] long * lEventCode, [out] long * lParam1,
+                         [out] long * lParam2, [in] long msTimeout );
+        HRESULT FreeEventParams([in] long lEvCode, [in] long lParam1,
+                                [in] long lParam2);
+        HRESULT WaitForCompletion([in] long msTimeout, [out] long * pEvCode);
+
+        HRESULT CancelDefaultHandling([in] long lEvCode);
+        HRESULT RestoreDefaultHandling([in] long lEvCode);
+
+        //
+        // IVideoCDPlaybackSource methods
+        // 
+        HRESULT PlayNext();
+        HRESULT PlayPrevious();
+        HRESULT PlayDefault();
+        HRESULT PlayReturn();
+        HRESULT PlayNumeric([in] int iNum);
+        HRESULT PlayTrack([in] int iNum, [in] long lOffset);
+        HRESULT RepeatAB([in] PREPEAT_AB pAB);
+        HRESULT Stride([in] PSTRIDE pStride);
+
+        //
+        // IVideoCDPlaybackRendering methods
+        //
+        HRESULT GetPlayItem([out] int *pPlayItem); 
+        HRESULT GetTrack([out] int *pTrackNum);
+        HRESULT GetMediaTime([out] long *pSeconds);
+        HRESULT DisplayStillFrame();
+        HRESULT SlowForward(double dRate);
+}

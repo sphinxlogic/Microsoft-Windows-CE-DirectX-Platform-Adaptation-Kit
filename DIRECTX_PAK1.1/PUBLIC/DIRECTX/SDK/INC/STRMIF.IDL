@@ -1,0 +1,43 @@
+//==========================================================================;
+//
+//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
+//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
+//  PURPOSE.
+//
+//  Copyright (c) 1992 - 2000  Microsoft Corporation.  All Rights Reserved.
+//
+//--------------------------------------------------------------------------;
+
+// ActiveMovie interface definitions
+
+import "unknwn.idl";
+import "objidl.idl";	// for IPersist (IFilter's root)
+
+#ifdef UNDER_CE
+#include "dxmce.idl"
+#endif
+
+// core interfaces
+#include "axcore.idl"
+
+// extended, ActiveMovie-only interfaces
+#include "axextend.idl"
+
+#ifndef UNDER_CE
+// ActiveMovie-only sample plug-in distributor interface
+#include "IAMovie.idl"
+
+#else
+
+#ifndef NO_FILTERMAPPER2
+#include "devenum.idl"
+#endif
+
+// application interfaces for DVD
+#include "dvdif.idl"
+
+// VideoCD playback interfaces
+#include "vcd.idl"
+
+#endif // UNDER_CE

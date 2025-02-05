@@ -1,0 +1,689 @@
+WINCEPROJ=directx
+
+#
+# Include shared SYSGEN makefile
+#
+
+!INCLUDE $(_PUBLICROOT)\common\cesysgen\cesysgen.mak
+
+!IF "$(__CLEANMODE)"=="1"
+MAKE=$(MAKE) /a
+!ENDIF
+
+preproc: includes $(DIRECTX_MODULES) files 
+
+postproc:$(DIRECTX_REPLACE_MODULES) postlocalize
+
+#
+# These are parts of the sysgen process not associated with any modules. They are always run.
+#
+includes:
+	@echo Processing include files
+	$(SG_TOKENFILTER) $(SG_INPUT_ROOT)\sdk\inc\*.* $(SG_OUTPUT_ROOT)\sdk\inc
+	$(SG_TOKENFILTER) $(SG_INPUT_ROOT)\oak\inc\*.* $(SG_OUTPUT_ROOT)\oak\inc
+#	$(SG_TOKENFILTER) $(SG_INPUT_ROOT)\ddk\inc\*.* $(SG_OUTPUT_ROOT)\ddk\inc
+
+files:
+	$(SG_TOKENFILTER) $(SG_INPUT_ROOT)\oak\files\$(WINCEPROJ).* $(SG_OUTPUT_ROOT)\oak\files
+!IF "$(WINCEREL)"=="1"
+	copy $(SG_OUTPUT_ROOT)\oak\files\$(WINCEPROJ).* $(_FLATRELEASEDIR)
+!ENDIF
+
+#	-@xcopy /D /I $(SG_INPUT_ROOT)\oak\files\*.2bp $(SG_OUTPUT_ROOT)\oak\files
+#	-@xcopy /D /I $(SG_INPUT_ROOT)\oak\files\*.bmp $(SG_OUTPUT_ROOT)\oak\files
+#	-@xcopy /D /I $(SG_INPUT_ROOT)\oak\files\*.gif $(SG_OUTPUT_ROOT)\oak\files
+#	-@xcopy /D /I $(SG_INPUT_ROOT)\oak\files\*.lnk $(SG_OUTPUT_ROOT)\oak\files
+#	-@xcopy /D /I $(SG_INPUT_ROOT)\oak\files\*.ttf $(SG_OUTPUT_ROOT)\oak\files
+#	-@xcopy /i /e /q /c /D $(SG_INPUT_ROOT)\oak\files\intltrns $(SG_OUTPUT_ROOT)\oak\files\intltrns
+#	-@xcopy /i /e /q /c /D $(SG_INPUT_ROOT)\oak\files\intlfile $(SG_OUTPUT_ROOT)\oak\files\intlfile
+
+####################################################################################################
+# These are modules which link as part of the sysgen phase, but are not componentized.
+# This includes everything else in PRIVATE\WINCEOS except those that have explicit rules above
+# When you add your module here, please follow the 4-step instructions laid down below.
+####################################################################################################
+#
+# STEP1: List your dependencies (other things that must link before you in the sysgen phase) and
+#        set your TARGETLIBS variable. List your link libs & RES files first and your import libs last
+#        Don't list coredll.dll. It will be included by default. Don't set SOURCELIBS. It is not used
+#        in this phase. Also note that all rules in this section must end in :: not :
+#
+# IMPORTANT: Don't forget to list your dependencies. Anything you list in TARGETLIBS that also builds
+# in *this* makefile *must* be listed as a dependency. DO NOT list stuff built elsewhere, such as in
+# the WINCEOS tree's sysgen phase
+
+## Some useful generic macros
+OWNLIB=$(SG_INPUT_LIB)\$@.lib
+OWNRES=$(SG_INPUT_LIB)\$@.res
+OWNLIB_RES=$(SG_INPUT_LIB)\$@.lib $(SG_INPUT_LIB)\$@.res
+SG_INPUT_OAKTGT=$(SG_INPUT_ROOT)\oak\target\$(_CPUINDPATH)
+## Some useful directx macros
+DX_ROOT=$(_PUBLICROOT)\$(WINCEPROJ)
+DX_SDKLIB=$(DX_ROOT)\sdk\lib\$(_CPUINDPATH)
+DX_OAKLIB=$(DX_ROOT)\oak\lib\$(_CPUINDPATH)
+DSFILTER_LIBS=$(SG_OUTPUT_SDKLIB)\strmbase.lib $(SG_OUTPUT_SDKLIB)\strmiids.lib
+## Some useful OLE macros
+OLELIBS=$(SG_OUTPUT_SDKLIB)\uuid.lib $(SG_OUTPUT_SDKLIB)\ole32.lib $(SG_OUTPUT_SDKLIB)\oleaut32.lib
+CCLIB=$(SG_OUTPUT_SDKLIB)\commctrl.lib 
+WINSOCKLIB=$(SG_OUTPUT_SDKLIB)\winsock.lib
+
+# DirectX
+#
+# Don't use @ for things that can fail, otherwise its very hard to track down errors
+
+##########################################################################################################
+
+directsound:: dsound dsounds
+
+dsound::
+	@set DLLENTRY=DllMain
+	@set TARGETLIBS=$(OWNLIB) $(SG_OUTPUT_SDKLIB)\uuid.lib
+
+dsounds::
+	@set DLLENTRY=DSoundSDllEntry
+	@set TARGETLIBS=$(OWNLIB) $(SG_OUTPUT_SDKLIB)\uuid.lib $(DX_OAKLIB)\DSMixer.lib
+
+dsplay:: dsound
+	@set TARGETLIBS=$(OWNLIB) $(SG_OUTPUT_SDKLIB)\dsound.lib $(SG_OUTPUT_SDKLIB)\uuid.lib $(SG_OUTPUT_SDKLIB)\dxguid.lib
+
+CaptureEcho:: dsound
+	@set TARGETLIBS=$(OWNLIB) $(SG_OUTPUT_SDKLIB)\dsound.lib $(SG_OUTPUT_SDKLIB)\uuid.lib $(SG_OUTPUT_SDKLIB)\dxguid.lib
+
+acmdwrap::
+	@set DLLENTRY=DllMain
+	@set TARGETLIBS=$(OWNLIB) 
+
+wavebuff::
+	@set DLLENTRY=dllentry
+	@set TARGETLIBS=$(OWNLIB) $(SG_OUTPUT_SDKLIB)\dsound.lib $(SG_OUTPUT_SDKLIB)\uuid.lib 
+
+idswave::
+	@set DLLENTRY=DllEntry
+	@set TARGETLIBS=$(OWNLIB) $(SG_OUTPUT_SDKLIB)\uuid.lib
+
+mxat::
+	@set DLLENTRY=DllMain
+	@set TARGETLIBS=$(OWNLIB) 
+
+es1371::
+	@set DLLENTRY=dllentry
+	@set TARGETLIBS=$(OWNLIB) $(DX_OAKLIB)\dsndmdd.lib $(SG_OUTPUT_OAKLIB)\ceddk.lib \
+$(DX_OAKLIB)\irqmap.lib
+
+idses1371::
+	@set DLLENTRY=DllEntry
+	@set TARGETLIBS=$(OWNLIB) $(SG_OUTPUT_OAKLIB)\ceddk.lib $(DX_OAKLIB)\irqmap.lib	\
+$(SG_OUTPUT_SDKLIB)\uuid.lib
+
+igs5000::
+	@set DLLENTRY=dllentry
+	@set TARGETLIBS=$(OWNLIB) $(DX_OAKLIB)\dsndmdd.lib $(SG_OUTPUT_OAKLIB)\ceddk.lib \
+$(DX_OAKLIB)\irqmap.lib
+
+mixerapi::
+	@set DLLENTRY=DllMain
+	@set TARGETLIBS=$(OWNLIB)
+
+
+##########################################################################################################
+
+directdraw:: ddcore ddraw ddstub $(SG_OUTPUT_OAKLIB)\ddgpe.lib $(SG_OUTPUT_SDKLIB)\dxguid.lib ddex1 ddex2 ddex3 ddex4 mosquito donuts foxbear
+
+ddcore::
+	@set DLLENTRY=DllMain
+	@set TARGETLIBS=$(OWNLIB) $(OLELIBS) $(DX_SDKLIB)\dxguid.lib
+
+ddstub:: ddcore
+	@set DLLENTRY=DllMain
+	@set TARGETLIBS=$(OWNLIB) $(SG_OUTPUT_SDKLIB)\uuid.lib $(SG_OUTPUT_OAKLIB)\ddcore.lib $(DX_SDKLIB)\dxguid.lib
+
+ddraw::
+	@set DLLENTRY=_DllMainCRTStartup
+	@set TARGETLIBS=$(OWNLIB) $(SG_OUTPUT_SDKLIB)\uuid.lib $(DX_SDKLIB)\dxguid.lib
+
+ddhel:: ddcore
+	@set DLLENTRY=DllMain
+	@set TARGETLIBS=$(OWNLIB) $(OLELIBS) $(SG_OUTPUT_OAKLIB)\ddcore.lib $(DX_SDKLIB)\dxguid.lib $(DX_OAKLIB)\blitlib.lib
+
+$(SG_OUTPUT_OAKLIB)\ddgpe.lib: $(DX_OAKLIB)\ddgpe.lib
+	copy $? $@
+
+$(SG_OUTPUT_SDKLIB)\dxguid.lib: $(DX_SDKLIB)\dxguid.lib
+	copy $? $@
+
+dxguid:: $(SG_OUTPUT_SDKLIB)\dxguid.lib
+
+ddex1:: ddraw dxguid
+	@set TARGETLIBS=$(OWNLIB) $(SG_OUTPUT_SDKLIB)\uuid.lib $(SG_OUTPUT_SDKLIB)\dxguid.lib $(SG_OUTPUT_SDKLIB)\ddraw.lib
+
+mosquito:: ddraw dxguid
+	@set TARGETLIBS=$(OWNLIB_RES) $(SG_OUTPUT_SDKLIB)\uuid.lib $(SG_OUTPUT_SDKLIB)\dxguid.lib $(SG_OUTPUT_SDKLIB)\ddraw.lib
+
+ddex2 ddex3 ddex4:: ddraw dxguid
+	@set TARGETLIBS=$(OWNLIB_RES) $(SG_OUTPUT_SDKLIB)\uuid.lib $(SG_OUTPUT_SDKLIB)\dxguid.lib $(SG_OUTPUT_SDKLIB)\ddraw.lib $(DX_OAKLIB)\ddutil.lib
+
+donuts:: dsound ddraw dxguid
+	@set TARGETLIBS=$(OWNLIB_RES) $(SG_OUTPUT_SDKLIB)\uuid.lib $(SG_OUTPUT_SDKLIB)\dxguid.lib $(SG_OUTPUT_SDKLIB)\ddraw.lib $(DX_OAKLIB)\ddutil.lib $(SG_OUTPUT_SDKLIB)\dsound.lib
+
+foxbear:: dsound ddraw dxguid
+	@set TARGETLIBS=$(OWNLIB_RES) $(SG_OUTPUT_SDKLIB)\uuid.lib $(SG_OUTPUT_SDKLIB)\dxguid.lib $(SG_OUTPUT_SDKLIB)\ddraw.lib $(DX_OAKLIB)\ddutil.lib  $(SG_OUTPUT_SDKLIB)\dsound.lib
+
+ddi_igs2 ddi_igs5 ddi_ds3v::$(SG_OUTPUT_OAKLIB)\ddgpe.lib $(SG_OUTPUT_SDKLIB)\dxguid.lib
+	@set DLLENTRY=_DllMainCRTStartup
+	@set TARGETLIBS=$(OWNLIB) $(SG_OUTPUT_OAKLIB)\ddgpe.lib $(SG_OUTPUT_SDKLIB)\dxguid.lib \
+$(SG_OUTPUT_OAKLIB)\emul.lib $(SG_OUTPUT_OAKLIB)\gpe.lib $(SG_OUTPUT_OAKLIB)\ceddk.lib $(DX_OAKLIB)\irqmap.lib
+
+tmix:: mixerapi
+	@set TARGETLIBS=$(OWNLIB) $(SG_OUTPUT_SDKLIB)\mixerapi.lib
+
+##########################################################################################################
+
+dmcompos::
+	@set DLLENTRY=_DllMainCRTStartup
+	@set TARGETLIBS=$(OWNLIB) $(OLELIBS)
+
+dmsynth::
+        @set DLLENTRY=_DllMainCRTStartup
+        @set TARGETLIBS=$(OWNLIB) $(OLELIBS)
+
+dmusic::
+	@set DLLENTRY=_DllMainCRTStartup
+	@set TARGETLIBS=$(OWNLIB) $(OLELIBS) \
+                        $(SG_OUTPUT_OAKLIB)\fulllibc.lib \
+                        $(SG_OUTPUT_SDKLIB)\dsound.lib \
+                        $(SG_INPUT_LIB)\dmband.lib \
+                        $(SG_INPUT_LIB)\dmime.lib \
+                        $(SG_INPUT_LIB)\dmloader.lib \
+                        $(SG_INPUT_LIB)\dmstyle.lib
+
+msdls::
+	copy $(SG_INPUT_ROOT)\oak\files\wince_gm.dls $(SG_OUTPUT_ROOT)\oak\files
+
+rlddls::
+	copy $(SG_INPUT_ROOT)\oak\files\gm.dls $(SG_OUTPUT_ROOT)\oak\files
+
+##########################################################################################################
+
+amovie::$(SG_OUTPUT_SDKLIB)\strmiids.lib
+	@set DLLENTRY=_DllMainCRTStartup
+	@set TARGETLIBS=$(OWNLIB_RES) $(OLELIBS) $(SG_OUTPUT_SDKLIB)\strmiids.lib
+
+##########################################################################################################
+
+wmt40::
+    !ERROR wmt40 is no longer sysgenable - use dxmasf instead.
+
+nserror::
+	@set DLLENTRY=_DllMainCRTStartup
+	@set TARGETLIBS=$(OWNLIB_RES)
+
+cleanup_wmt::
+	@set CLEANUP_ROOT=$(SG_OUTPUT_ROOT)
+
+cleanup_wmt:: cleanup_quartz_tree
+
+cleanup_wmt_directx::
+	@set CLEANUP_ROOT=$(_PUBLICROOT)\directx
+
+cleanup_wmt_directx:: cleanup_wmt_tree
+
+cleanup_wmt_tree: 
+	@echo Cleaning up wmt files in %%CLEANUP_ROOT%%...
+	@pushd .
+	@
+	@chdir %%CLEANUP_ROOT%%\oak\lib\$(_CPUINDPATH)
+	-@$(CLEANCMD) dxmasf*.* strmdll.* nserror.* wsasock.* 
+	@
+	@chdir %%CLEANUP_ROOT%%\sdk\lib\$(_CPUINDPATH)
+	-@$(CLEANCMD) dxmasf*.* strmdll.* nserror.* wsasock.* 
+	@
+	@chdir %%CLEANUP_ROOT%%\oak\target\$(_CPUINDPATH)
+	-@$(CLEANCMD) dxmasf*.* strmdll.* nserror.* wsasock.*
+	@
+	@chdir %%CLEANUP_ROOT%%\sdk\inc
+	-@$(CLEANCMD) qnetwork.* playlist.*
+	@
+	@chdir  %%CLEANUP_ROOT%%\oak\inc
+	-@popd
+
+##########################################################################################################
+
+QUARTZ_CORE_COMPONENTS=amutil fgctl filgraph
+
+amstream:: directdraw strmsamp
+	@set DLLENTRY=DllEntryPoint
+	@set TARGETLIBS=$(OWNLIB_RES) $(OLELIBS) $(SG_OUTPUT_SDKLIB)\dxguid.lib $(SG_OUTPUT_SDKLIB)\ddraw.lib \
+$(SG_OUTPUT_SDKLIB)\amstrmid.lib
+
+strmsamp:: directdraw
+	@set TARGETLIBS=$(OWNLIB) $(OLELIBS) $(SG_OUTPUT_SDKLIB)\ddraw.lib $(SG_OUTPUT_SDKLIB)\amstrmid.lib
+
+msadpcm::
+	@set DLLENTRY=DllMain
+	@set TARGETLIBS=$(OWNLIB_RES)
+
+imaadpcm pcmconv msgsm610 msg711 msacmce::
+	@set DLLENTRY=DllMain
+	@set TARGETLIBS=$(OWNLIB)
+
+msrle32 icm::
+	@set DLLENTRY=DllEntryPoint
+	@set TARGETLIBS=$(OWNLIB)
+
+mpeg4v3: $(SG_OUTPUT_OAKTGT)\mpg4ds32.dll
+
+wmaudio: $(SG_OUTPUT_OAKTGT)\msaud32.dll
+
+iccvid l3filter sl_anet: $(SG_OUTPUT_OAKTGT)\$@.dll
+
+$(SG_OUTPUT_OAKTGT)\iccvid.dll 	 \
+$(SG_OUTPUT_OAKTGT)\msaud32.dll  \
+$(SG_OUTPUT_OAKTGT)\mpg4ds32.dll \
+$(SG_OUTPUT_OAKTGT)\l3filter.dll \
+$(SG_OUTPUT_OAKTGT)\sl_anet.dll \
+: $(SG_INPUT_OAKTGT)\$(@F)
+	copy $? $@
+!IF "$(WINCEREL)"=="1"
+	copy $? $(_FLATRELEASEDIR)
+!ENDIF
+
+$(SG_OUTPUT_SDKLIB)\strmiids.lib \
+$(SG_OUTPUT_SDKLIB)\strmbase.lib \
+$(SG_OUTPUT_SDKLIB)\amstrmid.lib \
+: $(DX_SDKLIB)\$(@F)
+	copy $? $@
+
+$(QUARTZ_CORE_COMPONENTS) 		\
+asyncrdr msreader simpread 		\
+midirdr qtrdr avidec acmwrap colour 	\
+dvsp dvmux dvenc dvcap dvavc dvdump 	\
+image mididm scmdout:
+	@set SOURCELIBS=%%SOURCELIBS%% $(DX_OAKLIB)\$@.lib
+
+#####################################################################
+
+nsmulti  \
+objdisp  \
+urlgrab  \
+xmlplayl:
+	@set SOURCELIBS=%%SOURCELIBS%% $(DX_OAKLIB)\$@.lib
+
+httpstrm \
+msstrm   \
+filestrm \
+msbstrm:
+	@set SOURCELIBS=%%SOURCELIBS%%
+
+#####################################################################
+
+urlrdr::
+	@set SOURCELIBSTMP=%%SOURCELIBS%%
+
+urlrdr:: 
+	@set SOURCELIBS=%%SOURCELIBSTMP%% $(DX_OAKLIB)\$@.lib 
+	@set QUARTZLIBS=%%QUARTZLIBS%% $(SG_OUTPUT_SDKLIB)\urlmon.lib
+
+avimsr wavemsr: msreader 
+	@set SOURCELIBS=%%SOURCELIBS%% $(DX_OAKLIB)\$@.lib
+
+midirdr: simpread
+	@set SOURCELIBS=%%SOURCELIBS%% $(DX_OAKLIB)\$@.lib
+
+dvdec:
+	@set SOURCELIBS=%%SOURCELIBS%% $(DX_OAKLIB)\$@.lib
+	@set QUARTZLIBS=%%QUARTZLIBS%% $(DX_OAKLIB)\dvdecode.lib
+
+waveout midiout: wavcore
+	if not defined _DSNDOUT copy $(DX_OAKLIB)\amdsndstub.lib $(SG_OUTPUT_OAKLIB)\amdsnd.lib	
+	@set SOURCELIBS=%%SOURCELIBS%% $(DX_OAKLIB)\$@.lib
+
+dsndout: wavcore
+	copy $(DX_OAKLIB)\amdsnd.lib $(SG_OUTPUT_OAKLIB)\amdsnd.lib
+	@set _DSNDOUT=1
+	@set SOURCELIBS=%%SOURCELIBS%% $(DX_OAKLIB)\$@.lib
+
+wavcore:
+	@set SOURCELIBS=%%SOURCELIBS%% $(DX_OAKLIB)\$@.lib $(SG_OUTPUT_OAKLIB)\amdsnd.lib
+
+mpgsplit:
+	@set SOURCELIBS=%%SOURCELIBS%% $(DX_OAKLIB)\$@.lib \
+$(DX_OAKLIB)\strmaloc.lib $(DX_OAKLIB)\statepse.lib $(DX_OAKLIB)\wmtguid.lib
+
+mpgdec: mpgadec mpgvdec
+
+mpgadec:
+	@set SOURCELIBS=%%SOURCELIBS%% $(DX_OAKLIB)\$@.lib $(DX_OAKLIB)\asrc.lib $(DX_OAKLIB)\mpgdec.lib
+
+mpgvdec:
+	@set SOURCELIBS=%%SOURCELIBS%% $(DX_OAKLIB)\$@.lib $(DX_OAKLIB)\vsrc.lib $(DX_OAKLIB)\mpgdec.lib
+
+
+ovmixer ovmixer2:
+	@set SOURCELIBS=%%SOURCELIBS%% $(DX_OAKLIB)\$@.lib 
+	@set QUARTZLIBS=%%QUARTZLIBS%% $(SG_OUTPUT_SDKLIB)\amstrmid.lib
+
+#--------------------------------------------------------------------------------------------------
+
+quartz0 quartz1 quartz2::
+	@set SOURCELIBS=
+
+quartz0::$(QUARTZ_CORE_COMPONENTS)
+quartz1::$(QUARTZ1_COMPONENTS)
+quartz2::$(QUARTZ2_COMPONENTS)	
+
+quartz0 quartz1 quartz2:: 
+	@set TARGETNAME=$@
+	@set RELEASETYPE=OAK
+	@set TARGETLIBS=
+	@set TARGETTYPE=LIBRARY
+	$(MAKE) /NOLOGO $(SG_OUTPUT_OAKLIB)\$@.lib
+	@set QUARTZLIBS=%%QUARTZLIBS%% $(SG_OUTPUT_OAKLIB)\$@.lib
+
+$(SG_OUTPUT_OAKTGT)\quartz.obj: $(DX_OAKLIB)\quartz.cpp $(SG_OUTPUT_ROOT)\sdk\inc\ceconfig.h
+	-del $(SG_OUTPUT_OAKLIB)\quartz?.lib
+	@type <<
+$(CXXCOMPILER) -I$(SG_OUTPUT_ROOT)\oak\inc -I$(SG_OUTPUT_ROOT)\sdk\inc $(CONLY_FLAGS) -Fo$@ $(CFLAGS)  $(DX_OAKLIB)\quartz.cpp
+<<NOKEEP
+	@$(CXXCOMPILER) @<<
+-I$(SG_OUTPUT_ROOT)\oak\inc -I$(SG_OUTPUT_ROOT)\sdk\inc $(CONLY_FLAGS) -Fo$@
+$(CFLAGS: =
+) $(DX_OAKLIB)\quartz.cpp
+<<NOKEEP
+
+quartz:: mmtimer dxguid 
+
+quartz:: 
+	$(MAKE) /NOLOGO $(SG_OUTPUT_OAKTGT)\quartz.obj
+	@set SOURCELIBS=
+	@set TARGETLIBS=
+	@set QUARTZLIBS=$(SG_OUTPUT_OAKTGT)\quartz.obj
+
+quartz:: quartz0 $(QUARTZ_COMPONENTS) $(DSFILTER_LIBS) 
+	@set LDEFINES=/FORCE:MULTIPLE
+	@set DLLENTRY=DllEntryPoint
+    	@set TARGETLIBS=%%QUARTZLIBS%% $(DSFILTER_LIBS) $(OLELIBS) \
+			$(SG_OUTPUT_SDKLIB)\dxguid.lib $(SG_OUTPUT_SDKLIB)\mmtimer.lib 
+!IF "$(WINCEDEBUG)"=="debug"
+	@set TARGETLIBS=%%TARGETLIBS%% $(OWNRES)
+!ENDIF
+
+#----------------------------------------------------------------------------------------
+
+dxmasf1::
+	@set SOURCELIBS=
+
+dxmasf1::$(DXMASF1_COMPONENTS)
+
+dxmasf1:: 
+	@set TARGETNAME=$@
+	@set RELEASETYPE=OAK
+	@set TARGETLIBS=
+	@set TARGETTYPE=LIBRARY
+	$(MAKE) /NOLOGO $(SG_OUTPUT_OAKLIB)\$@.lib
+	@set DXMASFLIBS=%%DXMASFLIBS%% $(SG_OUTPUT_OAKLIB)\$@.lib
+
+DXMASF_DEFINES=
+
+$(SG_OUTPUT_OAKTGT)\dxmasf.obj: $(DX_OAKLIB)\dxmasf.cpp $(SG_OUTPUT_ROOT)\sdk\inc\ceconfig.h
+	-del $(SG_OUTPUT_OAKLIB)\dxmasf?.lib
+	@type <<
+$(CXXCOMPILER) -I$(SG_OUTPUT_ROOT)\oak\inc -I$(SG_OUTPUT_ROOT)\sdk\inc $(DXMASF_DEFINES) $(CONLY_FLAGS) -Fo$@ $(CFLAGS)  $(DX_OAKLIB)\dxmasf.cpp
+<<NOKEEP
+	@$(CXXCOMPILER) @<<
+-I$(SG_OUTPUT_ROOT)\oak\inc -I$(SG_OUTPUT_ROOT)\sdk\inc $(DXMASF_DEFINES) $(CONLY_FLAGS) -Fo$@
+$(CFLAGS: =
+) $(DX_OAKLIB)\dxmasf.cpp
+<<NOKEEP
+
+dxmasf::
+	$(MAKE) /NOLOGO $(SG_OUTPUT_OAKTGT)\dxmasf.obj
+	@set DXMASFLIBS=$(SG_OUTPUT_OAKTGT)\dxmasf.obj
+
+dxmasf:: $(DXMASF_COMPONENTS) $(DSFILTER_LIBS) mmtimer $(DX_OAKLIB)\wmtguid.lib $(DX_OAKLIB)\nsdll.lib $(DX_OAKLIB)\strmdll.lib
+	@set LDEFINES=/FORCE:MULTIPLE
+	@set DLLENTRY=DllEntryPoint
+   	@set TARGETLIBS=%%DXMASFLIBS%% $(OLELIBS) $(DSFILTER_LIBS) \
+$(SG_OUTPUT_SDKLIB)\mmtimer.lib $(DX_OAKLIB)\wmtguid.lib $(DX_OAKLIB)\nsdll.lib $(DX_OAKLIB)\strmdll.lib 
+
+#--------------------------------------------------------------------------------------------------
+
+dshowsamples::ceplayit
+
+playit oplayit ceplayit::
+	@set TARGETLIBS=$(OWNLIB) $(OLELIBS) $(DX_SDKLIB)\strmiids.lib
+
+ddxclmv::
+	@set TARGETLIBS=$(OWNLIB_RES) $(OLELIBS) $(DX_SDKLIB)\strmiids.lib $(DX_SDKLIB)\strmbase.lib \
+			$(SG_OUTPUT_SDKLIB)\ddraw.lib 
+
+mmtimer::
+	@set DLLENTRY=DllMain
+	@set TARGETLIBS=$(OWNLIB)
+
+CLEANCMD=erase
+
+cleanup_quartz::
+	@set CLEANUP_ROOT=$(SG_OUTPUT_ROOT)
+
+cleanup_quartz:: cleanup_quartz_tree
+
+cleanup_quartz_directx::
+	@set CLEANUP_ROOT=$(_PUBLICROOT)\directx
+
+cleanup_quartz_directx:: cleanup_quartz_tree
+
+cleanup_quartz_tree: 
+	@echo Cleaning up quartz files in %%CLEANUP_ROOT%%...
+	@pushd .
+	@
+	@chdir %%CLEANUP_ROOT%%\oak\lib\$(_CPUINDPATH)
+	-@$(CLEANCMD) quartz*.* amovie.* 
+	-@$(CLEANCMD) msadpcm.* imaadpcm.* pcmconv.* msgsm610.* msg711.* msrle32.* 
+	@
+	@chdir %%CLEANUP_ROOT%%\sdk\lib\$(_CPUINDPATH)
+	-@$(CLEANCMD) msacmce.* icm.* mmtimer.* 
+	-@$(CLEANCMD) strmiids.* strmbase.* amstrmid.*
+	@
+	@chdir %%CLEANUP_ROOT%%\oak\target\$(_CPUINDPATH)
+	-@$(CLEANCMD) /s quartz*.* amovie.* amstream.* strmdll.* 
+	-@$(CLEANCMD) strmsamp.* playit.* oplayit.* ceplayit.* ddxclmv.* 
+	-@$(CLEANCMD) msadpcm.* imaadpcm.* pcmconv.* msgsm610.* msg711.* msrle32.* 
+	-@$(CLEANCMD) iccvid.* msaud32.* mpg4ds32.* l3filter.* sl_anet.* 
+	-@$(CLEANCMD) msacmce.* icm.* mmtimer.*
+	@
+	@chdir %%CLEANUP_ROOT%%\sdk\inc
+	-@$(CLEANCMD) amaudio.* amfilter.* amstream.* amvideo.* austream.* aviriff.* cache.* combase.* comlite.* control.* ctlutil.* cutlist.* ddstream.* dvdmedia.* edevdefs.* errors.* evcode.* fourcc.* ksuuids.* measure.* mmstream.* mpconfig.* mpegtype.* msgthrd.* mtype.* outputq.* pstream.* pullpin.* refclock.* reftime.* renbase.* schedule.* seekpt.* source.* streams.* strmctl.*  strmif.* sysclock.* transfrm.* transip.* uuids.* vfwmsgs.* videoctl.* vpconfig.* vpnotify.* vptype.* vtrans.* winctrl.* winutil.* winx.* wxdebug.* wxlist.* wxutil.* 
+	@
+	@chdir  %%CLEANUP_ROOT%%\oak\inc
+	-@$(CLEANCMD) quartz.* ks.* ksmedia.* kspin.*
+	-@popd
+	
+##########################################################################################################
+
+wdm:: wdmlib $(SG_OUTPUT_OAKLIB)\wdm.lib wdevice watapi wcdrom wdisk wudfs
+
+wdmlib::
+	@set DLLENTRY=DllMain
+	@set TARGETLIBS=$(OWNLIB)
+
+$(SG_OUTPUT_OAKLIB)\wdm.lib: $(DX_OAKLIB)\wdm.lib
+	copy $? $@
+
+wdevice::
+	@set TARGETLIBS=$(OWNLIB) $(SG_OUTPUT_OAKLIB)\wdmlib.lib
+
+watapi wcdrom wdisk::
+	@set DLLENTRY=DllMain
+	@set TARGETLIBS=$(OWNLIB) $(SG_OUTPUT_OAKLIB)\wdm.lib $(SG_OUTPUT_OAKLIB)\ceddk.lib $(SG_OUTPUT_OAKLIB)\wdmlib.lib
+
+wudfs::
+    @set DLLENTRY=UDFSMain
+	@set TARGETLIBS=$(OWNLIB)
+
+##########################################################################################################
+
+dvd:: $(SG_OUTPUT_OAKLIB)\dvdif.lib $(SG_OUTPUT_OAKLIB)\ksguid.lib dvddrvr dvdata dvdnav anxjtest
+
+$(SG_OUTPUT_OAKLIB)\dvdif.lib: $(DX_OAKLIB)\dvdif.lib
+	copy $? $@
+
+$(SG_OUTPUT_OAKLIB)\ksguid.lib: $(DX_OAKLIB)\ksguid.lib
+	copy $? $@
+
+dvddrvr::
+	@set DLLENTRY=_DllMainCRTStartup
+	@set TARGETLIBS=$(OWNLIB) $(OLELIBS) $(SG_OUTPUT_OAKLIB)\ksguid.lib $(SG_OUTPUT_OAKLIB)\dvdif.lib
+
+dvdata::
+	@set DLLENTRY=DllEntryPoint
+	@set TARGETLIBS=$(OWNLIB) $(OLELIBS)
+
+dvdnav::
+	@set DLLENTRY=DllEntryPoint
+	@set TARGETLIBS=$(OWNLIB) $(OLELIBS) $(SG_OUTPUT_OAKLIB)\ksguid.lib $(SG_OUTPUT_OAKLIB)\dvddrvr.lib
+
+anxjtest::
+	@set TARGETLIBS=$(OWNLIB_RES) $(OLELIBS) $(SG_OUTPUT_OAKLIB)\ksguid.lib $(SG_OUTPUT_OAKLIB)\dvddrvr.lib
+
+###############################################################################
+# STEP-2: Add your module to exactly ONE of the following two RELEASETYPE rules
+###############################################################################
+
+acmdwrap \
+amovie \
+amstream \
+anxjtest \
+ceplayit \
+ddcore \
+ddex1 \
+ddex2 \
+ddex3 \
+ddex4 \
+ddhel \
+ddi_ds3v \
+ddi_igs2 \
+ddi_igs5 \
+ddstub \
+donuts \
+CaptureEcho \
+dsounds \
+dsplay \
+dvdata \
+dvddrvr \
+dvdnav \
+dxmasf \
+es1371 \
+foxbear \
+idses1371 \
+idswave \
+igs5000 \
+imaadpcm \
+mosquito \
+msadpcm \
+msg711 \
+msgsm610 \
+msrle32 \
+mxat \
+nserror \
+oplayit \
+pcmconv \
+playit \
+quartz \
+strmsamp \
+tmix \
+watapi \
+wavebuff \
+wcdrom \
+wdevice \
+wdisk \
+wdmlib \
+wudfs ::
+	@set RELEASETYPE=OAK
+	@set CPL=
+
+ddraw \
+dmcompos \
+dmsynth \
+dmusic \
+dsound \
+icm \
+mixerapi \
+mmtimer \
+msacmce ::
+	@set RELEASETYPE=SDK
+	@set CPL=
+
+#################################################################################################
+# STEP-3: Hack for .CPLs only! If (and only if) your module needs to be renamed from .DLL to .CPL
+###############################################################################
+
+# ::
+#	@set CPL=1
+
+###################################################################################
+# STEP-4: Add your module to exactly ONE of the following rules. 
+#         Two of the rules are for DLLs, the third for EXEs
+#         DO NOT add any new rules. Make your module conform to one of these forms
+###################################################################################
+
+msadpcm imaadpcm pcmconv msgsm610 msg711 msrle32 msacmce icm quartz amovie dxmasf \
+amstream nserror dsound dsounds mixerapi acmdwrap wavebuff idswave mxat es1371 idses1371 igs5000 \
+ddcore ddraw ddstub ddhel wdmlib watapi wcdrom wdisk wudfs ddi_igs2 ddi_igs5 \
+ddi_ds3v dvddrvr dvdata dvdnav mmtimer \
+dmcompos dmsynth dmusic::
+	@set TARGETTYPE=DYNLINK
+	@set TARGETNAME=$@
+	@set DEFFILE=$(SG_INPUT_LIB)\$@.def
+	@set SOURCELIBS=
+	@set TARGETLIBS=%%TARGETLIBS%% $(SG_OUTPUT_SDKLIB)\coredll.lib 
+	$(MAKE) /NOLOGO $(SG_OUTPUT_OAKTGT)\$@.dll
+
+anxjtest \
+ceplayit \
+ddex1 \
+ddex2 \
+ddex3 \
+ddex4 \
+ddxclmv \
+donuts \
+CaptureEcho \
+dsplay \
+foxbear \
+mosquito \
+oplayit \
+playit \
+strmsamp \
+tmix \
+wdevice::
+	@set TARGETTYPE=PROGRAM
+	@set EXEENTRY=WinMain
+	@set TARGETNAME=$@
+	@set SOURCELIBS=
+	@set TARGETLIBS=$(SG_OUTPUT_SDKLIB)\coredll.lib %%TARGETLIBS%%
+	$(MAKE) /NOLOGO $(SG_OUTPUT_OAKTGT)\$@.exe
+
+# This is a special rule for DLLs that want their DEF file filtered for componentization
+#
+# ::
+#	@set TARGETTYPE=DYNLINK
+#	@set DLLENTRY=DllEntry
+#	@set TARGETNAME=$@
+#	@set DEFFILE=$(SG_OUTPUT_OAKLIB)\$@.def
+#	$(SG_TOKENFILTER) $(SG_INPUT_LIB)\$@.def $(SG_OUTPUT_OAKLIB)
+#	@set SOURCELIBS=
+#	@set TARGETLIBS=%%TARGETLIBS%% $(SG_OUTPUT_SDKLIB)\coredll.lib
+#	$(MAKE) /NOLOGO $(SG_OUTPUT_OAKTGT)\$@.dll
+	
+
+######################################################################################
+# STEP-5: If (and only if) your module has a localizable RES file, add it to the first
+#         line below. This creates a text file that is used during MAKEIMG to insert 
+#         the correct localized resources.
+######################################################################################
+	
+#ieceext shlwapi shdocvw mshtml wininet urlmon msxml::
+#	@echo $@ >> $(SG_OUTPUT_OAKTGT)\$(WINCEPROJ).loc
+
+#################### END of 5-STEP standardized default SYSGEN LINK PHASE ######################
+
+cleanup: cleanup_quartz

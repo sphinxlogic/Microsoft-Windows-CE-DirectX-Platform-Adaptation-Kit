@@ -1,0 +1,74 @@
+MODULES
+;  Name            Path                                           Memory Type
+;  --------------  ---------------------------------------------  -----------
+
+IF IMGIESAMPLE
+   iesample.exe    $(_FLATRELEASEDIR)\iesample.exe                NK  S
+ENDIF
+
+
+FILES
+;  Name            Path                                           Memory Type
+;  --------------  ---------------------------------------------  -----------
+   ; All of the system UI components (commctrl, commdlg, control panel, applets,
+   ; taskman etc) depend on the Tahoma font to look right. Also the Console
+   ; depends on some fixed pitch font (such as Courier) being present
+   tahoma.ttf		$(_FLATRELEASEDIR)\tahoma.ttf       NK  SHU
+   cour.ttf		$(_FLATRELEASEDIR)\cour.ttf         NK  SHU
+   arial.ttf		$(_FLATRELEASEDIR)\arial.ttf        NK  SHU
+   symbol.ttf		$(_FLATRELEASEDIR)\symbol.ttf       NK  SHU
+   times.ttf		$(_FLATRELEASEDIR)\times.ttf        NK  SHU
+
+IF IMGIESAMPLE
+   ; link for the IE Sample Web Browser
+   iesample.lnk         $(_FLATRELEASEDIR)\iesample.lnk     NK SH
+ENDIF
+
+IF COUNTRY=JAPAN
+   impact.ttf    $(_FLATRELEASEDIR)\impact.ttf     NK  SU
+   kino.ttf      $(_FLATRELEASEDIR)\kino.ttf       NK  SU
+   mslogo.ttf    $(_FLATRELEASEDIR)\mslogo.ttf     NK  SU
+   timesbd.ttf   $(_FLATRELEASEDIR)\timesbd.ttf    NK  SU
+
+   msgothic.ttc  $(_FLATRELEASEDIR)\msgothic.ttc  NK  U
+   test01.tte    $(_FLATRELEASEDIR)\test01.tte    NK  U
+   test02.tte    $(_FLATRELEASEDIR)\test02.tte    NK  U
+   test03.tte    $(_FLATRELEASEDIR)\test03.tte    NK  U
+   eudc.tte      $(_FLATRELEASEDIR)\eudc.tte      NK  U
+ENDIF
+
+IF COUNTRY=KOREA
+	gl_ce.ttf	$(_FLATRELEASEDIR)\gl_ce.ttf	NK	SU
+ENDIF
+
+IF COUNTRY=CHS
+   sunfon.ttf    $(_FLATRELEASEDIR)\sunfon.ttf     NK  SU
+ENDIF	
+IF COUNTRY=CHT
+    mingliu.ttf     $(_FLATRELEASEDIR)\mingliu.ttf                  NK  SHU
+ENDIF	
+
+IF IMGTINY !
+IF IMGNOFILES !
+   ; These WAV files used to play system sounds (selected in the SOUND CPL applet)
+	asterisk.wav	$(_FLATRELEASEDIR)\asterisk.wav		NK S
+	close.wav	$(_FLATRELEASEDIR)\close.wav		NK S
+	critical.wav	$(_FLATRELEASEDIR)\critical.wav		NK S
+	default.wav	$(_FLATRELEASEDIR)\default.wav		NK S
+	empty.wav	$(_FLATRELEASEDIR)\empty.wav		NK S
+	exclam.wav	$(_FLATRELEASEDIR)\exclam.wav		NK S
+	infbeg.wav	$(_FLATRELEASEDIR)\infbeg.wav		NK S
+	infend.wav	$(_FLATRELEASEDIR)\infend.wav		NK S
+	infintr.wav	$(_FLATRELEASEDIR)\infintr.wav		NK S
+	menupop.wav	$(_FLATRELEASEDIR)\menupop.wav		NK S
+	menusel.wav	$(_FLATRELEASEDIR)\menusel.wav		NK S
+	openprog.wav	$(_FLATRELEASEDIR)\openprog.wav		NK S
+	question.wav	$(_FLATRELEASEDIR)\question.wav		NK S
+	startup.wav	$(_FLATRELEASEDIR)\startup.wav		NK S
+	windmax.wav	$(_FLATRELEASEDIR)\windmax.wav		NK S
+	windmin.wav	$(_FLATRELEASEDIR)\windmin.wav		NK S
+   ; These BMP files are used for desktop background bitmap (selected in the SCREEN CPL applet)
+	wince.bmp	$(_FLATRELEASEDIR)\wince.bmp		NK S
+ENDIF
+ENDIF
+

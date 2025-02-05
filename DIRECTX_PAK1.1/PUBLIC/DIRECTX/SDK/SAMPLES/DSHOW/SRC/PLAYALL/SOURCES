@@ -1,0 +1,37 @@
+!IF 0
+--------------------------------------------------------------------------------
+
+    Windows CE PlayAll Executable
+    Copyright (c) 1999-2000, Microsoft Corporation
+
+--------------------------------------------------------------------------------
+!ENDIF
+
+WINCEOEM=1
+
+TARGETNAME=PlayAll
+
+!ifdef DOSYSGEN
+
+TARGETTYPE=LIBRARY
+TARGETDEFNAME=$(TARGETNAME)
+
+!else
+
+TARGETTYPE=PROGRAM
+
+TARGETLIBS=\
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\Ole32.lib              \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\Oleaut32.lib           \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\uuid.lib               \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib            \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\dsound.lib            \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\dxguid.lib            \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\strmiids.lib
+
+!endif
+
+SOURCES=\
+   playvideo.cpp \
+   winmain.cpp   \
+   globals.cpp

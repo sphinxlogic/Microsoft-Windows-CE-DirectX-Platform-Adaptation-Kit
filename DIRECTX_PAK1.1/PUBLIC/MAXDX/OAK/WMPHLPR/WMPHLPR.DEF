@@ -1,0 +1,7 @@
+; wmphlpr.def : Declares the module parameters.
+
+LIBRARY      "wmphlpr.dll"
+
+EXPORTS
+	DllCanUnloadNow     @1 PRIVATE
+	DllGetClassObject   @2 PRIVATE

@@ -1,0 +1,33 @@
+Windows Media Technology:
+dxmasf.cpp
+m3uplayl.lib
+nsdll.lib
+nsdll.res
+acmobj.lib 
+icmobj.lib
+urlobj.lib
+strmdll.lib
+urlgrab.lib
+xmlplayl,lib
+wmtguid.lib
+
+Windows Media Player Controls
+amcompat.lib
+amcompat.res
+ieuuid.lib
+imglist.lib
+msdxm.res
+msdxm.lib
+msdxm.cpp
+vrctl.lib
+wmpbmp.res
+wmpstatus.res
+wmptbar.res
+
+Windows Media decoders:
+msaud32.dll
+mpg4ds32.dll
+sl_anet.dll
+
+ACELP.net decoder:
+sl_anet.dll

@@ -1,0 +1,47 @@
+;===========================================================================;
+;
+;   msacmce.def
+;
+;===========================================================================;
+
+LIBRARY     MSACMCE
+
+EXPORTS     
+            acmGetVersion                     ;!!! must be same as 1.00 !!!
+
+			acmInitialize					  ; Exported just for AcmWrapper
+
+;;;            acmMetrics
+
+;;;            acmDriverEnum
+            acmDriverDetails
+;;;;            acmDriverAdd
+;;;;            acmDriverRemove
+;;;            acmDriverOpen               
+;;;            acmDriverClose              
+;;;            acmDriverMessage            
+;;;            acmDriverID                 
+;;;            acmDriverPriority           
+
+            acmFormatTagDetails
+;;;            acmFormatTagEnum
+
+;;            acmFormatChoose            
+            acmFormatDetails
+            acmFormatEnum
+            acmFormatSuggest            
+
+;;            acmFilterTagDetails
+;;            acmFilterTagEnum
+;;            acmFilterChoose
+;;            acmFilterDetails
+;;            acmFilterEnum
+
+            acmStreamOpen               
+            acmStreamClose              
+            acmStreamSize               
+            acmStreamConvert            
+;;;;            acmStreamReset
+;;;            acmStreamMessage
+            acmStreamPrepareHeader
+            acmStreamUnprepareHeader

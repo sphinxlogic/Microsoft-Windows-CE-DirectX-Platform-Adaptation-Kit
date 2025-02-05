@@ -1,0 +1,12 @@
+; msdxm.def : Declares the module parameters.
+
+LIBRARY      "msdxm.ocx"
+
+EXPORTS
+	DllCanUnloadNow     @1 PRIVATE
+	DllGetClassObject   @2 PRIVATE
+;	DllRegisterServer   @3 PRIVATE
+;	DllUnregisterServer	@4 PRIVATE
+;	RunDll
+;   	RunDllW
+; Uncomment RunDllW for mplayer2 support

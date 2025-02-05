@@ -1,0 +1,261 @@
+//=========================================================================
+//
+//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
+//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
+//  PURPOSE.
+//
+// Copyright (c) 1995 - 2000  Microsoft Corporation.  All Rights Reserved.
+//
+//=========================================================================
+
+
+//Microsoft Developer Studio generated resource script.
+//
+#include <windows.h>
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+DDCAPS_ICON             ICON    DISCARDABLE     ddcaps.ico
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MENU1 MENU DISCARDABLE
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "&About DDCaps",               IDD_ABOUT
+        MENUITEM "&Exit",                       ID_FILE_EXIT
+    END
+    POPUP "&Driver"
+    BEGIN
+        MENUITEM "Driver &Caps",                 ID_VIEW_DRIVERCAPS
+        MENUITEM "Driver C&olor Key Caps",       ID_VIEW_DRIVERCOLORKEYCAPS
+        MENUITEM "Driver &FX Caps",              ID_VIEW_DRIVERFXCAPS
+        MENUITEM "Driver &Palette Caps",         ID_VIEW_DRIVERPALETTECAPS
+        MENUITEM "Driver &Surface Caps",         ID_VIEW_DRIVERSURFACECAPS
+    END
+    POPUP "&HEL"
+    BEGIN
+        MENUITEM "HEL &Caps",                    ID_VIEW_HELCAPS
+        MENUITEM "HEL C&olor Key Caps",          ID_VIEW_HELCOLORKEYCAPS
+        MENUITEM "HEL &FX Caps",                 ID_VIEW_HELFXCAPS
+        MENUITEM "HEL &Palette Caps",            ID_VIEW_HELPALETTECAPS
+        MENUITEM "HEL &Surface Caps",            ID_VIEW_HELSURFACECAPS
+    END
+END
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+1 TEXTINCLUDE DISCARDABLE
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE
+BEGIN
+    "#define APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "#include ""windows.h""\r\n"
+    "#undef APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "#include ""winver.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_DIALOG1 DIALOG DISCARDABLE  0, 0, 224, 189
+STYLE DS_MODALFRAME | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Direct Draw Caps Bits"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "Close",IDC_EXIT,154,167,50,14
+    CONTROL         "XXXXXXXXXXXXXXXXXXX",IDC_CHECK1,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,6,2,105,10
+    PUSHBUTTON      "Restore",IDC_RESTORE,86,167,49,14
+    CONTROL         "XXXXXXXXXXXXXXXXXXX",IDC_CHECK2,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,6,12,105,10
+    CONTROL         "XXXXXXXXXXXXXXXXXXX",IDC_CHECK3,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,6,22,105,10
+    CONTROL         "XXXXXXXXXXXXXXXXXXX",IDC_CHECK4,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,6,31,105,10
+    CONTROL         "XXXXXXXXXXXXXXXXXXX",IDC_CHECK5,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,6,42,105,10
+    CONTROL         "XXXXXXXXXXXXXXXXXXX",IDC_CHECK6,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,6,52,105,10
+    CONTROL         "XXXXXXXXXXXXXXXXXXX",IDC_CHECK7,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,6,62,105,10
+    CONTROL         "XXXXXXXXXXXXXXXXXXX",IDC_CHECK8,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,6,71,105,10
+    CONTROL         "XXXXXXXXXXXXXXXXXXX",IDC_CHECK9,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,6,82,105,10
+    CONTROL         "XXXXXXXXXXXXXXXXXXX",IDC_CHECK10,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,6,92,105,10
+    CONTROL         "XXXXXXXXXXXXXXXXXXX",IDC_CHECK11,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,6,102,105,10
+    CONTROL         "XXXXXXXXXXXXXXXXXXX",IDC_CHECK12,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,6,111,105,10
+    CONTROL         "XXXXXXXXXXXXXXXXXXX",IDC_CHECK13,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,6,122,105,10
+    CONTROL         "XXXXXXXXXXXXXXXXXXX",IDC_CHECK14,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,6,132,105,10
+    CONTROL         "XXXXXXXXXXXXXXXXXXX",IDC_CHECK15,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,6,142,105,10
+    CONTROL         "XXXXXXXXXXXXXXXXXXX",IDC_CHECK16,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,6,151,105,10
+    CONTROL         "XXXXXXXXXXXXXXXXXXX",IDC_CHECK17,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,111,2,105,10
+    CONTROL         "XXXXXXXXXXXXXXXXXXX",IDC_CHECK18,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,111,12,105,10
+    CONTROL         "XXXXXXXXXXXXXXXXXXX",IDC_CHECK19,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,111,23,105,10
+    CONTROL         "XXXXXXXXXXXXXXXXXXX",IDC_CHECK20,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,111,33,105,10
+    CONTROL         "XXXXXXXXXXXXXXXXXXX",IDC_CHECK21,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,111,42,105,10
+    CONTROL         "XXXXXXXXXXXXXXXXXXX",IDC_CHECK22,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,111,52,105,10
+    CONTROL         "XXXXXXXXXXXXXXXXXXX",IDC_CHECK23,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,111,63,105,10
+    CONTROL         "XXXXXXXXXXXXXXXXXXX",IDC_CHECK24,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,111,73,105,10
+    CONTROL         "XXXXXXXXXXXXXXXXXXX",IDC_CHECK25,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,111,82,105,10
+    CONTROL         "XXXXXXXXXXXXXXXXXXX",IDC_CHECK26,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,111,92,105,10
+    CONTROL         "XXXXXXXXXXXXXXXXXXX",IDC_CHECK27,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,111,103,105,10
+    CONTROL         "XXXXXXXXXXXXXXXXXXX",IDC_CHECK28,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,111,113,105,10
+    CONTROL         "XXXXXXXXXXXXXXXXXXX",IDC_CHECK29,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,111,122,105,10
+    CONTROL         "XXXXXXXXXXXXXXXXXXX",IDC_CHECK30,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,111,132,105,10
+    CONTROL         "XXXXXXXXXXXXXXXXXXX",IDC_CHECK31,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,111,143,105,10
+    CONTROL         "XXXXXXXXXXXXXXXXXXX",IDC_CHECK32,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,111,153,105,10
+    PUSHBUTTON      "Refresh",IDC_REFRESH,18,167,49,14
+END
+
+IDD_SEL_DRIVER DIALOG DISCARDABLE  0, 0, 174, 55
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Select DDraw Driver"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,120,35,50,14
+    COMBOBOX        IDC_COMBO_DRIVERS,5,35,110,65,CBS_DROPDOWNLIST |
+                    CBS_AUTOHSCROLL | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Select the DirectDraw driver you wish to use for this application:",
+                    IDC_STATIC,5,5,165,24
+END
+
+
+ABOUT DIALOG DISCARDABLE  0, 0, 191, 80
+STYLE DS_MODALFRAME | WS_VISIBLE | WS_CAPTION | WS_SYSMENU | WS_POPUP
+CAPTION "About DDCaps"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "&OK",IDOK,132,58,50,14
+    LTEXT           "DirectDraw Caps Viewer for Windows CE",-1,15,14,165,8
+    LTEXT           "Copyright © 1995-2000 Microsoft Corporation",-1,15,28,
+                    165,8
+    LTEXT           "Version",-1,15,42,24,8
+    LTEXT           "1.0",-1,40,42,66,8
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE
+BEGIN
+    IDD_SEL_DRIVER, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 167
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 48
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

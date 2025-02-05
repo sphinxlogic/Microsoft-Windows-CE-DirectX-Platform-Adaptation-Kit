@@ -1,0 +1,33 @@
+!IF 0
+--------------------------------------------------------------------------------
+
+    Windows CE TMIX
+    Mixer Device Enumeration Utility
+
+    Copyright (c) 1998-2000, Microsoft Corporation
+
+--------------------------------------------------------------------------------
+!ENDIF
+
+WINCEOEM=1
+
+TARGETNAME=tmix
+
+!ifdef DOSYSGEN
+
+TARGETTYPE=LIBRARY
+TARGETDEFNAME=$(TARGETNAME)
+
+!else
+
+TARGETTYPE=PROGRAM
+EXEENTRY=WinMain
+
+TARGETLIBS= \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\mixerapi.lib
+
+!endif
+
+SOURCES= \
+	tmix.cpp

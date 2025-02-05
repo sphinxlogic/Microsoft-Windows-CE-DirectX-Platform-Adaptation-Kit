@@ -1,0 +1,24 @@
+TARGETNAME=ddex1
+
+INCLUDES=                   \
+    ..\..\include;          \
+    $(_PUBLICROOT)\$(WINCEPROJ)\sdk\inc;
+
+SOURCES=            \
+    ddex1.cpp       \
+    ddex1.rc
+
+!ifdef DOSYSGEN
+
+TARGETTYPE=LIBRARY
+
+!else
+
+TARGETTYPE=PROGRAM
+TARGETLIBS=                                            \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\dxguid.lib    \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\ddraw.lib     \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\uuid.lib      \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib
+
+!endif

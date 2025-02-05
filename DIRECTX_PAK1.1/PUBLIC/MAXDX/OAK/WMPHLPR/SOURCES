@@ -1,0 +1,26 @@
+WINCEOEM=1
+WINCEATL=1
+TARGETNAME=wmphlpr
+TARGETTYPE=DYNLINK
+RELEASETYPE=OAK
+
+DLLENTRY=DllMain
+PRECOMPILED_CXX=1
+PRECOMPILED_INCLUDE=stdafx.h
+
+INCLUDES=$(INCLUDES) $(_WINCEROOT)\others\atl\include;
+
+CDEFINES= $(CDEFINES) -D_ATL_NO_SECURITY -D_WIN32_WCE=212
+
+SOURCES=         \
+    atl.cpp      \
+    wmphlpr.cpp  \
+    wmphlpr.rc   \
+    wmphelpr.cpp
+
+TARGETLIBS=                                           \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib  \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\ole32.lib    \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\oleaut32.lib \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\uuid.lib     
+

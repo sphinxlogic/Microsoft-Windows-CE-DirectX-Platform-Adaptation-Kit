@@ -1,0 +1,29 @@
+//-----------------------------------------------------------------------------
+// File: PlayVideo.h
+//
+// Desc: Header file for for DirectShow sample
+//
+//
+// Copyright (c) 1998 Microsoft Corporation. All rights reserved.
+//-----------------------------------------------------------------------------
+
+#ifndef PLAY_VID_H
+#define PLAY_VID_H
+
+//-----------------------------------------------------------------------------
+// External function-prototypes
+//-----------------------------------------------------------------------------
+HRESULT InitDirectShow();
+HRESULT FreeDirectShow();
+HRESULT PrepareMedia(LPTSTR szPath, unsigned int nRepeats);
+HRESULT CheckMovieState(BOOL *pbComplete);
+HRESULT RunMedia();
+HRESULT StopMedia();
+HRESULT PlayFile(LPTSTR pszFile, int nPlayCount);
+
+void RetailOutput(TCHAR *tszErr, ...);
+
+extern BOOL g_bFullScreen, g_bDisplayEvents;
+extern int  g_nFilesPlayed, g_nFilesFailed, g_nAudioOnly, g_nGlobalRepeats;
+
+#endif // !defined(PLAY_VID_H)

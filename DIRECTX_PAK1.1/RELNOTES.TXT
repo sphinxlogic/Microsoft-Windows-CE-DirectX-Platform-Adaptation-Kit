@@ -1,0 +1,262 @@
+Microsoft(R) Windows(R) CE DirectX(R) Platform Adaptation Kit 1.1
+
+__________________________________________________________________
+
+
+Contents:
+
+- CD Layout
+- Known Issues 
+
+
+__________________________________________________________________
+
+For the latest information on DXPAK, please go to 
+http://www.microsoft.com/embedded/products/directx.asp.
+
+CD LAYOUT
+
+The following directory contains operating system updates.
+
+\212QFE
+    IMPORTANT  
+    This directory contains Quick Fix Engineering (QFEs) for Microsoft 
+    Windows CE 2.12. After applying the QFEs, DXPAK 1.1 performance and
+    reliability will be significantly improved. DXPAK 1.1 includes 
+    QFEs numbered 1 - 7 and 9 - 11. For installation instructions see 
+    the README.TXT file in this directory.
+    
+    For more information on Windows CE 2.12 Core OS QFE's see 
+    http://microsoft.com/windowsce/embedded/resources/qfe.asp. 
+
+    If you are doing either of the following, you will need additional 
+    QFEs that were not available at time of release:
+
+    - Using DXPAK 1.1 on an AMD processor
+    - Using Windows Media multicast
+
+    These QFEs will be available at the URL mentioned above.
+
+The following is a brief description of the directories found in the 
+\public\DirectX directory of this CD and the %_WINCEROOT%\public\directx 
+directory on your hard disk after installation.  
+
+\Cesysgen
+    Contains the makefile for CESysgen components.
+
+\Docs
+    Contains the HTMLHelp documentation for DXPAK.  
+
+\OAK
+    Drivers
+       - Contains the drivers shipped with DXPAK.
+    files
+       - Contains binary image builder (.bib) files.
+    inc
+       - Contains required platform-specific include files.
+    lib
+       - Contains platform-specific library (.lib) and symbol (.pdb) files.
+    Target
+       - Platform binaries will be built into this tree.
+\SDK
+    inc
+       - Platform specific DirectX include files.
+    lib
+       - Platform specific DirectX libraries.
+    Samples
+       - DirectX sample applications.
+
+\uninst
+       - Contains information used in uninstalling DXPAK.
+
+The following is a brief description of the directories found in the 
+\public\maxdx directory of this CD and the %_WINCEROOT%\public\maxdx directory 
+on your hard disk after installation.
+
+\OAK
+       - Contains international versions of many files.
+
+    IESample
+       - Contains a sample implementation of Internet Explorer for 
+         demonstration purposes.
+
+    WMPHLPR
+       - Contains a sample implementation of the Windows Media Player ActiveX
+         control for demonstration purposes.
+
+__________________________________________________________________
+
+
+KNOWN ISSUES
+
+Drivers
+=======
+
+- Certain steppings of the S3 Virge and the DirectDraw-enabled S3Virge driver have
+  an unavoidable problem. Some cards that have 4 memory chips will not be driven
+  correctly. You will see three copies of the left side of the image that should
+  be projected spread accross the screen. The only known remedy is to avoid 
+  those cards.
+
+- The sample S3 Virge driver does not support flipping overlay surfaces. The 
+  MOSQUITO sample application requires flipping overlay support and therefore 
+  will not run on an S3 Virge.
+
+- A note about DShow and DSound interactions.  The current implementation of 
+  DShow assumes a correct implementation of the DSound HAL.  If the OEM 
+  implementation of DSound is missing certain capabilities, DShow may fail 
+  in unexpected ways, while the DSound use of the same DSHAL will proceed (with
+  limited capabilities).  Particular features which are known to cause confusion
+  are IDsDriverBuffer::SetFrequency(), IDsDriverBuffer::SetPosition(), and 
+  IDsDriverBuffer::SetVolume().  
+
+  Following is a short (but not complete) list of possible failures.  A failure 
+  in IDsDriverBuffer::SetFrequency() may cause sound data to be left in a buffer 
+  (where silence is expected) resulting in a a repeated sample being played.  
+  Failures in ::SetPosition() or ::SetVolume() may cause the filter graph to go 
+  (silently) into a pause state.
+
+DirectDraw
+==========
+
+- There is a known issue integrating DirectDraw with the Platform Builder MaxAll 
+  shell configuration. If the user presses Alt-Tab, Alt-Enter, Ctrl-Alt-Delete 
+  or another system key combination while the shell and a full-screen exclusive 
+  DirectDraw application are running simultaneously, the Task Manager dialog will
+  still load and be given focus even though it is not visible. There is no 
+  workaround at this time. The application does not receive WM_SYSKEY messages 
+  for these key combinations.
+
+- If your system driver supports allocating system memory surfaces, it is best to 
+  avoid calling SetSurfaceDesc.  Many video drivers do not react well to this 
+  method. Instead, use CreateSurface to initially allocate the surfaces you will
+  need. 
+
+DirectShow
+==========
+
+- In order to use the URL Reader module of DirectShow ('urlrdr') in a platform, 
+  the IE module 'urlmon' must also be included.  This dependence is handled 
+  automatically for configurations created with Platform Builder.  If using a 
+  manual platform configuration that does not include all IE browser components,
+  one must ensure that 'urlmon' in included in the IE_MODULES setting in 
+  cesysgen.bat.
+
+- It is possible to change the color key used by the DirectShow Video Renderer 
+  when displaying video using a DirectDraw overlay surface.  Applications that 
+  wish to mask parts of the video output may do so by drawing with a non-color-key 
+  color in a window that is on top of the video window.  Video will only be 
+  visible wherever pixels are the same color as the color key.  The color key is
+  determined by the following registry keys in directx.reg, where RR, GG, BB 
+  represent red, green & blue components of the color.  For 8-bit palettized 
+  displays, one can set "KeyIndex" to the desired palette entry.
+
+  [HKEY_LOCAL_MACHINE\Software\Microsoft\DirectX\DirectShow\Video Renderer]
+  "KeyColor"=hex:BB,GG,RR,00
+  "KeyIndex"=hex:XX,00,00,00
+
+DirectSound
+===========
+
+- DirectSound playback quality is very sensitive to thread priorities.  If any 
+  threads with a priority of THREAD_PRIORITY_ABOVE_NORMAL or higher are running 
+  concurrently with a playback thread, playback quality could be compromised.
+
+- DirectSound, when using a waveout driver, uses waveOutGetPosition which returns
+  a 32 bit value.  This value will wrap in just under 7 hours, making the 
+  DirectSound subsystem unstable. If your application requires prolonged 
+  continous playback of audio with DirectSound, a DirectSound driver should be 
+  developed to avoid this problem.
+
+- Applications that implement audio streaming using the waveout API instead of 
+  DirectSound must use audio buffers at least 16KB in size. Using buffers smaller
+  than 16KB will cause audio breakup.
+
+- Platforms using a WaveDev device that supports audio playback but not audio 
+  capture should disable the capture portion of the IDsWave HAL Emulation layer.
+  This will prevent DirectSoundCaptureEnumerate from giving the false impression
+  that audio capture is available.
+
+  In particular, the following section should be removed from DirectX.reg
+
+	[HKEY_LOCAL_MACHINE\Drivers\DsoundCapture\Wavedev]
+	   "clsid"="{E8B6835F-7836-11d3-801C-00C04F687798}"
+	   "Dll"="idswave.dll"
+	   "Desc"="Wavedev DSound Capture HAL Emulator"
+
+- The AudioMixer API support in DXPAK 1.1 only supports mixer devices. Support for 
+  wav, MIDI and aux devices is not provided. This means that the only MIXER_OBJECT 
+  flags that are supported are MIXER_OBJECTF_MIXER and MIXER_OBJECTF_HMIXER.
+
+  The following flags are not supported:
+
+    MIXER_OBJECTF_WAVEOUT
+    MIXER_OBJECTF_HWAVEOUT
+    MIXER_OBJECTF_WAVEIN
+    MIXER_OBJECTF_HWAVEIN
+    MIXER_OBJECTF_MIDIOUT
+    MIXER_OBJECTF_HMIDIOUT
+    MIXER_OBJECTF_MIDIIN
+    MIXER_OBJECTF_HMIDIIN
+    MIXER_OBJECTF_AUX
+
+  If you have a wave device driver that provides mixer capabilities, you will need 
+  expose both the WAV and MIX file system driver functions (i.e. WAV_Read and 
+  MIX_Read) and list the driver as both a WAV driver and a MIX driver in the 
+  registry.
+
+
+Windows Media Player/Windows Media Technologies
+===============================================
+
+- There are two registry settings that allow control of WMT buffering behavior.
+
+  [HKEY_CURRENT_USER\Software\Microsoft\Netshow\Player\General] Buffering Time  
+  and
+  [HKEY_CURRENT_USER\Software\Microsoft\Netshow\Player\General] Maximum Buffering Time
+
+  Buffering Time has a default of 3000 (3 seconds) and any value between 1 and 30000 
+  is allowed.
+
+  Maximum Buffering Time has a default of 5000 (5 seconds) and any value between 1 
+  30000 is allowed.
+
+- The Windows Media Player control does not respond to double-click events. A 
+  double-click is treated as two consecutive click events. This is a limitation of
+  the Windows CE operating system.
+
+- The "Processing Embedded Script Commands" topic contains an incorrect registry key.
+  In order to force the Windows Media Player control to open another instance of the
+  browser, the following registry key must be set:
+
+  HKLM\Software\Microsoft\MediaPlayer\Control\URLFlipping=dword:1
+
+  The documentation erroneously lists this registry key as:
+  
+  HKLM\Software\Microsoft\MediaPlayer\ControlURLFlipping=dword:1
+
+Install/Uninstall
+=================
+
+- When uninstalling DXPAK 1.1, the Add/Remove Programs dialog states version 1.0
+  is being removed. This is incorrect. Choosing this item will in fact uninstall 
+  version 1.1 of DXPAK. This only occurs if version 1.1 has been installed on top
+  of DXPAK 1.0.
+
+Platform Builder 2.12
+=====================
+
+- When using the Platform Buider 2.12 IDE to create a project, the IDE will 
+  provide default values for a list of known environment variables, possibly 
+  overwriting the values set in the Board Support Package (.BSP) file. After 
+  creating the project, open the menu item "Platform->Settings..." to double 
+  check whether the values set in the .BSP file were overwritten.  If any of 
+  the desired environment variable settings in the .BSP file were overwritten, 
+  they must be manually set back to the desired values.
+
+- If you are running Platform Builder on Windows 2000, make sure the following 
+  environment variable is set:
+  
+  copycmd=/y
+
+  Failure to do so will cause platform builds to hang.

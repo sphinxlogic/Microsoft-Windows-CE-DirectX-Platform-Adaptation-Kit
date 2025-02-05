@@ -1,0 +1,36 @@
+!IF 0
+--------------------------------------------------------------------------------
+
+    Windows CE CEPlayIt Executable
+    Copyright (c) 1998-2000, Microsoft Corporation
+
+--------------------------------------------------------------------------------
+!ENDIF
+
+WINCEOEM=1
+
+TARGETNAME=CEPlayit
+
+!ifdef DOSYSGEN
+
+TARGETTYPE=LIBRARY
+TARGETDEFNAME=$(TARGETNAME)
+
+!else
+
+TARGETTYPE=PROGRAM
+
+TARGETLIBS=\
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\Ole32.lib              \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\Oleaut32.lib           \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib            \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\strmiids.lib
+
+!endif
+
+SOURCES=\
+    globals.cpp     \
+    ceplayit.cpp    \
+    ceshio.cpp      \
+    filecopy.cpp    \
+    vidwindow.cpp

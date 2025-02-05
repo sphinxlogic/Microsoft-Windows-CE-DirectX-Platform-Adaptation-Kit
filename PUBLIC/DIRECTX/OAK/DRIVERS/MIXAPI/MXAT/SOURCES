@@ -1,0 +1,41 @@
+#
+# Sources for MXAT - Mixer API Test Driver
+#
+
+TARGETNAME=mxat
+
+CDEFINES=-D$(_TGTPLAT)
+
+!ifdef DOSYSGEN
+
+TARGETTYPE=LIBRARY
+TARGETDEFNAME=$(TARGETNAME)
+WINCETARGETFILE0=$(_RELEASELIBDIR)\$(TARGETDEFNAME).def
+
+!else
+
+TARGETTYPE=DYNLINK
+
+TARGETLIBS=$(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib
+
+SOURCELIBS= \
+   $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib
+
+
+DLLENTRY=DllMain
+
+!endif
+
+#INCLUDES=..\..\inc;..\..\mixmdd
+INCLUDES=..\..\inc;
+
+
+SOURCES= \
+	fakehw.cpp \
+	dllmain.cpp \
+	csmix.cpp \
+	mixdrv.cpp \
+	mixfunc.cpp
+
+
+

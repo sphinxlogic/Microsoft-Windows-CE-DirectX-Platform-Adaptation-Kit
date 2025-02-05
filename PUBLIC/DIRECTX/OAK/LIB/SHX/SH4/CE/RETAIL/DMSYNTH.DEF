@@ -1,0 +1,12 @@
+;      Copyright (c) Microsoft Corporation 1996-1999
+
+; @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.
+; dmsynth.def : Declares the module parameters.
+LIBRARY      "dmsynth.DLL"
+; @@END_DDKSPLIT
+
+EXPORTS
+	DllCanUnloadNow     @1 PRIVATE
+	DllGetClassObject   @2 PRIVATE
+        DllRegisterServer   @3 PRIVATE
+        DllUnregisterServer @4 PRIVATE

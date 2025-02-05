@@ -1,0 +1,9 @@
+TARGETNAME=ddutil
+TARGETTYPE=LIBRARY
+
+INCLUDES=                   \
+    ..\..\include;          \
+    $(_PUBLICROOT)\$(WINCEPROJ)\sdk\inc;
+
+SOURCES=            \
+    ddutil.cpp

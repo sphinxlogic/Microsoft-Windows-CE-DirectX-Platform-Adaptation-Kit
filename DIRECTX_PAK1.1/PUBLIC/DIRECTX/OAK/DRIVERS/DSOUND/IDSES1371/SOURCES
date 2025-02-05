@@ -1,0 +1,58 @@
+!IF 0
+
+Copyright (c) 1989-2000  Microsoft Corporation
+
+Module Name:
+
+    sources.
+
+Abstract:
+
+    This file specifies the target component being built and the list of
+    sources files needed to build that component.  Also specifies optional
+    compiler switches and libraries that are unique for the component being
+    built.
+
+
+!ENDIF
+
+
+TARGETNAME=IDSES1371
+
+CDEFINES=-D$(_TGTPLAT)
+
+!ifdef DOSYSGEN
+
+TARGETTYPE=LIBRARY
+TARGETDEFNAME=$(TARGETNAME)
+WINCETARGETFILE0=$(_RELEASELIBDIR)\$(TARGETDEFNAME).def
+
+!else
+
+TARGETTYPE=DYNLINK
+
+TARGETLIBS=                                             \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib 
+SOURCELIBS= \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\uuid.lib	\
+    $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib 	\
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\ntcompat.lib 	\
+    $(_PUBLICROOT)\directx\oak\lib\$(_CPUINDPATH)\IrqMap.lib 
+
+DLLENTRY=DllEntry
+
+!endif
+
+INCLUDES=..\..\inc
+
+SOURCES=\
+	idses1371dll.cpp	\
+	DsDriver.cpp		\
+	DsDriverBuffer.cpp	\
+	DsDriverCapture.cpp		\
+	DsCaptureDriverBuffer.cpp	\
+	es1371.cpp      \
+	hw_uart.cpp     \
+	hw_ac97.cpp     \
+	hw_pwr.cpp	\
+	decibels.cpp

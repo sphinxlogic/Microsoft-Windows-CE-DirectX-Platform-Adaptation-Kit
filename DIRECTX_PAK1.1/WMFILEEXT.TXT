@@ -1,0 +1,21 @@
+You shall comply with the following Windows Media file extension requirements:
+*	Product for Windows CE that want to take ownership of the .WMA (and/or the associated audio/x-ms-wma MIME type) or .WAX 
+(and/or the associated audio/x-ms-wax MIME type) file name association will (i) present the end user with a choice as to whether or not 
+the Product for Windows CE should become the default application (only if an alternate application is already the default application), 
+and (ii) be capable of rendering audio content and script commands, and (iii) be capable of parsing the Windows Media metafile with the 
+.WAX file name extension.
+*	Product for Windows CE that want to take ownership of the .WMV (and/or the associated video/x-ms-wmv MIME type) or .WVX 
+(and/or the associated video/x-ms-wvx MIME type) file name association will (i) present the end user with a choice as to whether or not 
+the Product for Windows CE should become the default application (only if an alternate application is already the default application), 
+and (ii) be capable of rendering audio content, video content, and script commands, and (iii) be capable of parsing the Windows Media 
+Metafile with either the .WVX or the .WAX file name extension.
+*	This EULA prohibits the Product from Windows CE from taking ownership of .ASF (and/or the associated video/x-ms-asf MIME type), 
+.ASX (and/or the associated video/x-ms-asf MIME type), .WM (and/or the associated video/x-ms-wm MIME type), and .WMX (and/or 
+the associated video/x-ms-wmx MIME type) file name extensions unless the Product for Windows CE also licenses and incorporates 
+other Microsoft-licensed components or Microsoft-licensed technology (by written agreement separate from this EULA) by which a 
+license to take such associations is explicitly granted. 
+* 	The Product for Windows CE may reclaim media file associations changed by the REDISTRIBUTABLE components if they offer the 
+user notice of the Product for Windows CE's desire to reset the file association and a simultaneous opportunity for the end-user to elect 
+not to have this action undertaken.  Product for Windows CE may not otherwise automatically reclaim for your applications, scripts, or 
+operating systems, any media file associations changed by the REDISTRIBUTABLE components. 
+

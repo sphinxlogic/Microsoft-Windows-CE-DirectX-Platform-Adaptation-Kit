@@ -1,0 +1,5 @@
+LIBRARY 	IDSES1371
+
+EXPORTS 
+	DllEntry
+	DllGetClassObject

@@ -1,0 +1,27 @@
+TARGETNAME=ddex4
+
+INCLUDES=		    \
+    ..\..\include;          \
+    $(_PUBLICROOT)\$(WINCEPROJ)\sdk\inc;
+
+SOURCES=            \
+    ddex4.cpp       \
+    ddex4.rc
+
+!ifdef DOSYSGEN
+
+TARGETTYPE=LIBRARY
+COPYRES=1
+WINCETARGETFILES=$(_RELEASELIBDIR)\$(TARGETNAME).res
+
+!else
+
+TARGETTYPE=PROGRAM
+TARGETLIBS=                                            \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\dxguid.lib    \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\ddraw.lib     \
+    $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\ddutil.lib    \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\uuid.lib      \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib
+
+!endif

@@ -1,0 +1,13 @@
+LIBRARY DDHEL
+
+EXPORTS
+HELInit
+InitializeJunctions
+AllocateSysMemForSurf
+
+; Global blitting junction tables
+g_rgjunc8
+g_rgjunc555
+g_rgjunc565
+g_rgjunc24
+g_rgjunc32

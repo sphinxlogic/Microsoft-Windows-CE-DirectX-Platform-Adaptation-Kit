@@ -1,0 +1,41 @@
+!IF 0
+--------------------------------------------------------------------------------
+
+    Windows CE DXView Executable
+    Copyright (c) 1998-2000, Microsoft Corporation
+
+--------------------------------------------------------------------------------
+!ENDIF
+
+TARGETNAME=DXView
+WINCEOEM=1
+
+!ifdef DOSYSGEN
+
+TARGETTYPE=LIBRARY
+TARGETDEFNAME=$(TARGETNAME)
+COPYRES=1
+WINCETARGETFILES=$(_RELEASELIBDIR)\$(TARGETNAME).res
+
+!else
+
+TARGETTYPE=PROGRAM
+
+TARGETLIBS=\
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\Ole32.lib         \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib       \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\dxguid.lib        \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\ddraw.lib         \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\dsound.lib        \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\commctrl.lib      \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\commdlg.lib       \
+
+!endif
+
+SOURCES=\
+    dxview.c     \
+    ddraw.c      \
+    dsound.c     \
+    dxprint.c    \
+    listview.c   \
+    dxview.rc

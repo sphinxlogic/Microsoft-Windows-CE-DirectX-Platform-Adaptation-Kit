@@ -1,0 +1,1 @@
+DIRS=ddraw wavedev irqmap wavemdd dsound mixapi

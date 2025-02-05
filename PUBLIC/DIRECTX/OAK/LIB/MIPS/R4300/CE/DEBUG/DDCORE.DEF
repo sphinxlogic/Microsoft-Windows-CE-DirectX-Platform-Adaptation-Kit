@@ -1,0 +1,72 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+LIBRARY DDCORE
+
+EXPORTS
+    DirectDrawCreate
+    DirectDrawEnumerateA
+    DirectDrawEnumerateW
+    DirectDrawEnumerateExA
+    DirectDrawEnumerateExW
+    DDInternalLock
+    DDInternalUnlock
+    DirectDrawCreateClipper
+    AcquireDDThreadLock
+    ReleaseDDThreadLock
+    DllGetClassObject
+    DllCanUnloadNow
+    CleanupAfterProc
+
+; Exports to support ddhel
+
+	MemAlloc
+	MemFree
+	MemReAlloc
+	hDirectDrawMutex
+
+	DXdprintf
+
+
+
+	bGotddcb
+	ddcb
+

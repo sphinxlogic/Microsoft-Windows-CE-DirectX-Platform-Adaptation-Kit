@@ -1,0 +1,1894 @@
+//
+// Copyright 1998-1999 (c) Creative Labs, Malvern.  All rights reserved.
+// Portions copyright 1999 (c) Microsoft Corporation.  All rights reserved.
+//
+// $Workfile: es1371.cpp $   
+//
+// Author: Joe Cotellese
+//
+//
+// Comments:   
+//
+// $History: es1371.cpp $
+// 
+// *****************  Version 14  *****************
+// Modified for use with CE DirectSound Driver model
+//
+// *****************  Version 13  *****************
+// User: Mauriceb     Date: 3/16/99    Time: 2:13p
+// Updated in $/AC97/wdm/full/1371
+// Conditionally compile wave pci / wave cyclic
+// 
+// *****************  Version 12  *****************
+// User: Dsowa        Date: 3/01/99    Time: 9:46a
+// Updated in $/AC97/wdm/1371
+// Added Joystick support.
+// Fixed some masking issues in the register write routines.
+// Make the ship count setting use the proper register write routines so
+// the values get cached.
+// If the ISR gets all f's when it reads the interrupt status register
+// then we've lost the device from the bus.
+// 
+// *****************  Version 11  *****************
+// User: Dsowa        Date: 2/08/99    Time: 3:34p
+// Updated in $/AC97/wdm/1371
+// Post MS trip #1:
+// The functions that physically write to the chips check to see if the
+// chip is powered down and if so just stash the write.
+// 
+// *****************  Version 10  *****************
+// User: Dsowa        Date: 1/28/99    Time: 12:56p
+// Updated in $/AC97/wdm/1371
+// fixed typo in DAC1 unpause case.
+// 
+// *****************  Version 9  *****************
+// User: Dsowa        Date: 12/29/98   Time: 9:53a
+// Updated in $/AC97/wdm/1371
+// Lots of changes to save and restore hardware state to allow for power
+// management.
+// 
+// *****************  Version 8  *****************
+// User: Dsowa        Date: 10/23/98   Time: 9:42a
+// Updated in $/ac97/wdm/1371
+// start of power management implemenation
+// 
+// *****************  Version 7  *****************
+// User: Dsowa        Date: 9/10/98    Time: 1:21p
+// Updated in $/ac97/wdm/1371
+// Added MP protection for Indirect IO reads and writes.
+// 
+// So MIDI and Wave work together now.
+// 
+// *****************  Version 6  *****************
+// User: Dsowa        Date: 8/27/98    Time: 4:40p
+// Updated in $/AC97/wdm/1371
+// First pass on UART.  Midi input and output both working.  Further work
+// remains to be done to protect all the needed routines from the ISR.
+// 
+// *****************  Version 4  *****************
+// User: Dsowa        Date: 7/29/98    Time: 12:58p
+// Updated in $/ac97/wdm/1371
+// Store the AC97 register values in their array properly
+// 
+// *****************  Version 3  *****************
+// User: Dsowa        Date: 7/27/98    Time: 3:20p
+// Updated in $/ac97/wdm/1371
+// Set up the CODEC to record from the MIC by default for testing.
+// 
+// *****************  Version 2  *****************
+// User: Dsowa        Date: 7/23/98    Time: 3:24p
+// Updated in $/AC97/wdm/1371
+// updated all the sources to say ES1371 instead of SB16
+// 
+// *****************  Version 1  *****************
+// User: Dsowa        Date: 7/23/98    Time: 1:58p
+// Created in $/AC97/wdm/1371
+// Initial checkin of 1371 based WDM driver.
+// 
+// Right now this just started making sound on Win98.  Hopefully better
+// things are coming
+//
+//
+// {{{ EMACS local variables
+// Local variables:
+// folded-file: t
+// end:
+// }}}
+#include "includes.h"
+
+#define STR_MODULENAME "CES1371: "
+
+
+typedef struct
+{
+    CES1371           * pHardware;
+    BOOLEAN             fRead;
+    ULONG               ulPage;
+    ULONG               ulIOAddress;
+    PULONG              pulData;
+}
+SYNCIOCONTEXT, *PSYNCIOCONTEXT;
+
+static
+NTSTATUS
+SynchronizedPagedIO
+(
+    IN      PINTERRUPTSYNC  InterruptSync,
+    IN      PVOID           syncIOContext
+);
+
+// {{{ constructor/destructor
+
+CES1371::CES1371 ()
+{
+	//initialize our member variables
+   	m_dmachannel[0].ulDMAChannelState = DMA_STOPPED;
+   	m_dmachannel[1].ulDMAChannelState = DMA_STOPPED;
+   	m_dmachannel[2].ulDMAChannelState = DMA_STOPPED;
+
+	m_pDsDriver = NULL;
+	m_pDsCaptureDriver = NULL;
+	m_bInitDone = FALSE;
+
+	m_hISTInitializeEvent = CreateEvent(NULL, FALSE, FALSE, TEXT("ES1371WaitForISTInitialize"));
+	m_hISTInterruptEvent = CreateEvent(NULL, FALSE, FALSE, TEXT("ES1371WaitForISTInterrupt"));
+	InitializeCriticalSection( &m_ces1371critsec );
+
+	m_hISThread = NULL;
+	m_bExitIST = FALSE;
+
+	m_pInterruptSync = (IInterruptSync_WinCeStub*)new IInterruptSync_WinCeStub;
+
+	m_fIsMapped = FALSE;
+
+    m_ulPowerState = 0;		// record the internal state of the device as "powered up"
+
+}
+
+CES1371::~CES1371 ()
+{
+    //invalidate our member variables
+
+	// Close the IST
+	m_bExitIST = true;
+	SetEvent(m_hISTInterruptEvent);
+	if( WAIT_OBJECT_0 != WaitForSingleObject(m_hISThread, 10000) )
+		DEBUGMSG(ZONE_ERROR,(TEXT("~CES1371-- Error closing IST \r\n")));
+
+    m_pPciAddr = 0;
+	CloseHandle(m_hISTInitializeEvent);
+	CloseHandle(m_hISTInterruptEvent);
+	DeleteCriticalSection( &m_ces1371critsec );
+
+	if (m_fIsMapped) {
+		MmUnmapIoSpace(m_pPciAddr, ES1371_IO_SPACE_SIZE);
+		m_fIsMapped = FALSE;
+	}
+    m_pPciAddr = 0;
+}
+
+
+
+
+// }}}
+
+// {{{ Init
+
+//--------------------------------------------------------------------------
+//
+//  Name: CES1371::InitHardware
+//
+//  Description: intitializes the 1371 hardware
+//
+//  Parameters: none
+//
+//  Returns: void
+//
+//  Note: 
+//
+//--------------------------------------------------------------------------
+void CES1371::InitHardware()
+{
+    UCHAR  bReg = 0x00;
+    USHORT wReg = 0x0000;
+    ULONG  i;
+
+    // write bogus values into the DRegs so the initial writes take
+    for ( i=0; i<12; i++)
+      m_ulDRegs[i] = 0xffffffff;
+    
+    /*
+     *put the HW into a happy state
+     */  
+    InitSRC( TRUE );
+    
+    /* setup the MISCCTRL reg */
+    bReg =
+        ES1371_MISCCTL_PDLEV_D0
+        & ~ES1371_MISCCTL_CCBINTRM_EN;
+
+    HwRegRMW( ES1371_bMISCCTL_OFF, 0xff, bReg );
+    
+    /* setup the DEVCTRL reg */
+    /* enable UART, XTAL clock and PCI clock */
+    bReg =
+         ES1371_DEVCTL_UART_EN 
+        & ~ES1371_DEVCTL_XTALCLK_DS
+        & ~ES1371_DEVCTL_PCICLK_DS;
+    
+    HwRegRMW( ES1371_bDEVCTL_OFF, 0xff, bReg );
+
+    /* setup the JOYCTRL reg */
+    bReg = 0;
+    HwRegRMW( ES1371_bJOYCTL_OFF, 0xff, bReg );
+    
+    /* disable the NMI */
+    bReg = 0x00;
+    HwRegRMW( ES1371_bNMIENA_OFF, 0xff, bReg );
+    
+    /* clear the NMI status register */
+    wReg = 0x0000;
+    HwRegRMW( ES1371_wNMISTAT_OFF, 0xffff, wReg );
+    
+    /* clear the Serial Control register */
+    bReg = 0x00;
+    HwRegRMW( ES1371_bSERCTL_OFF, 0xff, bReg );
+    
+    // initialize Codec
+    InitCodec();
+
+    // initialize UART
+    m_ulUARTState = 0;
+
+    return;
+}
+
+// }}}
+
+// {{{ SRCInit
+
+void CES1371::InitSRC( BOOLEAN fEnable )
+{
+    USHORT     i;
+    ULONG      ulHardwareWrite;
+
+    /* must poll before writes to DISABLE or PAUSE the SRCIO register */
+    SRCPollIOReg ();
+    /* disable SRC for init */
+    ulHardwareWrite = SRC_DISABLE;
+    HwRegRMW( ES1371_dSRCIO_OFF, 0xffffffff, ulHardwareWrite ); 
+//    WRITE_PORT_ULONG((PULONG)(m_pPciAddr + ES1371_dSRCIO_OFF), SRC_DISABLE);
+
+    /* clear the SRC RAM */
+    for( i = 0; i < 0x80; ++i )
+        SRCRegWrite(i, 0 );
+
+    SRCRegWrite(SRC_DAC0_BASE + SRC_TRUNC_N_OFF, 16 << 4);
+    SRCRegWrite(SRC_DAC0_BASE + SRC_INT_REGS_OFF, 16 << 10);
+    SRCRegWrite(SRC_DAC1_BASE + SRC_TRUNC_N_OFF, 16 << 4);
+    SRCRegWrite(SRC_DAC1_BASE + SRC_INT_REGS_OFF, 16 << 10);
+    SRCRegWrite(SRC_ADC_BASE + SRC_TRUNC_N_OFF, 16 << 4);
+    SRCRegWrite(SRC_ADC_BASE + SRC_INT_REGS_OFF, 16 << 10);
+    SRCRegWrite(SRC_DAC0_VOL_L, 1 << 12);
+    SRCRegWrite(SRC_DAC0_VOL_R, 1 << 12);
+    SRCRegWrite(SRC_DAC1_VOL_L, 1 << 12);
+    SRCRegWrite(SRC_DAC1_VOL_R, 1 << 12);
+    SRCRegWrite(SRC_ADC_VOL_L, 1 << 12);
+    SRCRegWrite(SRC_ADC_VOL_R, 1 << 12);
+
+    /* default some rates */
+    SRCSetRate(ES1371_DAC0, 22050);
+    SRCSetRate(ES1371_DAC1, 22050);
+    SRCSetRate(ES1371_ADC, 22050);
+
+#if (DBG)
+    USHORT usSRCdata[8];
+    USHORT j;
+    /* dump the SRC ram */
+    DEBUGMSG( 1, (TEXT("es1371 dump SRC ram\r")));
+
+    for ( i = 0; i < 16; i++ )
+    {
+      for ( j = 0; j < 8; j++)
+      {
+          usSRCdata[j] = SRCRegRead( i*8 + j );  
+      }
+
+      DEBUGMSG( 1, (TEXT("%02x %04x %04x %04x %04x %04x %04x %04x %04x\r"), i*8,
+                                      usSRCdata[0],usSRCdata[1],
+                                      usSRCdata[2],usSRCdata[3],
+                                      usSRCdata[4],usSRCdata[5],
+                                      usSRCdata[6],usSRCdata[7]));
+    }
+#endif
+
+    if ( fEnable )
+    {
+        /* now enable the whole deal */
+        SRCPollIOReg ();
+        ulHardwareWrite = 0L;
+        HwRegRMW( ES1371_dSRCIO_OFF, 0xffffffff, ulHardwareWrite ); 
+    }
+
+    return;
+}
+
+// }}}
+
+//--------------------------------------------------------------------------
+//
+//  Name: HwPagedIOWrite
+//
+//  Description: Does a MP-safe write to the indirect registers
+//
+//  Parameters: UCHAR Page : the memory page to set
+//              PULONG pAddr : the IO address to write
+//              ULONG ulData : the data to write
+//
+//  Returns: NTSTATUS    
+//
+//--------------------------------------------------------------------------
+NTSTATUS
+CES1371::HwPagedIOWrite( UCHAR Page, ULONG pAddr, ULONG ulData )
+{
+    SYNCIOCONTEXT context;
+    ULONG ulWriteData;
+
+    NTSTATUS ntStatus = STATUS_SUCCESS;
+
+    if ( 0 == m_ulPowerState )
+    {
+        // normal power state - go read the hardware
+        ulWriteData = ulData;
+
+        context.pHardware = this;
+        context.fRead = FALSE;
+        context.ulPage = ULONG( Page );
+        context.ulIOAddress = pAddr;
+        context.pulData = &ulWriteData;
+
+        ntStatus = m_pInterruptSync->
+                     CallSynchronizedRoutine(SynchronizedPagedIO,PVOID(&context));
+    }
+    else
+    {
+        // power down state - can't write hardware write the saved setting
+        m_ulIRegsPMContext[ (ULONG(Page) * 4) + ( (pAddr - 0x30) / 4 ) ] = ulData;
+    }
+
+    return ntStatus;
+}
+
+//--------------------------------------------------------------------------
+//
+//  Name: HwPagedIORead
+//
+//  Description: Sets the current page of indirect registers
+//
+//  Parameters: UCHAR Page : the memory page to set
+//              PULONG pAddr : the IO address to read
+//
+//  Returns: data read   
+//
+//--------------------------------------------------------------------------
+ULONG
+CES1371::HwPagedIORead( UCHAR Page, ULONG pAddr )
+{
+    SYNCIOCONTEXT context;
+    ULONG ulReadData;
+
+    NTSTATUS ntStatus = STATUS_SUCCESS;
+
+    if ( 0 == m_ulPowerState )
+    {
+        // normal power state - go read the hardware
+        context.pHardware = this;
+        context.fRead = TRUE;
+        context.ulPage = ULONG( Page );
+        context.ulIOAddress = pAddr;
+        context.pulData = &ulReadData;
+
+        ntStatus = m_pInterruptSync->
+                     CallSynchronizedRoutine(SynchronizedPagedIO,PVOID(&context));
+    }
+    else
+    {
+        // power down state - can't read hardware get the saved setting
+        ulReadData = m_ulIRegsPMContext[ (ULONG(Page) * 4) + ( (pAddr - 0x30) / 4 ) ];
+    }
+
+    return ulReadData;
+}
+
+// {{{ HwRegRMW
+/* -----------------------------------------------------------------------  /
+
+    Routine:  HwRegRMW
+
+    Purpose:  The routine is used to access a Concert chip register via
+              its shadowed value.  This routine is required to provide
+              exclusion (synchronization) to the register.
+
+              This routine should be run from the KeSynchronizeExecution
+              call,  forceing this routine to execute at our devices
+              DIRQL.  It also acquires the spin lock, providing exclusion.
+
+              The current value in the shadow ram is read, ANDed with
+              the mask and ORed with the bits.
+
+
+    Inputs:
+
+    Output:   None
+
+    Errors:   None
+
+/  ----------------------------------------------------------------------- */
+UCHAR
+CES1371::HwRegRMW (  UCHAR Reg, UCHAR bBitMask, UCHAR bSetBits )
+{
+   UCHAR bNewValue;
+   UCHAR *puc_DRegs = (UCHAR *)m_ulDRegs;
+
+   // are we setting the whole data space?
+   if ( 0x00 == bBitMask )
+   {
+       return ( *(puc_DRegs + Reg) );
+   }
+   else if ( 0xff == bBitMask )
+   {
+       bNewValue = bSetBits;
+   }
+   else
+   {
+       // read original value, 
+       // zero out bits of interest, 
+       // set proper bits to one 
+       if ( (0xff != *(puc_DRegs + Reg)) || ( m_ulPowerState > 0 ) )
+           bNewValue = *(puc_DRegs + Reg);
+       else
+           bNewValue = READ_PORT_UCHAR (m_pPciAddr + Reg);
+       bNewValue &= ~bBitMask;
+       bNewValue |= (bSetBits & bBitMask);
+   }
+   // write new value to hardware
+   if ( 0 == m_ulPowerState )
+       WRITE_PORT_UCHAR ( m_pPciAddr + Reg, bNewValue);
+
+   // save the value for the future
+   *(puc_DRegs + Reg) = bNewValue;
+
+   return bNewValue;
+
+}  // end of function: hw_reg_rmw_char
+
+// }}}
+
+// {{{ HwRegRMW
+USHORT
+CES1371::HwRegRMW ( UCHAR Reg, USHORT wBitMask, USHORT wSetBits )
+{
+   USHORT wNewValue;
+   USHORT *pus_DRegs = (USHORT *)m_ulDRegs;
+   
+   // are we setting the whole data space?
+   if ( 0x0000 == wBitMask )
+   {
+       return ( *(pus_DRegs + Reg/2) );
+   }
+   else if ( 0xffff == wBitMask )
+   {
+       wNewValue = wSetBits;
+   }
+   else
+   {
+       // read original value, 
+       // zero out bits of interest, 
+       // set proper bits to one
+       if ( (0xffff != *(pus_DRegs + (Reg/2))) || ( m_ulPowerState > 0 ) )
+           wNewValue = *(pus_DRegs + (Reg/2));
+       else
+           wNewValue = READ_PORT_USHORT ( (PUSHORT)(m_pPciAddr + Reg) );
+       wNewValue &= ~wBitMask;
+       wNewValue |= (wSetBits & wBitMask);
+   }
+     
+   /* write new value to hardware */
+   if ( 0 == m_ulPowerState )
+       WRITE_PORT_USHORT ( (PUSHORT)(m_pPciAddr + Reg), wNewValue );
+   
+   // save the value for the future
+   *(pus_DRegs + (Reg/2)) = wNewValue;
+
+   return wNewValue;
+  
+}  /* end of function: hw_reg_rmw_short */
+
+// }}}
+
+// {{{ HwRegRMW
+ULONG
+CES1371::HwRegRMW ( UCHAR Reg, ULONG dwBitMask, ULONG dwSetBits )
+{
+   ULONG dwNewValue;
+
+   // are we setting the whole data space?
+   if ( 0x00000000 == dwBitMask )
+   {
+       return ( m_ulDRegs[Reg/4] );
+   }
+   else if ( 0xffffffff == dwBitMask )
+   {
+       dwNewValue = dwSetBits;
+   }
+   else
+   {
+       // read original value, 
+       // zero out bits of interest, 
+       // set proper bits to one 
+       if ( (0xffffffff != m_ulDRegs[Reg/4]) || ( m_ulPowerState > 0 ) )
+           dwNewValue = m_ulDRegs[Reg/4];
+       else
+           dwNewValue = READ_PORT_ULONG ( (PULONG)(m_pPciAddr + Reg) );
+
+       dwNewValue &= ~dwBitMask;
+       dwNewValue |= (dwSetBits & dwBitMask);
+   }
+
+   /* write new value to hardware */
+   if ( 0 == m_ulPowerState )
+       WRITE_PORT_ULONG ( (PULONG)(m_pPciAddr + Reg), dwNewValue );
+
+   // save the value for the future
+   m_ulDRegs[Reg/4] = dwNewValue;
+
+   return dwNewValue;
+
+}  /* end of function: hw_reg_rmw_long */
+
+// }}}
+
+// {{{ SRCRegRead
+
+USHORT
+CES1371::SRCRegRead( USHORT reg )
+{
+   /* LOCAL DATA */
+   ULONG    dtemp;
+   /* END LOCAL DATA */
+
+   // Is the device powered down?
+   if ( m_ulPowerState > 0 )
+        return m_usSRCRegsPMContext[ reg ];
+
+   /* wait for ready */
+   dtemp = SRCPollIOReg ();
+    
+   /* assert a read request */
+   WRITE_PORT_ULONG((PULONG)(m_pPciAddr + ES1371_dSRCIO_OFF),
+                    (dtemp & SRC_CTLMASK) | (ULONG(reg) << 25) );
+
+   /* wait for the data */
+   dtemp = SRCPollIOReg ();
+   return (USHORT) dtemp;
+}
+
+// }}}
+
+void 
+CES1371::SRCRegWrite(USHORT reg, USHORT val)
+{
+    ULONG    i, dtemp;
+
+    // Is the device powered down?
+    if ( m_ulPowerState > 0 )
+    {
+        m_usSRCRegsPMContext[ reg ] = val;
+        return;
+    }
+
+    /* wait for ready */
+    dtemp = SRCPollIOReg ();
+
+    /* assert the write request */
+    i = (dtemp & SRC_CTLMASK) | SRC_WENABLE |
+            ( (ULONG)reg << 25 ) | val;
+
+    /* write the value */
+    WRITE_PORT_ULONG((PULONG)(m_pPciAddr + ES1371_dSRCIO_OFF), i);
+
+#ifdef DBG
+    {
+      USHORT us;
+      us = SRCRegRead ( reg );
+      if ( us != val )
+        _DbgPrintF( DEBUGLVL_TERSE, ("[SRCRegWrite] FAILED reg %02x wrote %04x read %04x", reg, val, us));
+    }
+#endif
+
+    return;
+}
+
+// }}}
+
+
+void
+CES1371::SRCSetRate( UCHAR ucDMAChannel, USHORT wSampleRate )
+{
+    ULONG    i, freq, dtemp;
+    USHORT   N, truncM, truncStart, wtemp;
+
+    // Is the device powered down?
+    if ( m_ulPowerState > 0 )
+        return;
+
+    switch ( ucDMAChannel )
+    {
+      case ES1371_DAC0:
+        // freeze the channel
+        for( i = 0; i < SRC_IOPOLL_COUNT; ++i )
+            if( !(READ_PORT_ULONG ( (PULONG)(m_pPciAddr + ES1371_dSRCIO_OFF) ) & SRC_BUSY) )
+                break;
+
+        dtemp = READ_PORT_ULONG((PULONG)(m_pPciAddr + ES1371_dSRCIO_OFF));
+        WRITE_PORT_ULONG( (PULONG)(m_pPciAddr + ES1371_dSRCIO_OFF),
+                (dtemp & SRC_CTLMASK) | SRC_DAC0FREEZE);
+
+        // calculate new frequency and write it
+        // preserve accum 
+        freq = ((ULONG) wSampleRate << 16) / 3000U;
+        SRCRegWrite( SRC_DAC0_BASE + SRC_INT_REGS_OFF, 
+                     (SRCRegRead( SRC_DAC0_BASE + SRC_INT_REGS_OFF ) & 0x00ffU) |
+                       ((USHORT) (freq >> 6) & 0xfc00));
+        SRCRegWrite( SRC_DAC0_BASE + SRC_VFREQ_FRAC_OFF, (USHORT) freq >> 1);
+
+        // un-freeze the channel
+        for( i = 0; i < SRC_IOPOLL_COUNT; ++i )
+            if( !(READ_PORT_ULONG ( (PULONG)(m_pPciAddr + ES1371_dSRCIO_OFF) ) & SRC_BUSY) )
+                break;
+        dtemp = READ_PORT_ULONG((PULONG)(m_pPciAddr + ES1371_dSRCIO_OFF));
+        WRITE_PORT_ULONG( (PULONG)(m_pPciAddr + ES1371_dSRCIO_OFF),
+                (dtemp & SRC_CTLMASK) & (~SRC_DAC0FREEZE) );
+        break;
+
+      case ES1371_DAC1:
+        // freeze the channel
+        for( i = 0; i < SRC_IOPOLL_COUNT; ++i )
+            if( !(READ_PORT_ULONG ( (PULONG)(m_pPciAddr + ES1371_dSRCIO_OFF) ) & SRC_BUSY) )
+                break;
+
+        dtemp = READ_PORT_ULONG((PULONG)(m_pPciAddr + ES1371_dSRCIO_OFF));
+        WRITE_PORT_ULONG( (PULONG)(m_pPciAddr + ES1371_dSRCIO_OFF),
+                (dtemp & SRC_CTLMASK) | SRC_DAC1FREEZE);
+
+        // calculate new frequency and write it
+        // preserve accum 
+        freq = ((ULONG) wSampleRate << 16) / 3000U;
+        SRCRegWrite( SRC_DAC1_BASE + SRC_INT_REGS_OFF, 
+                     (SRCRegRead( SRC_DAC1_BASE + SRC_INT_REGS_OFF ) & 0x00ffU) |
+                       ((USHORT) (freq >> 6) & 0xfc00));
+        SRCRegWrite( SRC_DAC1_BASE + SRC_VFREQ_FRAC_OFF, (USHORT) freq >> 1);
+
+        // un-freeze the channel
+        for( i = 0; i < SRC_IOPOLL_COUNT; ++i )
+            if( !(READ_PORT_ULONG ( (PULONG)(m_pPciAddr + ES1371_dSRCIO_OFF) ) & SRC_BUSY) )
+                break;
+        dtemp = READ_PORT_ULONG((PULONG)(m_pPciAddr + ES1371_dSRCIO_OFF));
+        WRITE_PORT_ULONG( (PULONG)(m_pPciAddr + ES1371_dSRCIO_OFF),
+                (dtemp & SRC_CTLMASK) & (~SRC_DAC1FREEZE) );
+        break;
+
+      case ES1371_ADC:
+        // derive oversample ratio
+        N = wSampleRate/3000U;
+        if( N == 15 || N == 13 || N == 11 || N == 9 )
+            --N;
+
+        // truncate the filter and write n/trunc_start
+        truncM = (21*N - 1) | 1;
+        if( wSampleRate >= 24000U )
+        {
+            if( truncM > 239 )
+                truncM = 239;
+            truncStart = (239 - truncM) >> 1;
+            
+            SRCRegWrite( SRC_ADC_BASE + SRC_TRUNC_N_OFF,
+                         (truncStart << 9) | (N << 4));
+        }
+        else
+        {
+            if( truncM > 119 )
+                truncM = 119;
+            truncStart = (119 - truncM) >> 1;
+
+            SRCRegWrite( SRC_ADC_BASE + SRC_TRUNC_N_OFF,
+                    0x8000U | (truncStart << 9) | (N << 4));
+        }
+
+        /* calculate new frequency and write it - preserve accum */
+        freq = ((48000UL << 16) / wSampleRate) * N;
+        wtemp = SRCRegRead( SRC_ADC_BASE + SRC_INT_REGS_OFF );
+        SRCRegWrite( SRC_ADC_BASE + SRC_INT_REGS_OFF,
+                     (wtemp & 0x00ff) | ((USHORT) (freq >> 6) & 0xfc00));
+        SRCRegWrite( SRC_ADC_BASE + SRC_VFREQ_FRAC_OFF, (USHORT) freq >> 1);
+
+        SRCRegWrite( SRC_ADC_VOL_L, N << 8);
+        SRCRegWrite( SRC_ADC_VOL_R, N << 8);
+        break;
+    }
+
+    return;
+}
+
+
+//--------------------------------------------------------------------------
+//
+//  Name: SRCWaitForFrame1
+//
+//  Description: code that polls a value in the SRC converter so that we know
+//               when it is safe to write.
+//
+//  Parameters:  PFRAME_CONTEXT
+//
+//  Returns: always succeeds
+//
+//  Note: Apparently, we can't do CODEC writes when the sync pulse is high.
+//        Luckily, there are some debug things in the SRC that let us know
+//        when sync pulse is low. This needs to be synched with the ISR so
+//        we don't get interrupted and lose track of where we are.
+//
+//--------------------------------------------------------------------------
+void
+CES1371::SRCWaitForFrame1 ( )
+{
+    while( !((READ_PORT_ULONG( (PULONG)(m_pPciAddr + ES1371_dSRCIO_OFF) ) & 0x00070000UL) ==
+          0x00010000UL) )
+//<mod:ce> KeStallExecutionProcessor(1);
+
+    return;
+}
+
+// }}}
+   
+// {{{ SRCPollIOReg
+
+//--------------------------------------------------------------------------
+//
+//  Name: SRCPollIOReg
+//
+//  Description:
+//
+//  Parameters: 
+//
+//  Returns:    
+//
+//  Note: This function must be called prior to any
+//        writes to the Disable/Pause bits
+//
+//--------------------------------------------------------------------------
+ULONG
+CES1371::SRCPollIOReg ()
+{
+  int i;
+  ULONG dw=0;
+
+  for (i=0; i<SRC_IOPOLL_COUNT; ++i)
+  {
+        if (!((dw = READ_PORT_ULONG ((PULONG)(m_pPciAddr+ES1371_dSRCIO_OFF))) & SRC_BUSY) )
+          break;
+
+//<mod:ce> KeStallExecutionProcessor (1);
+  }
+
+#ifdef DBG
+  if (i == SRC_IOPOLL_COUNT)
+        _DbgPrintF( DEBUGLVL_TERSE, ("[SRCPollIOReg] timeout %x", dw));
+#endif
+
+  return dw;
+}
+
+// }}}
+    
+//--------------------------------------------------------------------------
+//
+//  Name: InitDMAChannel
+//
+//  Description: Intialize all the things about a DMA channel
+//
+//  Parameters: UCHAR ucDMAChannel : Index of the DMA channel to init
+//              ULONG ulPhysDMAAddr : Physical address of the DMA buffer
+//                                    in memory
+//              USHORT usBufferSize : Number of bytes in a DMA buffer
+//
+//  Returns: none   
+//
+//  Note:
+//
+//--------------------------------------------------------------------------
+void
+CES1371::InitDMAChannel( UCHAR ucDMAChannel,
+                         ULONG ulPhysDMAAddr,
+                         ULONG ulBufferSize )
+{
+  ULONG ulFrameCount = 0;
+
+  m_dmachannel[ucDMAChannel].ulPhysDMAAddr = ulPhysDMAAddr;
+  m_dmachannel[ucDMAChannel].ulDMABufSize  = ulBufferSize;
+
+  switch ( ucDMAChannel )
+  {
+    case ES1371_DAC0 :
+      // Set up the physical DMA buffer address
+      HwPagedIOWrite( ES1371_DAC0CTL_PAGE, ES1371_dDAC0PADDR_OFF, ulPhysDMAAddr);  
+      // Clear out the Frame count register
+      HwPagedIOWrite( ES1371_DAC0CTL_PAGE, ES1371_wDAC0FC_OFF, ulFrameCount);  
+      break;
+
+    case ES1371_DAC1 :
+      // Set up the physical DMA buffer address
+      HwPagedIOWrite( ES1371_DAC1CTL_PAGE, ES1371_dDAC1PADDR_OFF, ulPhysDMAAddr);  
+      // Clear out the Frame count register
+      HwPagedIOWrite( ES1371_DAC1CTL_PAGE, ES1371_wDAC1FC_OFF, ulFrameCount);  
+      break;
+
+    case ES1371_ADC :
+      // Set up the physical DMA buffer address
+      HwPagedIOWrite( ES1371_ADCCTL_PAGE, ES1371_dADCPADDR_OFF, ulPhysDMAAddr);  
+      // Clear out the Frame count register
+      HwPagedIOWrite( ES1371_ADCCTL_PAGE, ES1371_wADCFC_OFF, ulFrameCount);  
+      break;
+  }
+  return ;
+}  
+
+//--------------------------------------------------------------------------
+//
+//  Name: SetDMAChannelFormat
+//
+//  Description: Set the Format of a particular DMA channel.
+//
+//  Parameters: UCHAR ucDMAChannel : Index of the DMA channel to init
+//              ULONG ulChannels   : Number of audio channels 1=mono 2=stereo
+//              ULONG ul16Bit      : flag for sample size 0=8bit 1=16bit
+//              ULONG ulSampleRate : actual number of samples/second.
+//
+//  Returns: none   
+//
+//  Note:
+//
+//--------------------------------------------------------------------------
+void
+CES1371::SetDMAChannelFormat( UCHAR ucDMAChannel,
+                              ULONG ulChannels,
+                              ULONG ul16Bit,
+                              ULONG ulSampleRate )
+{
+  UCHAR ucFormatBits;
+  UCHAR ucSkipCount;
+
+  // save off the info for power managment
+  m_dmachannel[ucDMAChannel].ulChannels   = ulChannels;
+  m_dmachannel[ucDMAChannel].ul16Bit      = ul16Bit;
+  m_dmachannel[ucDMAChannel].ulSampleRate = ulSampleRate;
+
+  // first set the new sample rate
+  SRCSetRate ( ucDMAChannel, (USHORT) ulSampleRate );
+
+  switch ( ucDMAChannel )
+  {
+    case ES1371_DAC0 :
+      // set format bits for DAC0 ... 
+      ucFormatBits = 0x00;
+      if( 2 == ulChannels )
+          ucFormatBits |= ES1371_PCM_DAC0_STEREO ;
+      if( 1 == ul16Bit )
+          ucFormatBits |= ES1371_PCM_DAC0_16BIT ;
+
+      HwRegRMW( ES1371_bSERFMT_OFF, 
+                ES1371_PCM_DAC0_STEREO|ES1371_PCM_DAC0_16BIT,
+                ucFormatBits ); 
+      break;
+
+    case ES1371_DAC1 :
+      // set format bits for DAC1 ... 
+      ucFormatBits = 0x00;
+      if( 2 == ulChannels )
+          ucFormatBits |= ES1371_PCM_DAC1_STEREO ;
+      if( 1 == ul16Bit )
+      {
+          ucFormatBits |= ES1371_PCM_DAC1_16BIT ;
+          // set the SKIP register for proper playback
+          ucSkipCount = 0x10;
+          HwRegRMW( ES1371_bSKIPC_OFF, (UCHAR)0x18, ucSkipCount ); 
+      }
+      else
+      {   // set the SKIP register for proper playback
+          ucSkipCount = 0x08;
+          HwRegRMW( ES1371_bSKIPC_OFF, (UCHAR)0x18, ucSkipCount ); 
+      }
+
+      HwRegRMW( ES1371_bSERFMT_OFF, 
+                ES1371_PCM_DAC1_STEREO|ES1371_PCM_DAC1_16BIT,
+                ucFormatBits ); 
+      break;
+
+    case ES1371_ADC :
+      // set format bits for ADC ... 
+      ucFormatBits = 0x00;
+      if( 2 == ulChannels )
+          ucFormatBits |= ES1371_PCM_ADC_STEREO ;
+      if( 1 == ul16Bit )
+          ucFormatBits |= ES1371_PCM_ADC_16BIT ;
+ 
+      HwRegRMW( ES1371_bSERFMT_OFF, 
+                ES1371_PCM_ADC_STEREO|ES1371_PCM_ADC_16BIT,
+                ucFormatBits ); 
+      break;
+  }
+  return ;  
+}
+
+//--------------------------------------------------------------------------
+//
+//  Name: SetDMAChannelBuffer
+//
+//  Description: Set the buffer sizes of a particular DMA channel.
+//
+//  Parameters: UCHAR ucDMAChannel    : Index of the DMA channel to init
+//              ULONG ulBufferLength  : Size in bytes of the whole DMA buffer
+//              ULONG ulSamplesPerInt : Count of samples before interrupting
+//
+//  Returns: none   
+//
+//  Note:
+//
+//--------------------------------------------------------------------------
+void
+CES1371::SetDMAChannelBuffer( UCHAR ucDMAChannel,
+                              ULONG ulBufferLength,
+                              ULONG ulSamplesPerInt )
+{
+  ULONG ulDesiredBufferSize =  m_dmachannel[ucDMAChannel].ulDMABufSize;
+  USHORT usInterruptCount = (USHORT) (ulSamplesPerInt - 1);
+
+  m_dmachannel[ucDMAChannel].ulBufferLength  = ulBufferLength;
+  m_dmachannel[ucDMAChannel].ulSamplesPerInt = ulSamplesPerInt;
+
+  // buffer can't be bigger than half the physical buffer
+  ulDesiredBufferSize = MIN( ulDesiredBufferSize, ulBufferLength ) ;
+
+  switch ( ucDMAChannel )
+  {
+    case ES1371_DAC0 :
+      // set the DAC0 DWORD frame count
+      HwPagedIOWrite( ES1371_DAC0CTL_PAGE, 
+                      ES1371_wDAC0FC_OFF, 
+                      (ulDesiredBufferSize/4 - 1) & 0x0000ffff );  
+
+      // Write DAC0 interrupt count - sample frames per half-buffer (n-1).
+      HwRegRMW( ES1371_wDAC0IC_OFF, 0xffff, usInterruptCount );
+//      WRITE_PORT_USHORT((PUSHORT)(m_pPciAddr + ES1371_wDAC0IC_OFF),
+//                         (USHORT) (ulSamplesPerInt - 1) ) ;
+      break;
+
+    case ES1371_DAC1 :
+      // set the DAC1 DWORD frame count
+      HwPagedIOWrite( ES1371_DAC1CTL_PAGE, 
+                      ES1371_wDAC1FC_OFF, 
+                      (ulDesiredBufferSize/4 - 1) & 0x0000ffff );  
+
+      // Write DAC1 interrupt count - sample frames per half-buffer (n-1).
+      HwRegRMW( ES1371_wDAC1IC_OFF, 0xffff, usInterruptCount );
+//      WRITE_PORT_USHORT((PUSHORT)(m_pPciAddr + ES1371_wDAC1IC_OFF),
+//                         (USHORT) (ulSamplesPerInt - 1) ) ;
+      break;
+
+    case ES1371_ADC :
+      // set the ADC DWORD frame count
+      HwPagedIOWrite( ES1371_ADCCTL_PAGE, 
+                      ES1371_wADCFC_OFF, 
+                      (ulDesiredBufferSize/4 - 1) & 0x0000ffff );  
+
+      // Write ADC interrupt count - sample frames per half-buffer (n-1).
+      HwRegRMW( ES1371_wADCIC_OFF, 0xffff, usInterruptCount );
+//      WRITE_PORT_USHORT((PUSHORT)(m_pPciAddr + ES1371_wADCIC_OFF),
+//                         (USHORT) (ulSamplesPerInt - 1) ) ;
+      break;
+  }
+  return ;  
+}
+
+//--------------------------------------------------------------------------
+//
+//  Name: StartDMAChannel
+//
+//  Description: Start a particular DMA channel running.
+//
+//  Parameters: UCHAR ucDMAChannel : Index of the DMA channel to start
+//
+//  Returns: none   
+//
+//  Note:
+//
+//--------------------------------------------------------------------------
+void
+CES1371::StartDMAChannel( UCHAR ucDMAChannel )
+{
+  UCHAR ucIOVal;
+
+  switch ( ucDMAChannel )
+  {
+    case ES1371_DAC0 :
+      if ( DMA_PAUSED == m_dmachannel[ucDMAChannel].ulDMAChannelState )
+      {
+        // modify pause bit for DAC0
+        ucIOVal = 0;
+        HwRegRMW( ES1371_bSERCTL_OFF,
+                  ES1371_SERCTL_DAC0PAUSE, ucIOVal );
+      }
+      else
+      {
+        // enable the DAC0 interrupt
+        ucIOVal = ES1371_SERCTL_DAC0IE;
+        HwRegRMW( ES1371_bSERCTL_OFF,
+                  ES1371_SERCTL_DAC0IE,
+                  ucIOVal ); 
+
+        // start DAC0
+        ucIOVal = ES1371_DEVCTL_DAC0_EN;
+        HwRegRMW( ES1371_bDEVCTL_OFF,
+                  ES1371_DEVCTL_DAC0_EN,
+                  ucIOVal ); 
+      }
+
+      // save the state
+      m_dmachannel[ucDMAChannel].ulDMAChannelState = DMA_RUNNING;
+      break;
+
+    case ES1371_DAC1 :
+      if ( DMA_PAUSED == m_dmachannel[ucDMAChannel].ulDMAChannelState )
+      {
+        // modify pause bit for DAC1
+        ucIOVal = 0;
+        HwRegRMW( ES1371_bSERCTL_OFF,
+                  ES1371_SERCTL_DAC1PAUSE, ucIOVal );
+      }
+      else
+      {
+        // enable the DAC1 interrupt
+        ucIOVal = ES1371_SERCTL_DAC1IE;
+        HwRegRMW( ES1371_bSERCTL_OFF,
+                  ES1371_SERCTL_DAC1IE,
+                  ucIOVal ); 
+
+        // start DAC1
+        ucIOVal = ES1371_DEVCTL_DAC1_EN;
+        HwRegRMW( ES1371_bDEVCTL_OFF,
+                  ES1371_DEVCTL_DAC1_EN,
+                  ucIOVal ); 
+      }
+
+      // save the state
+      m_dmachannel[ucDMAChannel].ulDMAChannelState = DMA_RUNNING;
+      break;
+
+    case ES1371_ADC :
+      // enable the ADC interrupt
+      ucIOVal = ES1371_SERCTL_ADCIE;
+      HwRegRMW( ES1371_bSERCTL_OFF,
+                ES1371_SERCTL_ADCIE,
+                ucIOVal ); 
+
+      // start ADC
+      ucIOVal = ES1371_DEVCTL_ADC_EN;
+      HwRegRMW( ES1371_bDEVCTL_OFF,
+                ES1371_DEVCTL_ADC_EN,
+                ucIOVal ); 
+
+      // save the state
+      m_dmachannel[ucDMAChannel].ulDMAChannelState = DMA_RUNNING;
+      break;
+  }
+  return;
+}
+
+//--------------------------------------------------------------------------
+//
+//  Name: StopDMAChannel
+//
+//  Description: Stop a particular DMA channel.
+//
+//  Parameters: UCHAR ucDMAChannel : Index of the DMA channel to stop
+//
+//  Returns: none   
+//
+//  Note:
+//
+//--------------------------------------------------------------------------
+void
+CES1371::StopDMAChannel( UCHAR ucDMAChannel )
+{
+  UCHAR ucIOVal;
+  ULONG ulFrameCount = 0;
+
+  switch ( ucDMAChannel )
+  {
+    case ES1371_DAC0 :
+      // Stop DAC0
+      ucIOVal = 0;
+      HwRegRMW( ES1371_bDEVCTL_OFF,
+                ES1371_DEVCTL_DAC0_EN, ucIOVal );
+
+      // disable the DAC0 interrupt
+      ucIOVal = 0;
+      HwRegRMW( ES1371_bSERCTL_OFF,
+                ES1371_SERCTL_DAC0IE, ucIOVal );
+
+      if ( DMA_PAUSED == m_dmachannel[ucDMAChannel].ulDMAChannelState )
+      {
+        // modify pause bit for DAC0
+        ucIOVal = 0;
+        HwRegRMW( ES1371_bSERCTL_OFF,
+                  ES1371_SERCTL_DAC0PAUSE, ucIOVal );
+      }
+
+      // Clear out the Current Frame count register
+      ulFrameCount = HwPagedIORead( ES1371_DAC0CTL_PAGE, ES1371_wDAC0FC_OFF); 
+      HwPagedIOWrite( ES1371_DAC0CTL_PAGE, 
+                      ES1371_wDAC0FC_OFF,
+                      ulFrameCount & 0x0000ffff ); 
+
+      // save the state
+      m_dmachannel[ucDMAChannel].ulDMAChannelState = DMA_STOPPED;
+      break;
+
+    case ES1371_DAC1 :
+      // Stop DAC1
+      ucIOVal = 0;
+      HwRegRMW( ES1371_bDEVCTL_OFF,
+                ES1371_DEVCTL_DAC1_EN, ucIOVal);
+
+      // disable the DAC1 interrupt
+      ucIOVal = 0;
+      HwRegRMW( ES1371_bSERCTL_OFF,
+                ES1371_SERCTL_DAC1IE, ucIOVal);
+
+      if ( DMA_PAUSED == m_dmachannel[ucDMAChannel].ulDMAChannelState )
+      {
+        // modify pause bit for DAC0
+        ucIOVal = 0;
+        HwRegRMW( ES1371_bSERCTL_OFF,
+                  ES1371_SERCTL_DAC1PAUSE, ucIOVal );
+      }
+
+      // Clear out the Current Frame count register
+      ulFrameCount = HwPagedIORead( ES1371_DAC1CTL_PAGE, ES1371_wDAC1FC_OFF); 
+      HwPagedIOWrite( ES1371_DAC1CTL_PAGE, 
+                      ES1371_wDAC1FC_OFF,
+                      ulFrameCount & 0x0000ffff ); 
+
+      // save the state
+      m_dmachannel[ucDMAChannel].ulDMAChannelState = DMA_STOPPED;
+      break;
+
+    case ES1371_ADC :
+      // Stop ADC
+      ucIOVal = 0;
+      HwRegRMW( ES1371_bDEVCTL_OFF,
+                ES1371_DEVCTL_ADC_EN, ucIOVal);
+
+      // disable the ADC interrupt
+      ucIOVal = 0;
+      HwRegRMW( ES1371_bSERCTL_OFF,
+                ES1371_SERCTL_ADCIE, ucIOVal);
+
+      // Clear out the Current Frame count register
+      ulFrameCount = HwPagedIORead( ES1371_ADCCTL_PAGE, ES1371_wADCFC_OFF); 
+      HwPagedIOWrite( ES1371_ADCCTL_PAGE, 
+                      ES1371_wADCFC_OFF,
+                      ulFrameCount & 0x0000ffff ); 
+
+      // save the state
+      m_dmachannel[ucDMAChannel].ulDMAChannelState = DMA_STOPPED;
+      break;
+  }
+  return;
+}
+
+//--------------------------------------------------------------------------
+//
+//  Name: PauseDMAChannel
+//
+//  Description: Pause a particular DMA channel.
+//
+//  Parameters: UCHAR ucDMAChannel : Index of the DMA channel to pause
+//
+//  Returns: none   
+//
+//  Note:
+//
+//--------------------------------------------------------------------------
+void
+CES1371::PauseDMAChannel( UCHAR ucDMAChannel )
+{
+  UCHAR ucIOVal;
+
+  switch ( ucDMAChannel )
+  {
+    case ES1371_DAC0 :
+      // wait until interrupt count is non-zero
+//      while ( !HwPagedIORead( ES1371_DAC0CTL_PAGE, ES1371_wDAC0CIC_OFF)); 
+
+      // modify pause bit for DAC0
+      ucIOVal = ES1371_SERCTL_DAC0PAUSE;
+      HwRegRMW( ES1371_bSERCTL_OFF,
+                ES1371_SERCTL_DAC0PAUSE, ucIOVal );
+      // save the state
+      m_dmachannel[ucDMAChannel].ulDMAChannelState = DMA_PAUSED;
+      break;
+
+    case ES1371_DAC1 :
+      // wait until interrupt count is non-zero
+//      while ( !HwPagedIORead( ES1371_DAC1CTL_PAGE, ES1371_wDAC1CIC_OFF)); 
+
+      // modify pause bit for DAC1
+      ucIOVal = ES1371_SERCTL_DAC1PAUSE;
+      HwRegRMW( ES1371_bSERCTL_OFF,
+                ES1371_SERCTL_DAC1PAUSE, ucIOVal);
+      // save the state
+      m_dmachannel[ucDMAChannel].ulDMAChannelState = DMA_PAUSED;
+      break;
+
+    case ES1371_ADC :
+      break;
+  }
+  return;
+}
+
+//--------------------------------------------------------------------------
+//
+//  Name: GetDMAPosition
+//
+//  Description: reads the current position of a DMA channel.
+//
+//  Parameters: UCHAR ucDMAChannel : Index of the DMA channel
+//
+//  Returns: ULONG current DMA position in bytes  
+//
+//  Note: This function returns the DMA position NOT the sample play
+//        cursor.  It appears that this will be used for buffer filling.
+//
+//--------------------------------------------------------------------------
+ULONG
+CES1371::GetDMAPosition( UCHAR ucDMAChannel )
+{
+  ULONG ulCurrentPos = 0;
+
+  switch ( ucDMAChannel )
+  {
+    case ES1371_DAC0 :
+      // read the Frame register
+      ulCurrentPos = HwPagedIORead( ES1371_DAC0CTL_PAGE, ES1371_wDAC0FC_OFF); 
+      // the current frame count is in the upper WORD
+      ulCurrentPos >>= 16;
+
+      // multiply the DWORD count by 4 to get a BYTE count to return
+      ulCurrentPos *= 4;
+      break;
+
+    case ES1371_DAC1 :
+      // read the Frame register
+      ulCurrentPos = HwPagedIORead( ES1371_DAC1CTL_PAGE, ES1371_wDAC1FC_OFF); 
+      // the current frame count is in the upper WORD
+      ulCurrentPos >>= 16;
+
+      // multiply the DWORD count by 4 to get a BYTE count to return
+      ulCurrentPos *= 4;
+      break;
+
+    case ES1371_ADC :
+      // read the Frame register
+      ulCurrentPos = HwPagedIORead( ES1371_ADCCTL_PAGE, ES1371_wADCFC_OFF); 
+      // the current frame count is in the upper WORD
+      ulCurrentPos >>= 16;
+
+      // multiply the DWORD count by 4 to get a BYTE count to return
+      ulCurrentPos *= 4;
+      break;
+  }
+  return ulCurrentPos;
+}
+
+//--------------------------------------------------------------------------
+//
+//  Name: GetInterruptSource
+//
+//  Description: returns the source of the current interrupt
+//
+//  Parameters: none
+//
+//  Returns: UCHAR LONG current DMA position in bytes  
+//
+//--------------------------------------------------------------------------
+UCHAR
+CES1371::GetInterruptSource( void )
+{
+    ULONG intstat;
+    UCHAR intsrc;
+
+    intstat = READ_PORT_ULONG( (PULONG)(m_pPciAddr + ES1371_dSTATUS_OFF) ); 
+
+    // If we get all f's back we can't see the hardware
+    if ( 0xffffffff == intstat )
+      return ES1371_INT_NONE;
+
+    if ( !( ES1371_INTSTAT_PENDING & intstat ))
+      return ES1371_INT_NONE;
+
+    intsrc = (UCHAR)(intstat) & ES1371_INT_MASK;
+
+    return intsrc;
+}
+
+//--------------------------------------------------------------------------
+//
+//  Name: AckDMAInterrupt
+//
+//  Description: clean up a (set of) interrupt(s) 
+//
+//  Parameters: UCHAR ucIntSrc : a bit mask interrupts to ack
+//
+//  Returns: none  
+//
+//--------------------------------------------------------------------------
+void
+CES1371::AckDMAInterrupt( UCHAR ucIntSrc )
+{
+    UCHAR ackmask = 0;
+
+    if ( ES1371_INT_ADC & ucIntSrc )
+       ackmask |= ES1371_SERCTL_ADCIE ;
+
+    if ( ES1371_INT_DAC0 & ucIntSrc )
+       ackmask |= ES1371_SERCTL_DAC0IE ;
+
+    if ( ES1371_INT_DAC1 & ucIntSrc )
+       ackmask |= ES1371_SERCTL_DAC1IE ;
+
+    // now ack the interrupts - first set the IEs to 0
+    HwRegRMW( ES1371_bSERCTL_OFF, ackmask, 0x00);
+	
+    // then set the IEs back to 1
+    HwRegRMW( ES1371_bSERCTL_OFF, ackmask, ackmask);
+
+}
+   
+
+//--------------------------------------------------------------------------
+//
+//  Name: JoystickEnable
+//
+//  Description: Enable or disable the joystick port IO range 
+//
+//  Parameters: 
+//     ULONG ulIOPort : The starting IO address to use or 0 to disable
+//
+//  Returns: none  
+//
+//--------------------------------------------------------------------------
+void
+CES1371::JoystickEnable( ULONG ulIOPort )
+{
+    UCHAR joyio = 0;
+
+    if ( ( 0x00000200 == ulIOPort ) ||
+         ( 0x00000208 == ulIOPort ) ||
+         ( 0x00000210 == ulIOPort ) ||
+         ( 0x00000218 == ulIOPort ) )
+    {
+         // move the two useful bits to the correct position
+         joyio = UCHAR( ulIOPort >> 3 ) ;
+
+         // set the two bits that control the joystick io range
+         HwRegRMW( ES1371_bJOYCTL_OFF, 0x03, joyio );
+
+         // enable the joystick port
+         joyio = ES1371_DEVCTL_JSTICK_EN ;
+         HwRegRMW( ES1371_bDEVCTL_OFF, ES1371_DEVCTL_JSTICK_EN, joyio );
+    }
+    else // disable
+    {
+         // disable the joystick port
+         joyio = 0;
+         HwRegRMW( ES1371_bDEVCTL_OFF, ES1371_DEVCTL_JSTICK_EN, joyio );
+    }     
+}
+   
+
+/*****************************************************************************
+ * SynchronizedPagedIO()
+ *****************************************************************************
+ * Do paged IO syncronized with the ISR.
+ */
+NTSTATUS
+SynchronizedPagedIO
+(
+    IN      PINTERRUPTSYNC  InterruptSync,
+    IN      PVOID           syncIOContext
+)
+{
+    PSYNCIOCONTEXT context;
+
+    context = (PSYNCIOCONTEXT)syncIOContext;
+    ASSERT(context->pHardware);
+    ASSERT(context->ulPage);
+    ASSERT(context->ulIOAddress);
+
+    NTSTATUS ntStatus = STATUS_SUCCESS;
+
+	// write the page register if needed
+    if ( context->pHardware->m_ulDRegs[ES1371_bMEMPAGE_OFF/4] != context->ulPage )
+    {
+        WRITE_PORT_UCHAR(context->pHardware->m_pPciAddr + ES1371_bMEMPAGE_OFF, 
+                         UCHAR(context->ulPage) & 0x0f );
+        // save in the regs array
+        context->pHardware->m_ulDRegs[ES1371_bMEMPAGE_OFF/4] = context->ulPage;
+    }
+
+    // read or write the data
+    if ( context->fRead )
+    {
+        *(context->pulData) = 
+            READ_PORT_ULONG( 
+               PULONG(context->pHardware->m_pPciAddr + context->ulIOAddress) );
+    }
+    else // write
+    {
+        WRITE_PORT_ULONG( 
+               PULONG(context->pHardware->m_pPciAddr + context->ulIOAddress),
+               *(context->pulData) );
+    }
+
+    return ntStatus;
+}
+
+//--------------------------------------------------------------------------
+//
+//  Name: CES1371::LocateAndMapHardware
+//
+//  Description: Locates the device in the system and maps registers & interrupts
+//
+//  Parameters: none
+//
+//  Returns: BOOL
+//		TRUE if device was located and mapped properly
+//		FALSE if device could not be located or mapped	
+//
+//  Note: 
+//
+//--------------------------------------------------------------------------
+BOOL CES1371::LocateAndMapHardware (ULONG ulIrq, ULONG ulPciAddr)
+{
+	//ULONG				AddressType;
+	PHYSICAL_ADDRESS	PortAddress;
+	PHYSICAL_ADDRESS	MappedAddress;
+	BOOLEAN				bReturn;
+    PCI_COMMON_CONFIG   pcicfg;
+    PCI_SLOT_NUMBER     SlotNumber;
+	ULONG				ulReturn;
+	BOOL				bFoundIt;
+    LONG                bus, device, function;
+
+	//initialize our member variables
+	m_pPciAddr = (PUCHAR) ulPciAddr;
+
+    bFoundIt = FALSE;
+    SlotNumber.u.AsULONG = 0;  // Start at slot 0
+
+    for (bus = 0; bus < PCI_MAX_BUS; bus++)
+    {
+        for (device = 0; device < PCI_MAX_DEVICES; device++)
+        {
+            SlotNumber.u.bits.DeviceNumber = device;
+
+            for (function = 0; function < PCI_MAX_FUNCTION; function++)
+            {
+                SlotNumber.u.bits.FunctionNumber = function;
+
+                ulReturn = HalGetBusDataByOffset(
+                    PCIConfiguration, bus, SlotNumber.u.AsULONG, (PVOID)&pcicfg,
+                    0, offsetof(PCI_COMMON_CONFIG, DeviceSpecific));
+
+
+                if (!ulReturn || pcicfg.VendorID == 0xFFFF)
+                {
+                    //
+                    // There are no more devices on this bus or this is the
+                    // last function of this device.
+                    //
+                    break;
+                }
+
+				// 
+				// Check for  a PCI sound card 
+				//
+                if (pcicfg.BaseClass == PCI_CLASS_MULTIMEDIA_DEV &&
+                    pcicfg.SubClass  == PCI_SUBCLASS_MM_AUDIO_DEV)
+                {
+					DEBUGMSG(1, (TEXT("ENSONIQ1371: Found a PCI Audio Device\r\n")));
+
+					//
+					// Check for Creative PCI ENSONIQ
+					//
+					if (pcicfg.VendorID == ES1371_PCI_VENDID && 
+						pcicfg.DeviceID == ES1371_PCI_DEVID)
+					{
+						DEBUGMSG(1, (TEXT("ENSONIQ1371: Creative PCI ENSONIQ 1371\r\n")));
+	                    bFoundIt = TRUE;
+						break;
+					}
+                }
+
+                if (function == 0 && !(pcicfg.HeaderType & 0x80))
+                {
+                    //
+                    // This isn't a multifunction device so try the next device.
+                    //
+                    break;
+                }
+            }
+
+            if (bFoundIt || !ulReturn)
+            {
+                //
+                // There are no more devices on this bus or we already found sound card
+                //
+                break;
+            }
+        }
+
+        if (bFoundIt || (!ulReturn && device == 0))
+        {
+            //
+            // We found the sound card or there are no devices on this bus.  If
+            // there are no devices on a bus there isn't any point in looking at
+            // more busses.
+            //
+            break;
+        }
+
+        if (bus == 0 && device == 0 && function == 0)
+        {
+            DEBUGMSG(1, (TEXT("ENSONIQ1371: Warning: Didn't find PCI bus\r\n")));
+            break;
+        }
+
+        //
+        // We didn't find it on this bus try the next one.
+        //
+    }
+
+	if (!bFoundIt) {
+		DEBUGMSG(1,(TEXT("ENSONIQ1371: Couldn't find a Creative PCI ENSONIQ 1371\r\n")));
+		return FALSE;
+	}
+
+	//
+	// Configure IO address
+	//
+	if ( m_pPciAddr == 0 )
+	{
+		// Registry values are not set use what reported back by the PCI card 
+
+		//
+		// Translate IO address 
+		//
+		ULONG AddressType = 1;	// io space    
+		PortAddress.LowPart  = (USHORT)(pcicfg.u.type0.BaseAddresses[0] & 0x0000ffc0);
+		PortAddress.HighPart = 0; 
+		bReturn = FALSE;
+		bReturn = HalTranslateBusAddress( PCIBus, 0, PortAddress,
+                               			  &AddressType, &MappedAddress
+										);
+		 if (!bReturn)  		
+			 return FALSE;
+
+		 if ( AddressType == 1 ) {
+			m_pPciAddr = (PUCHAR) MappedAddress.LowPart;
+		 }
+		 else {
+            m_pPciAddr = (PUCHAR) MmMapIoSpace(MappedAddress, ES1371_IO_SPACE_SIZE, FALSE);
+			m_fIsMapped = TRUE;
+		 }
+
+		DEBUGMSG(1,(TEXT("ENSONIQ1371: IO PORT [%X]\r\n"),m_pPciAddr));
+	}
+	else
+	{
+		// Set hardware with the registry value 
+
+		//
+		// Write the base IO address
+		//
+		ulReturn = HalSetBusDataByOffset(
+					PCIConfiguration, bus, SlotNumber.u.AsULONG, 
+					(PVOID)&m_pPciAddr, 0x10, sizeof(ULONG));
+
+		if (ulReturn == 0)
+		{
+			DEBUGMSG(1, (TEXT("ENSONIQ1371: Error writing IO Base Address\r\n")));
+			return FALSE;
+		}
+
+		//
+		// Translate address
+		//
+		DWORD AddressType = 1;	// io space    
+		PortAddress.LowPart  = (ULONG) m_pPciAddr;
+		PortAddress.HighPart = 0; 
+		bReturn = FALSE;
+		bReturn = HalTranslateBusAddress( PCIBus, 0, PortAddress,
+                               			  &AddressType, &MappedAddress
+										);
+		 if (!bReturn)  		
+			 return FALSE;
+
+		m_pPciAddr = (PUCHAR) MappedAddress.LowPart;
+	}
+
+	//
+	// Configure Interupt 
+	//
+	if ( ulIrq == 0 ) 
+	{
+		// Registry values appear not to be set use what reported back by the PCI card 
+
+		ulIrq = pcicfg.u.type0.InterruptLine;
+
+		//
+		// Map IO and Interupt to System spaces 
+		//
+
+		MapInterruptToSystem(ulIrq, 0, &m_IntrAudio);
+
+	}
+	else
+	{
+		//
+		// Write the Interupt 
+		//
+		ulReturn = HalSetBusDataByOffset(
+					PCIConfiguration, bus, SlotNumber.u.AsULONG, 
+					(PVOID)&ulIrq, 0x3C, sizeof(UCHAR));
+
+		if (ulReturn == 0)
+		{
+			DEBUGMSG(1, (TEXT("ENSONIQ1371: Error writing Interrupt\r\n")));
+			return FALSE;
+		}
+
+		MapInterruptToSystem(ulIrq, 0, &m_IntrAudio);
+
+	}
+
+    //call our initialization functions
+    InitHardware();	
+
+	//
+	// Turn on card
+	//
+	SetPowerState(1);	// Turn off to set register arrays 
+	SetPowerState(0);
+
+	DEBUGMSG(1, (TEXT("IDSES1371: PCI Init Done\r\n")));
+    return TRUE;
+}	
+
+//--------------------------------------------------------------------------
+//
+//  Name: CES1371::AudioInitialize
+//
+//  Description: maps hardware and sets up the Interrupt Service Thread
+//
+//  Parameters: none
+//
+//  Returns: BOOL
+//		TRUE if device was mapped properly and IST was set up correctly
+//		FALSE if either of the above fails
+//
+//  Note: 
+//
+//--------------------------------------------------------------------------
+BOOL CES1371::AudioInitialize()
+{
+    DEBUGMSG(1, (TEXT("CES1371::AudioInitialize \r\n")));
+
+    BOOL  bRetVal = 0;
+    ULONG nRetVal = 0;
+	CriticalSectionAcquisition csa(&m_ces1371critsec);
+
+	if( m_bInitDone )
+		return TRUE;
+
+    if (!LocateAndMapHardware (0, 0)) {
+        DEBUGMSG(1, (TEXT("CES1371::AudioInitialize : No SBAWE32/64 Found\r\n")));
+        return FALSE;
+    }
+
+
+	// Set up the IST
+	DWORD dwThreadId=0;
+
+	m_hISThread = CreateThread(NULL, 0, IST_es1371, this, 0, &dwThreadId);
+	if(m_hISThread == NULL)
+	{
+		DEBUGMSG(ZONE_ERROR,(TEXT("DsDriver::Open -- unable to create IST\r\n")));
+
+		return FALSE;
+	}
+
+	//wait till thread initializes
+	DWORD dwRet = WaitForSingleObject(m_hISTInitializeEvent, INFINITE);
+	if(dwRet != WAIT_OBJECT_0)
+	{
+		DEBUGMSG(ZONE_ERROR,(TEXT("DsDriver::Open -- unable to initialize IST\r\n")));
+
+		return FALSE;
+	}
+
+	m_bInitDone = TRUE;
+
+	return TRUE;
+}
+
+//--------------------------------------------------------------------------
+//
+//  Name: CES1371::SetDriver
+//
+//  Description: Sets the Driver object to which DAC0 or DAC1 interrupts must be routed
+//
+//  Parameters:	DsDriver *pDsDriver : Pointer to the DsDriver Object
+//				BOOL bSet : TRUE will set it, FALSE will unset it
+//
+//  Returns: VOID
+//
+//  Note: 
+//
+//--------------------------------------------------------------------------
+VOID CES1371::SetDriver(DsDriver *pDsDriver, BOOL bSet )
+{
+	CriticalSectionAcquisition csa(&m_ces1371critsec);
+
+	if(bSet==TRUE)
+		m_pDsDriver = pDsDriver;
+	else
+		m_pDsDriver = NULL;
+}
+
+//--------------------------------------------------------------------------
+//
+//  Name: CES1371::SetDriver
+//
+//  Description: Sets the Capture Driver object to which ADC interrupts must be routed
+//
+//  Parameters:	DsDriverCapture *pDsCaptureDriver : Pointer to the DsCaptureDriver Object
+//				BOOL bSet : TRUE will set it, FALSE will unset it
+//
+//  Returns: VOID
+//
+//  Note: 
+//
+//--------------------------------------------------------------------------
+VOID CES1371::SetCaptureDriver(DsDriverCapture *pDsCaptureDriver, BOOL bSet )
+{
+	CriticalSectionAcquisition csa(&m_ces1371critsec);
+
+	if(bSet==TRUE)
+		m_pDsCaptureDriver = pDsCaptureDriver;
+	else
+		m_pDsCaptureDriver = NULL;
+}
+
+//--------------------------------------------------------------------------
+//
+//  Name: CES1371::IST
+//
+//  Description: The Interrupt service thread,
+//
+//  Parameters: none
+//
+//  Returns: VOID
+//
+//  Note: 
+//
+//--------------------------------------------------------------------------
+VOID CES1371::IST()
+{
+	DWORD dwRet=0;
+	BOOL bKeepLooping = TRUE;
+
+	//Initialize
+
+	if(!InterruptInitialize(m_IntrAudio, m_hISTInterruptEvent, NULL, NULL) )
+	{
+		DEBUGMSG(1, (TEXT("CES1371::IST - InterruptInitialize Failed \r\n")));
+		//	return;
+	}
+
+	//signal that initialize is complete
+	SetEvent(m_hISTInitializeEvent);
+
+    BOOL fResult = SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST);
+	if(!fResult)
+		DEBUGMSG(1, (TEXT("CES1371::IST - Warning - thread priority couldn't be changed to HIGHEST\r\n")));
+
+	// loop here waiting for an Interrupt to occur
+	while(bKeepLooping)
+	{
+#ifdef MIPS
+        // certain MIPS platforms have problems with back-to-back interrupts (e.g. full-duplex capture/playback)
+        // check if another interrupt is pending on the device & skip the wait.
+        UCHAR intsrc2 = GetInterruptSource();
+        if(!(intsrc2 & (ES1371_INT_ADC | ES1371_INT_DAC0 | ES1371_INT_DAC1 | ES1371_INT_PM)) ) {
+            dwRet = WaitForSingleObject(m_hISTInterruptEvent, INFINITE);
+        }
+        else {
+            dwRet = WAIT_OBJECT_0;
+        }
+#else
+       dwRet = WaitForSingleObject(m_hISTInterruptEvent, INFINITE);
+#endif
+
+		if(m_bExitIST == TRUE)
+			break;
+
+		switch(dwRet)
+		{
+		case WAIT_OBJECT_0:
+			//
+			// Do processing
+			//
+
+			// Route Interrupt to the appropriate object
+			{
+				UCHAR intsrc = GetInterruptSource();
+				CriticalSectionAcquisition csa(&m_ces1371critsec);
+
+				if ( intsrc & ES1371_INT_ADC )
+				{ 
+					if(m_pDsCaptureDriver)
+						m_pDsCaptureDriver->ProcessInterrupt();
+				}
+				if ( intsrc & (ES1371_INT_DAC0 | ES1371_INT_DAC1))
+				{ 
+					if(m_pDsDriver)
+						m_pDsDriver->ProcessInterrupt(intsrc);
+				}
+                else if (!(intsrc & ES1371_INT_ADC))
+                {
+                    DWORD dwTime = GetTickCount();
+//                  DEBUGMSG(1, (TEXT("CES1371 IST: spurious interrupt.. %d, %02X\r\n"), dwTime, (DWORD) intsrc));
+                }
+			}
+			break;
+		case WAIT_ABANDONED:
+	        DEBUGMSG(1, (TEXT("CES1371 IST: WAIT_ABANDONED.. \r\n")));
+		case WAIT_TIMEOUT:
+	        DEBUGMSG(1, (TEXT("CES1371 IST: WAIT_TIMEOUT.. \r\n")));
+		case WAIT_FAILED:
+	        DEBUGMSG(1, (TEXT("CES1371 IST: WAIT_FAILED.. \r\n")));
+		default:
+			// bKeepLooping = FALSE;
+			break;
+		}
+
+		InterruptDone(m_IntrAudio);
+	}
+    DEBUGMSG(1, (TEXT("CES1371 IST: Exiting.. \r\n")));
+
+	InterruptDone(m_IntrAudio);
+	InterruptDisable (m_IntrAudio);
+
+}
+

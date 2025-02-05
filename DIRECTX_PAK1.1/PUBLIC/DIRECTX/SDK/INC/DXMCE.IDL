@@ -1,0 +1,33 @@
+
+#ifdef UNDER_CE
+
+#ifndef NO_AMOVIESETUP
+#define NO_AMOVIESETUP
+#endif
+#ifndef NO_FILTERMAPPER2
+#define NO_FILTERMAPPER2
+#endif
+#ifndef NO_PROPERTYPAGES
+#define NO_PROPERTYPAGES
+#endif
+#ifndef PERSIST
+#define PERSIST
+#endif
+
+cpp_quote("#ifndef NO_AMOVIESETUP")
+cpp_quote("#define NO_AMOVIESETUP")
+cpp_quote("#endif")
+cpp_quote("#ifndef NO_FILTERMAPPER2")
+cpp_quote("#define NO_FILTERMAPPER2")
+cpp_quote("#endif")
+cpp_quote("#ifndef NO_PROPERTYPAGES")
+cpp_quote("#define NO_PROPERTYPAGES")
+cpp_quote("#endif")
+cpp_quote("#ifndef PERSIST")
+cpp_quote("#define PERSIST")
+cpp_quote("#endif")
+
+typedef DWORD DWORD_PTR;
+typedef LONG  LONG_PTR;
+
+#endif

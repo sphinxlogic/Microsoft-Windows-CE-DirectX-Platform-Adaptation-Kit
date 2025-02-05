@@ -1,0 +1,18 @@
+; This is the database initialization file.
+; format is as follows -
+; Database : <db name> : <type in hex> : <num sort order> : <hex propid> : <hex flags> ....
+; A database specifier can be followed by any number of record specifiers
+; Record : 
+; A record specifier can be followed by any number of field specifiers
+; Field : <hex propid> : <value> [ either string or hex dword ]
+; End   (ends a matching database or a record context)
+
+Database: "\\EventNotifications" : 888 : 1 : 43080002 : 0
+; If you include the CE Notifications component you can add Records to the EventNotifications 
+; here for applications that you want to have run on certain events. The event IDs are defined
+; in sdk\inc\NOTIFY.H. Example--this runs myapps.exe on NOTIFICATION_EVENT_TIME_CHANGE (eventid==1)
+;   Record :
+;   Field : 4301001f : "myapp.exe"
+;   Field : 43080002 : 1
+;   End
+End Database

@@ -1,0 +1,4 @@
+LIBRARY         IrqMap
+
+EXPORTS
+	MapInterruptToSystem

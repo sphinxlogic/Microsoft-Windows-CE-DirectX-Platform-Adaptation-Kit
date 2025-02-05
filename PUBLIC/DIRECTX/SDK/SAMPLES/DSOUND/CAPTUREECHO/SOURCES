@@ -1,0 +1,47 @@
+!IF 0
+--------------------------------------------------------------------------------
+
+    Windows CE DirectSound CaptureEcho
+	Capture and Playback sample for DirectSound
+
+    Copyright (c) 1999, Microsoft Corporation
+
+--------------------------------------------------------------------------------
+!ENDIF
+
+#WINCEOEM=1
+
+TARGETNAME=CaptureEcho
+
+#INCLUDES=$(_COMMONOAKROOT)\inc
+
+
+!ifdef DOSYSGEN
+
+TARGETTYPE=LIBRARY
+TARGETDEFNAME=$(TARGETNAME)
+
+!else
+
+TARGETTYPE=PROGRAM
+
+TARGETLIBS=\
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\uuid.lib \
+    $(_PROJECTROOT)\cesysgen\sdk\lib\$(_CPUINDPATH)\dsound.lib \
+    $(_PROJECTROOT)\cesysgen\sdk\lib\$(_CPUINDPATH)\dxguid.lib
+
+!endif
+
+
+PRECOMPILED_INCLUDE=main.h
+PRECOMPILED_CXX=1
+
+SOURCES=\
+    CaptureEcho.cpp \
+    DebugUty.cpp    \
+    DSoundUty.cpp   \
+    WinApp.cpp
+
+
+

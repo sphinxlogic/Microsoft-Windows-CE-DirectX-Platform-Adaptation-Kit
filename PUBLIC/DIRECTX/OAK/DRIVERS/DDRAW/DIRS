@@ -1,0 +1,6 @@
+DIRS=\
+    igs5000 \
+    s3virge
+
+OPTIONAL_DIRS=\
+    igs2010

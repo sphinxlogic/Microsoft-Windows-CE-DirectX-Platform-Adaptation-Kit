@@ -1,0 +1,91 @@
+!IF 0
+
+Copyright (c) 1989-2000 Microsoft Corporation
+
+Module Name:
+
+    sources.
+
+Abstract:
+
+    This file specifies the target component being built and the list of
+    sources files needed to build that component.  Also specifies optional
+    compiler switches and libraries that are unique for the component being
+    built.
+
+
+!ENDIF
+
+TARGETNAME=ddi_ds3v
+
+!ifdef DOSYSGEN
+
+TARGETTYPE=LIBRARY
+TARGETDEFNAME=$(TARGETNAME)
+WINCETARGETFILE0=$(_RELEASELIBDIR)\$(TARGETDEFNAME).def
+
+!else
+
+TARGETTYPE=DYNLINK
+SOURCELIBS=                                             \
+    $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\ddgpe.lib
+TARGETLIBS=                                             \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib    \
+    $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib      \
+    $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\gpe.lib        \
+    $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\emul.lib       \
+    $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\dxguid.lib     \
+
+!endif
+
+CDEFINES=$(CDEFINES) -DDDI -D$(_TGTPLAT) 
+
+!IF "$(FBBPP)"==""
+CDEFINES=$(CDEFINES) 
+!ELSE
+CDEFINES=$(CDEFINES) -D$(FBBPP)
+!ENDIF
+
+!IF "$(DO_DISPPERF)"=="1"
+CDEFINES=$(CDEFINES) -DDO_DISPPERF
+!ENDIF
+
+#
+# Define ENABLE_ACCELERATION if HW acceleration is desired.
+#
+# Note: VIRGE_ROP_BUG
+#	The 2D Line Draw with a ROP of "P" does NOT draw the whole line.
+# A portion of the line contains the last color pattern drawn. In order
+# to get around this, The Mono Pattern Foreground Color register is set
+# to the inverse of the passed color pattern, and the ROP code of Inverted 
+# Pattern "Pn" is used.
+#
+#	The Rectangle Fill with a ROP of "P" does NOT fill the whole rectangle.
+# A portion of the rectangle contains the last color pattern drawn. In order
+# to get around this, The Mono Pattern Foreground Color register is set to 
+# the inverse of the passed color pattern, and the ROP code of Inverted 
+# Pattern "Pn" is used.
+#
+CDEFINES=$(CDEFINES) -DDDI -D$(_TGTPLAT) -DVIRGE_ROP_BUG -DENABLE_ACCELERATION 
+
+PRECOMPILED_INCLUDE=precomp.h
+PRECOMPILED_PCH=precomp.pch
+PRECOMPILED_CXX=1
+
+INCLUDES=                       \
+    ..\..\..\inc;               \
+	..\inc;
+
+SOURCES= \
+	Config.cpp \
+	Misc.cpp \
+	Cursor.cpp \
+	Blt.cpp \
+	Line.cpp \
+	Surf.cpp \
+	ioport.cpp \
+	gpevga.cpp \
+    halcaps.cpp \
+    haldd.cpp \
+    halsurf.cpp \
+    halpalette.cpp \

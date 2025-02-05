@@ -1,0 +1,289 @@
+Microsoft(R) Windows(R) CE DirectX(R) Platform Adaptation Kit 
+
+__________________________________________________________________
+
+
+Contents:
+
+- CD Layout
+- Known Issues 
+
+
+__________________________________________________________________
+
+
+CD LAYOUT
+
+The following is a brief description of the directories found in the 
+\public\DirectX directory of this CD and the %_WINCEROOT%\public\directx 
+directory on your hard disk after installation.  
+
+\Cesysgen
+    Contains the makefile for CESysgen components.
+
+\Docs
+    Contains the HTMLHelp documentation for DXPAK.  
+
+\OAK
+    Drivers
+       - Contains the drivers shipped with DXPAK.
+    files
+       - Contains binary image builder (.bib) files.
+    inc
+       - Contains required platform-specific include files.
+    lib
+       - Contains platform-specific library (.lib) and symbol (.pdb) files.
+    Target
+       - Platform binaries will be built into this tree.
+\SDK
+    inc
+       - Platform specific DirectX include files.
+    lib
+       - Platform specific DirectX libraries.
+    Samples
+       - DirectX sample applications.
+
+\uninst
+       - Contains information used in uninstalling DXPAK.
+
+The following is a brief description of the directories found in the 
+\public\maxdx directory of this CD and the %_WINCEROOT%\public\maxdx directory 
+on your hard disk after installation.
+
+\IESample
+       - Contains a sample implementation of Internet Explorer (for 
+         demonstration purposes).
+\OAK
+       - Contains international versions of many files.
+
+__________________________________________________________________
+
+
+KNOWN ISSUES
+
+Drivers
+=======
+
+- Certain steppings of the S3 Virge and the DirectDraw-enabled S3Virge driver have
+  an unavoidable problem. Some cards that have 4 memory chips will not be driven
+  correctly. You will see three copies of the left side of the image that should
+  be projected spread accross the screen. The only known remedy is to avoid 
+  those cards.
+
+- The sample S3 Virge driver does not support flipping overlay surfaces. The 
+  MOSQUITO sample application requires flipping overlay support and therefore 
+  will not run on an S3 Virge.
+
+- A note about DShow and DSound interactions.  The current implementation of 
+  DShow assumes a correct implementation of the DSound HAL.  If the OEM 
+  implementation of DSound is missing certain capabilities, DShow may fail 
+  in unexpected ways, while the DSound use of the same DSHAL will proceed (with
+  limited capabilities).  Particular features which are known to cause confusion
+  are IDsDriverBuffer::SetFrequency(), IDsDriverBuffer::SetPosition(), and 
+  IDsDriverBuffer::SetVolume().  
+
+  Following is a short (but not complete) list of possible failures.  A failure 
+  in IDsDriverBuffer::SetFrequency() may cause sound data to be left in a buffer 
+  (where silence is expected) resulting in a a repeated sample being played.  
+  Failures in ::SetPosition() or ::SetVolume() may cause the filter graph to go 
+  (silently) into a pause state.
+
+- The sample ES1371 DirectSound HAL does not correctly handle DSBPN_OFFSETSTOP 
+  notification events on capture buffers. In particular, the notification position
+  check in the main capture loop fails to account for a possible DSBPN_OFFSETSTOP 
+  at the end of the notification array. Ideally, the capture buffer should have a 
+  separate member variable for the stop-event handle, as is implemented in the 
+  playback buffer.
+
+- The implementation of IDsDriverBuffer::SetVolumePan() in the sample DirectSound 
+  Hardware Abstraction Layer (HAL) is incorrect.  The following code fragment 
+  shows a correct implementation of this function.
+
+  STDMETHODIMP DsDriverBuffer::SetVolumePan(PDSVOLUMEPAN pdsVolumePan)
+  {
+      HRESULT hr = DS_OK;
+ 
+      if(NULL == pdsVolumePan)
+            return DSERR_INVALIDPARAM;
+      
+      CriticalSectionAcquisition csa(&m_csDriverBuffer);
+ 
+      // Set the volume and pan for this buffer.
+ 
+      //  Given:
+      //    pdsVolumePan->lVolume;  in Hundredths of decibels  0 to -10,000
+      //    pdsVolumePan->lPan;     -10,000 to +10,000
+      //  Above decibel values to be converted to linear values
+      // --------------------------------------------------------------------------
+      // Decibel fundamentals:
+      //   Number of decibels = 10 x log10( level / reference level )
+      // 
+      //   Our reference level is 4096, the SRC volume register no-gain setting.
+      //   We attenuate based on this reference value
+      //
+      //   So given decibels and the reference level we can find the level by
+      //      level =  10^(dBs/10) * refLevel
+      //
+      // --------------------------------------------------------------------------
+ 
+      double dbPan;
+      double dbVolumeL, dbVolumeR;
+      USHORT usLeftVal, usRightVal;
+ 
+      dbVolumeL = dbVolumeR = (pdsVolumePan->lVolume)/100.0;
+      dbPan = (pdsVolumePan->lPan)/100.0;
+
+      if (dbPan > 0) {
+            //right channel at full vol, and left channel attenuated
+            dbVolumeL -= dbPan;
+      }
+      else
+      if (dbPan < 0) {
+            //left channel at full vol, and right channel attenuated
+
+            dbVolumeR += dbPan;
+      }
+ 
+      usRightVal = (USHORT) (pow(10, dbVolumeR/10.0) * 4096);
+      usLeftVal  = (USHORT) (pow(10, dbVolumeL/10.0) * 4096);
+ 
+
+      switch(m_channelindex)
+      {
+      case 0:
+            m_pCES1371->SRCRegWrite(SRC_DAC0_VOL_L, usLeftVal);
+            m_pCES1371->SRCRegWrite(SRC_DAC0_VOL_R, usRightVal);
+ 
+            break;
+ 
+      case 1:
+            m_pCES1371->SRCRegWrite(SRC_DAC1_VOL_L, usLeftVal);
+            m_pCES1371->SRCRegWrite(SRC_DAC1_VOL_R, usRightVal);
+ 
+            break;
+ 
+      default:
+            return DSERR_GENERIC;
+      }
+ 
+      return hr;
+  }
+
+- The ES1371 Sample DirectSound HAL doesn't properly support the Model CT4810 
+  variant of the AudioPCI adapter. This board comes with a Crystal Semiconductor 
+  Codec, which behaves slightly differently from the the older TriTech codecs. To 
+  add support for the CT4810 adapters, the following changes are required:
+
+   - In CES1371::Codec_SetPowerState, the codec reset delay needs to be longer. 
+     It is recommended that GetTickCount() be used to pause for at least a full 
+     millisecond.
+   - In CES1371::Codec_WaitForPowerState, the timeout delay needs to be increased 
+     from 0x1000 to 0x10000 (i.e. 16 times longer)
+   - The AC97_VENDOR_ID1 and AC97_VENDOR_ID2 predefined constants in ac97.h should 
+     be changed to 0x7C and 0x7e, respectively.
+   - Add the following line to AC97.h:
+       #define AC97_VENDOR_CRYSTAL  0x43525900 
+   - In CES1371::InitCodec(), the code that cycles power on the codec analog 
+     section needs to specifically exclude revision 0x13 of the Crystal 
+     Semiconductor codec. The code should be changed to look like this:
+
+     if ( !( m_ulCodecVendorID == AC97_VENDOR_CRYSTAL && m_ulCodecRevision == 0x13))
+     {
+       // now power down the Analog section of the AC97
+       // and power it back up.  This forces the Crystal
+       // AC97 to recalibrate its analog levels.
+       Codec_SetPowerState( AC97_PWR_ANLOFF );
+
+       //<mod:ce>  KeStallExecutionProcessor (100);
+       unsigned int tick = GetTickCount();
+       while ( GetTickCount() <= tick + 1 );
+       Codec_SetPowerState( AC97_PWR_D0 );
+     }
+
+DirectDraw
+==========
+
+- There is a known issue integrating DirectDraw with the Platform Builder MaxAll 
+  shell configuration. If the user presses Alt-Tab, Alt-Enter, Ctrl-Alt-Delete 
+  or another system key combination while the shell and a full-screen exclusive 
+  DirectDraw application are running simultaneously, the Task Manager dialog will
+  still load and be given focus even though it is not visible. There is no 
+  workaround at this time. The application does not recieve WM_SYSKEY messages 
+  for these key combinations.
+
+- If your system driver supports allocating system memory surfaces, it is best to 
+  avoid calling SetSurfaceDesc.  Many video drivers do not react well to this 
+  method. Instead, use CreateSurface to initially allocate the surfaces you will
+  need. 
+
+DirectShow
+==========
+
+- In order to use the URL Reader module of DirectShow ('urlrdr') in a platform, 
+  the IE module 'urlmon' must also be included.  This dependence is handled 
+  automatically for configurations created with Platform Builder.  If using a 
+  manual platform configuration that does not include all IE browser components,
+  one must ensure that 'urlrdr' in included in the IE_MODULES setting in 
+  cesysgen.bat.
+
+- It is possible to change the color key used by the DirectShow Video Renderer 
+  when displaying video using a DirectDraw overlay surface.  Applications that 
+  wish to mask parts of the video output may do so by drawing with a non-color-key 
+  color in a window that is on top of the video window.  Video will only be 
+  visible wherever pixels are the same color as the color key.  The color key is
+  determined by the following registry keys in directx.reg, where RR, GG, BB 
+  represent red, green & blue components of the color.  For 8-bit palettized 
+  displays, one can set "KeyIndex" to the desired palette entry.
+
+  [HKEY_LOCAL_MACHINE\Software\Microsoft\DirectX\DirectShow\Video Renderer]
+  "KeyColor"=hex:BB,GG,RR,00
+  "KeyIndex"=hex:XX,00,00,00
+
+DirectSound
+===========
+
+- DirectSound playback quality is very sensitive to thread priorities.  If any 
+  threads with a priority of THREAD_PRIORITY_ABOVE_NORMAL or higher are running 
+  concurrently with a playback thread, playback quality could be compromised.
+
+- DirectSound, when using a waveout driver, uses waveOutGetPosition which returns
+  a 32 bit value.  This value will wrap in just under 7 hours, making the 
+  DirectSound subsystem unstable. If your application requires prolonged 
+  continous playback of audio with DirectSound, a DirectSound driver should be 
+  developed to avoid this problem.
+
+Windows Media Player
+====================
+
+- The Windows Media Player relies on the operating system (via DrawFrameControl)
+  to draw the button frames around the play/pause/stop bitmaps.  It is 
+  recommended that the implementation of this function not draw any more than 
+  1 pixel outside and 3 pixels inside the requested rectangle to leave room for the
+  focus rectangle. Care should also be taken with respect to the colors chosen for
+  the button frame to avoid confusion with the bitmaps used for the play/pause/stop
+  indicators.  
+
+Platform Builder 2.12
+=====================
+
+- When using the Platform Buider 2.12 IDE to create a project, the IDE will 
+  provide default values for a list of known environment variables, possibly 
+  overwriting the values set in the Board Support Package (.BSP) file. After 
+  creating the project, open the menu item "Platform->Settings..." to double 
+  check whether the values set in the .BSP file were overwritten.  If any of 
+  the desired environment variable settings in the .BSP file were overwritten, 
+  they must be manually set back to the desired values.
+
+- If you are running Platform Builder on Windows 2000, make sure the following 
+  environment variable is set:
+  
+  copycmd=/y
+
+  Failure to do so will cause platform builds to hang.
+
+- When creating a platform in Platform Builder that includes the IESAMPLE 
+  application and derives from MAXDX, the \public\maxdx\dirs file is not copied 
+  into the \public\<yournewplatform> tree.  You must manually copy this file 
+  from the \public\MAXDX tree into the \public\<yournewplatform> tree 
+  to ensure that CEBUILD will build any projects contained there.
+

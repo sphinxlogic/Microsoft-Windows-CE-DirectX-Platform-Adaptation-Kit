@@ -1,0 +1,13 @@
+LIBRARY         ES1371
+
+EXPORTS
+    WAV_Init
+    WAV_Deinit
+    WAV_Open
+    WAV_Close
+    WAV_Read
+    WAV_Write
+    WAV_Seek
+    WAV_IOControl
+    WAV_PowerUp
+    WAV_PowerDown

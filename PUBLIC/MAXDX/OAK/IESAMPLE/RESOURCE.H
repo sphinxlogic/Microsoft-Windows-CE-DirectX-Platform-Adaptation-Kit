@@ -1,0 +1,81 @@
+#define IDC_STATIC                      -1
+
+#define IDR_MAINMENU                    101
+#define IDR_ACCELERATOR					102
+#define IDB_TBBITMAP					103
+#define IDI_IE							104
+#define IDD_OPTIONS                     105
+#define IDB_ANIMATION					106
+#define IDI_HTML						108
+#define IDD_PRINTDLG					110
+#define IDD_PRINTPPTS					112
+
+#define ID_FILE_FIND                    40001
+#define ID_FILE_PRINT                   40002
+#define ID_FILE_CLOSE                   40003
+#define ID_VIEW_STOP                    40004
+#define ID_VIEW_REFRESH                 40005
+#define ID_VIEW_OPTIONS                 40006
+#define ID_GO_BACK                      40007
+#define ID_GO_FORWARD                   40008
+#define ID_GO_HOME                      40009
+#define ID_GO_SEARCH                    40010
+#define ID_FAVS_ADDTOFAVS               40011
+#define ID_FAVS_ORGANIZEFAVS            40012
+#define ID_HELP_ABOUT                   40013
+#define ID_VIEW_FONTSSMALLEST           40014
+#define ID_VIEW_FONTSSMALLER            40015
+#define ID_VIEW_FONTSMEDIUM             40016
+#define ID_VIEW_FONTSLARGER             40017
+#define ID_VIEW_FONTSLARGEST            40018
+
+#define ID_FOCUS_URL					40019
+
+#define ID_EDIT_CUT                     40020
+#define ID_EDIT_COPY                    40021
+#define ID_EDIT_PASTE                   40022
+#define ID_FILE_OFFLINE					40023
+
+#define ID_VIEW_ENCODING                50000
+
+#define IDC_START                       1000
+#define IDC_SEARCH                      1001
+#define IDC_CACHE                       1005
+#define IDC_USEPROXY                    1006
+#define IDC_ADDRESS                     1007
+#define IDC_PORT                        1008
+#define IDC_UNDERLINENEVER              1009
+#define IDC_UNDERLINEALWAYS				1010
+#define IDC_UNDERLINEHOVER              1011
+#define IDC_AUTODIAL                    1012
+#define IDC_FINDSTR                     1014
+#define IDC_UP                          1015
+#define IDC_DOWN                        1016
+#define IDC_FINDNEXT                    1017
+#define IDC_MATCHCASE                   1018
+#define IDC_DELETE						1019
+#define IDC_EDIT						1020
+#define IDC_GOTO						1021
+#define IDC_MATCHWHOLEWORD				1022
+#define IDC_TEXT						1023
+#define IDC_PRINTERS                    1024
+#define IDC_PROPERTIES                  1025
+#define IDC_COLORCHOICE                 1026
+#define IDC_QUALITYCHOICE               1027
+#define IDC_ORIENTATION                 1028
+#define IDC_PAPERSIZE                   1029
+#define IDC_DRIVER						1030
+#define ID_COMMANDBAND					1031
+#define ID_COMMANDBAR					1032
+#define ID_TOOLBAR						1033
+#define ID_STATUSBAR					1034
+#define ID_ADDRESSBAR					1035
+#define ID_ANIMATIONWINDOW				1036
+#define ID_ANIMATIONTIMER				1037
+#define IDS_IE							2008
+#define IDS_NOTFOUND					2009
+#define IDS_HYPHEN						2010
+#define IDS_TOOMANYFAVS					2011
+#define IDS_FAVOVERITE					2012
+#define IDC_LANNOAUTODIAL				2013
+

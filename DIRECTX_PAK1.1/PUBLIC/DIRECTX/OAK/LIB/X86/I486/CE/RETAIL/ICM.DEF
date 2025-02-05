@@ -1,0 +1,10 @@
+LIBRARY         icm
+EXPORTS
+                ICClose
+                ICDecompress
+                ICGetInfo
+                ICImageDecompress
+                ICInfo
+                ICLocate
+                ICOpen
+                ICSendMessage

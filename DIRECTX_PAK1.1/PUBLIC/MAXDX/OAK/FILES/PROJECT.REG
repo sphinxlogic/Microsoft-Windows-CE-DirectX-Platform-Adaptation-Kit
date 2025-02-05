@@ -1,0 +1,501 @@
+;;; Add a TEST Printer ;;;;;;;;;;;;;
+
+; Settings for 'MaxAll Test Color Printer'
+[HKEY_LOCAL_MACHINE\Printers\MaxAll Test Color Printer]
+    "Driver"="pcl.dll"
+    "High Quality"="300"
+    "Draft Quality"="75"
+    "Color"="Color"
+
+[HKEY_LOCAL_MACHINE\Ident]
+    "Name"=LOC_IDENT_NAME
+    "Desc"=LOC_IDENT_DESC
+
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\Serial]
+   "Tsp"="Unimodem.dll"
+   "DeviceArrayIndex"=dword:0
+   "Prefix"="COM"
+   "Dll"="Serial.Dll"
+   "Order"=dword:0
+   "DeviceType"=dword:0
+   "FriendlyName"=LOC_FRIENDLY_SERIAL
+   "DevConfig"=hex: 10,00, 00,00, 05,00,00,00, 10,01,00,00, 00,4B,00,00, 00,00, 08, 00, 00, 00,00,00,00
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\IrCOMM]
+   "Tsp"="Unimodem.dll"
+   "Dll"="IRCOMM.DLL"
+   "Prefix"="COM"
+   "Order"=dword:1
+   "Index"=dword:3
+   "DeviceType"=dword:6
+   "FriendlyName"=LOC_FRIENDLY_IRCOMM
+   "DevConfig"=hex: 10,00, 00,00, 02,00,00,00, 10,01,00,00, 00,4B,00,00, 00,00, 08, 00, 00, 00,00,00,00
+
+[HKEY_CURRENT_USER\ControlPanel\Volume]
+    "Key"=dword:0	; Keyclicks: 1=soft, 0x10002=loud
+    "Screen"=dword:0	; ScreenTaps: 1=soft, 0x10002=loud
+
+; Default display driver
+[HKEY_LOCAL_MACHINE\HARDWARE\DEVICEMAP\TOUCH]
+IF _TGTPLAT=PC !
+IF _TGTPLAT=CEPC !
+IF _TGTPLAT=PUZZLE !
+"DriverName"="touch.dll"
+ENDIF
+ENDIF
+ENDIF
+IF _TGTPLAT=PC
+"DriverName"="keybddr.dll"
+ENDIF
+IF _TGTPLAT=PUZZLE
+"DriverName"="keybddr.dll"
+ENDIF
+IF _TGTPLAT=CEPC
+"DriverName"="keybddr.dll"
+ENDIF
+
+; Redirector settings
+[HKEY_LOCAL_MACHINE\Comm\Redir]
+   ; Expose \NETWORK dir for mapped resources
+   "RegisterFSRoot"=dword:1
+
+;
+; ACM Drivers
+;
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\CODEC_CEGSM]
+   "Prefix"="ACM"
+   "Dll"="cegsm.dll"
+   "Index"=dword:1
+   "Order"=dword:0
+
+[HKEY_LOCAL_MACHINE\Drivers\BuiltIn\FILTER]
+   "Prefix"="ACM"
+   "Dll"="msfilter.dll"
+   "Index"=dword:2
+   "Order"=dword:0
+
+
+; Set memory thresholds for Hibernate
+[HKEY_LOCAL_MACHINE\SYSTEM\Hibernate]
+	"Bytes"=dword:20000
+	"Pages"=dword:28
+
+;
+; FONT linking and EUDC
+;
+
+IF COUNTRY=USA
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\FontLink\SystemLink]
+          "Arial"="\\Windows\\msgothic.ttc,MS PGothic"
+ "Microsoft Logo"="\\Windows\\msgothic.ttc,MS PGothic"
+"Times New Roman"="\\Windows\\msgothic.ttc,MS Gothic"
+         "Tahoma"="\\Windows\\msgothic.ttc,MS PGothic"
+    "Courier New"="\\Windows\\msgothic.ttc,MS PGothic"
+         "Symbol"="\\Windows\\msgothic.ttc,MS Gothic"
+        "Kino MT"="\\Windows\\msgothic.ttc,MS Gothic"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\FontLink\SkipTable]
+        "Tahoma"="005c,00a5,007e,0391-03c9,2026,2116,221a,25a0-25ff"
+
+[HKEY_CURRENT_USER\EUDC]
+"SystemDefaultEUDCFont"="\\Windows\\eudc.tte"
+"Times New Roman"="\\Windows\\test01.tte"
+"Tahoma"="\\Windows\\test03.tte"
+"Arial"="\\Windows\\test02.tte"
+"Impact"="\\Windows\\test02.tte"					
+"Courier New"="\\Windows\\test03.tte"
+"Microsoft Logo"="\\Windows\\test03.tte"
+"Symbol"="\\Windows\\test03.tte"
+
+"MS PGothic"="\\Windows\\test03.tte"
+"MS Gothic"="\\Windows\\test01.tte"
+ENDIF COUNTRY=USA
+
+
+
+IF COUNTRY=JAPAN
+[HKEY_LOCAL_MACHINE\SYSTEM\GDI]
+   "FontLinkMethods"=dword:1
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\FontLink\SystemLink]
+          "Arial"="\\Windows\\msgothic.ttc,‚l‚r ‚oƒSƒVƒbƒN"
+ "Microsoft Logo"="\\Windows\\msgothic.ttc,‚c‚e‚o“Á‘¾ƒSƒVƒbƒN‘Ì"
+"Times New Roman"="\\Windows\\msgothic.ttc,‚l‚r ƒSƒVƒbƒN"
+         "Tahoma"="\\Windows\\msgothic.ttc,‚l‚r ‚oƒSƒVƒbƒN"
+    "Courier New"="\\Windows\\msgothic.ttc,‚l‚r ƒSƒVƒbƒN"
+         "Symbol"="\\Windows\\msgothic.ttc,‚c‚e“Á‘¾ƒSƒVƒbƒN‘Ì"
+        "Kino MT"="\\Windows\\msgothic.ttc,‚c‚e‚o“Á‘¾ƒSƒVƒbƒN‘Ì"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\FontLink\SkipTable]
+        "Tahoma"="005c,00a5,007e,0391-03c9,2026,2116,221a,25a0-25ff"
+
+[HKEY_CURRENT_USER\EUDC]
+"SystemDefaultEUDCFont"="\\Windows\\eudc.tte"
+"Times New Roman"="\\Windows\\test01.tte"
+"Tahoma"="\\Windows\\test03.tte"
+"Arial"="\\Windows\\test02.tte"
+"Impact"="\\Windows\\test02.tte"					
+"Courier New"="\\Windows\\test03.tte"
+"Microsoft Logo"="\\Windows\\test03.tte"
+"Symbol"="\\Windows\\test03.tte"
+
+"‚l‚r ‚oƒSƒVƒbƒN"="\\Windows\\test03.tte"
+"‚l‚r ƒSƒVƒbƒN"="\\Windows\\test01.tte"
+
+"‚c‚e‚o“Á‘¾ƒSƒVƒbƒN‘Ì"="\\Windows\\eudc.tte"
+"‚c‚e“Á‘¾ƒSƒVƒbƒN‘Ì"="\\Windows\\test03.tte"
+
+"‚c‚e‚oPOP‘Ì"="\\Windows\\eudc.tte"
+"‚c‚ePOP‘Ì"="\\Windows\\test03.tte"
+ENDIF COUNTRY=JAPAN
+
+
+IF COUNTRY=KOREA
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\FontLink\SystemLink]
+          "Tahoma"="\\Windows\\gl_ce.ttf,±¼¸²"
+           "Arial"="\\Windows\\gl_ce.ttf,±¼¸²"
+     "Courier New"="\\Windows\\gl_ce.ttf,±¼¸²"
+ "Times New Roman"="\\Windows\\gl_ce.ttf,±¼¸²"
+          "Symbol"="\\Windows\\gl_ce.ttf,±¼¸²"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\FontLink\SkipTable]
+        "Tahoma"="005c"
+;        "Arial"="005c"
+;        "Courier New"="005c"
+
+[HKEY_CURRENT_USER\EUDC]
+	"SystemDefaultEUDCFont"="\\Windows\\eudc.tte"
+
+[HKEY_LOCAL_MACHINE\SYSTEM\GDI]
+	"FontLinkMethods"=dword:1
+	
+
+ENDIF
+
+IF COUNTRY=CHS
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\FontLink\SystemLink]
+    "Tahoma"="\\Windows\\sunfon.ttf,SC_Song"
+    "Courier New"="\\Windows\\sunfon.ttf,SC_Song"
+	"Arial"="\\Windows\\sunfon.ttf,SC_Song"
+	"Times New Roman"="\\Windows\\sunfon.ttf,SC_Song"
+	"Symbol"="\\Windows\\sunfon.ttf,SC_Song"
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\FontLink\SkipTable]
+	"Tahoma"="005c,00a5,007e,0391-03c9,2026,2116,221a,25a0-25ff"
+	"Arial"="005c"
+	"Courier New"="005c"
+
+ENDIF COUNTRY=CHS
+
+
+IF COUNTRY=CHT
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\FontLink\SystemLink]
+    "Tahoma"="\\Windows\\mingliu.ttf,MingLiu"
+    "Courier New"="\\Windows\\mingliu.ttf,MingLiu"
+	"Arial"="\\Windows\\mingliu.ttf,MingLiu"
+	"Times New Roman"="\\Windows\\mingliu.ttf,MingLiu"
+	"Symbol"="\\Windows\\mingliu.ttf,MingLiu"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\FontLink\SkipTable]
+	"Tahoma"="005c,00a5,007e,0391-03c9,2026,2116,221a,25a0-25ff"
+	"Arial"="005c"
+	"Courier New"="005c"
+
+[HKEY_LOCAL_MACHINE\SYSTEM\GDI]
+	 "FontLinkMethods"=dword:1
+
+ENDIF COUNTRY=CHT
+
+
+; ---------------------------------------------------------------------------
+; IESample registry keys
+; ---------------------------------------------------------------------------
+
+;
+; Default URLs
+;
+[HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main]
+IF COUNTRY=JAPAN !
+    "Start Page"="http://home.microsoft.com"
+    "Search Page"="http://www.msn.com/access/allinone.htm"
+ENDIF
+IF COUNTRY=JAPAN
+    "Start Page"="http://www.jp.msn.com/"
+    "Search Page"="http://www.yahoo.co.jp/"
+ENDIF
+
+
+;
+; Register IESample for web pages
+;
+[HKEY_CLASSES_ROOT\htmlfile\shell\open\command]
+@="iesample.exe %1"
+[HKEY_CLASSES_ROOT\htmlfile\DefaultIcon]
+@="iesample.exe,0"
+
+;
+; Register IESample for URL Protocols
+;
+[HKEY_CLASSES_ROOT\http\DefaultIcon]
+@="iesample.exe,0"
+[HKEY_CLASSES_ROOT\http\Shell\Open\Command]
+@="iesample.exe %1"
+
+[HKEY_CLASSES_ROOT\https\DefaultIcon]
+@="iesample.exe,0"
+[HKEY_CLASSES_ROOT\https\Shell\Open\Command]
+@="iesample.exe %1"
+
+[HKEY_CLASSES_ROOT\ftp\DefaultIcon]
+@="iesample.exe,0"
+[HKEY_CLASSES_ROOT\ftp\Shell\Open\Command]
+@="iesample.exe %1"
+
+
+; ---------------------------------------------------------------------------
+; WININET
+;----------------------------------------------------------------------------
+
+;
+;   Default username
+;
+[HKEY_LOCAL_MACHINE\Ident]
+    "Username"="guest"
+    "Desc"="Sample Internet Explorer product"
+
+;
+;    Proxy settings
+;
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings]
+IF WINCESHIP !
+    "ProxyEnable"=dword:1
+    "ProxyServer"="itgproxy:80"
+    "ProxyOverride"="<local>"
+ENDIF
+    "EnableAutodial"=dword:0
+
+;
+; ---------------------------------------------------------------------------
+; registry keys for cache paths
+;
+;  NOTE!!!: on per-user cache system, UserName
+;  (see value of HKEY_LOCAL_MACHINE\Ident key above) is part of the cache paths
+; --------------------------------------------------------------------------
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders]
+"Cache"="\\Windows\\Profiles\\guest\\Temporary Internet Files"
+"Cookies"="\\Windows\\Profiles\\guest\\Cookies"
+"History"="\\Windows\\Profiles\\guest\\History"
+
+;
+; ---------------------------------------------------------------------------
+; Registry keys for initial cache limits, limits are in Kb.
+; If these entries are not in the registry, initial Content cache limit
+; will be set to 30% of free Object store space, History and Cookies will
+; take 10% each.
+; ---------------------------------------------------------------------------
+
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Cache]
+"Signature"="Client UrlCache MMF Ver 4.7"
+"QuotaAdjustCheck"=dword:00000001
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Cache\Content]
+"CachePrefix"=""
+"CacheLimit"=dword:00000230
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Cache\Cookies]
+"CachePrefix"="Cookie:"
+"CacheLimit"=dword:000000BB
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Cache\History]
+"CachePrefix"="Visited:"
+"CacheLimit"=dword:000000BB
+
+
+
+; ---------------------------------------------------------------------------
+; URLMON
+;----------------------------------------------------------------------------
+
+;
+; MIME database
+;
+[HKEY_CLASSES_ROOT\.exe]
+@="exefile"
+"Content Type"="application/x-msdownload"
+
+[HKEY_CLASSES_ROOT\exefile\shell\open\command]
+@="\"%1\" %*"
+
+[HKEY_CLASSES_ROOT\MIME\Database\Content Type\application/x-msdownload]
+"Extension"=".exe"
+
+
+
+; ---------------------------------------------------------------------------
+; MSHTML
+;----------------------------------------------------------------------------
+
+;
+; This controls the JScript error dialog in the browser, disabling the dialog
+; also allows the JScript engine to ignore errors and continue running.
+;
+[HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main]
+"Error Dlg Displayed On Every Error"="no"
+
+
+; default code page - these can be changed
+IF COUNTRY=JAPAN !
+[HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\International]
+"Default_CodePage"=hex:e4,04,00,00
+"AcceptLanguage"="en-us"
+ENDIF
+
+IF COUNTRY=JAPAN
+[HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\International]
+"Default_CodePage"=hex:f4,c6,00,00
+"AcceptLanguage"="ja,en-us;q=0.5"
+ENDIF
+
+;-------------------
+; printing options
+;-------------------
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings]
+;   page orientation: 1=portrait, 2=landscape
+    "PageOrientation"=dword:1
+;   print quality: 1=draft, 2=final
+    "PrintQuality"=dword:1
+;   paper size: Letter, Legal, A4, B4 are supported
+;		1='letter', 5='Legal', 9='A4', 13='B5'
+    "PaperSize"=dword:1
+
+
+; ---------------------------------------------------------------------------
+; ShDocVW
+;----------------------------------------------------------------------------
+
+;
+; Audio feedback
+;
+[HKEY_CURRENT_USER\AppEvents\Schemes\Apps\Explorer\ActivatingDocument\.current]
+@="\\windows\\done.wav"
+[HKEY_CURRENT_USER\AppEvents\Schemes\Apps\Explorer\Navigating\.current]
+@="\\windows\\start.wav"
+[HKEY_CURRENT_USER\AppEvents\Schemes\Apps\Explorer\GoForward\.current]
+@="\\windows\\goforward.wav"
+[HKEY_CURRENT_USER\AppEvents\Schemes\Apps\Explorer\GoBack\.current]
+@="\\windows\\goback.wav"
+[HKEY_CURRENT_USER\AppEvents\Schemes\Apps\Explorer\Bonk\.current]
+@="\\windows\\bonk.wav"
+
+
+; ---------------------------------------------------------------------------
+; Windows Media Player helper registry settings
+;----------------------------------------------------------------------------
+
+[HKEY_CLASSES_ROOT\audiofile\shell\open\command]
+@="iesample.exe res://wmphlpr.dll/media.htm#%1"
+
+[HKEY_CLASSES_ROOT\audiofile\DefaultIcon]
+@="wmphlpr.dll,-110"
+
+[HKEY_CLASSES_ROOT\audiofile]
+@="Audio file"
+
+[HKEY_CLASSES_ROOT\videofile\shell\open\command]
+@="iesample.exe res://wmphlpr.dll/media.htm#%1"
+
+[HKEY_CLASSES_ROOT\videofile\DefaultIcon]
+@="wmphlpr.dll,-111"
+
+[HKEY_CLASSES_ROOT\videofile]
+@="Video file"
+
+[HKEY_CLASSES_ROOT\mms\shell\open\command]
+@="iesample.exe res://wmphlpr.dll/media.htm#%1"
+
+[HKEY_CLASSES_ROOT\mms]
+"URL Protocol"=""
+
+[HKEY_CLASSES_ROOT\mmsu\shell\open\command]
+@="iesample.exe res://wmphlpr.dll/media.htm#%1"
+
+[HKEY_CLASSES_ROOT\mmsu]
+"URL Protocol"=""
+
+[HKEY_CLASSES_ROOT\mmst\shell\open\command]
+@="iesample.exe res://wmphlpr.dll/media.htm#%1"
+
+[HKEY_CLASSES_ROOT\mmst]
+"URL Protocol"=""
+
+; WMP helper object that allow navigation to media HREF links
+[HKEY_CLASSES_ROOT\CLSID\{D00DA9D6-97AF-47f3-AB30-97AAB6AC54F9}\InprocServer32]
+@="wmphlpr.dll"
+
+[HKEY_CLASSES_ROOT\MIME\Database\Content Type\audio/wav]
+"CLSID"="{D00DA9D6-97AF-47f3-AB30-97AAB6AC54F9}"
+
+[HKEY_CLASSES_ROOT\MIME\Database\Content Type\audio/x-wav]
+"CLSID"="{D00DA9D6-97AF-47f3-AB30-97AAB6AC54F9}"
+
+[HKEY_CLASSES_ROOT\MIME\Database\Content Type\audio/x-ms-wma]
+"CLSID"="{D00DA9D6-97AF-47f3-AB30-97AAB6AC54F9}"
+
+[HKEY_CLASSES_ROOT\MIME\Database\Content Type\audio/x-ms-wax]
+"CLSID"="{D00DA9D6-97AF-47f3-AB30-97AAB6AC54F9}"
+
+[HKEY_CLASSES_ROOT\MIME\Database\Content Type\audio/aiff]
+"CLSID"="{D00DA9D6-97AF-47f3-AB30-97AAB6AC54F9}"
+
+[HKEY_CLASSES_ROOT\MIME\Database\Content Type\audio/x-aiff]
+"CLSID"="{D00DA9D6-97AF-47f3-AB30-97AAB6AC54F9}"
+
+[HKEY_CLASSES_ROOT\MIME\Database\Content Type\audio/basic]
+"CLSID"="{D00DA9D6-97AF-47f3-AB30-97AAB6AC54F9}"
+
+[HKEY_CLASSES_ROOT\MIME\Database\Content Type\audio/mid]
+"CLSID"="{D00DA9D6-97AF-47f3-AB30-97AAB6AC54F9}"
+
+[HKEY_CLASSES_ROOT\MIME\Database\Content Type\audio/midi]
+"CLSID"="{D00DA9D6-97AF-47f3-AB30-97AAB6AC54F9}"
+
+[HKEY_CLASSES_ROOT\MIME\Database\Content Type\audio/x-midi]
+"CLSID"="{D00DA9D6-97AF-47f3-AB30-97AAB6AC54F9}"
+
+[HKEY_CLASSES_ROOT\MIME\Database\Content Type\video/avi]
+"CLSID"="{D00DA9D6-97AF-47f3-AB30-97AAB6AC54F9}"
+
+[HKEY_CLASSES_ROOT\MIME\Database\Content Type\video/x-msvideo]
+"CLSID"="{D00DA9D6-97AF-47f3-AB30-97AAB6AC54F9}"
+
+[HKEY_CLASSES_ROOT\MIME\Database\Content Type\video/msvideo]
+"CLSID"="{D00DA9D6-97AF-47f3-AB30-97AAB6AC54F9}"
+
+[HKEY_CLASSES_ROOT\MIME\Database\Content Type\video/mpeg]
+"CLSID"="{D00DA9D6-97AF-47f3-AB30-97AAB6AC54F9}"
+
+[HKEY_CLASSES_ROOT\MIME\Database\Content Type\video/quicktime]
+"CLSID"="{D00DA9D6-97AF-47f3-AB30-97AAB6AC54F9}"
+
+[HKEY_CLASSES_ROOT\MIME\Database\Content Type\video/x-ms-asf]
+"CLSID"="{D00DA9D6-97AF-47f3-AB30-97AAB6AC54F9}"
+
+[HKEY_CLASSES_ROOT\MIME\Database\Content Type\video/x-ms-wm]
+"CLSID"="{D00DA9D6-97AF-47f3-AB30-97AAB6AC54F9}"
+
+[HKEY_CLASSES_ROOT\MIME\Database\Content Type\video/x-ms-wmv]
+"CLSID"="{D00DA9D6-97AF-47f3-AB30-97AAB6AC54F9}"
+
+[HKEY_CLASSES_ROOT\MIME\Database\Content Type\video/x-ms-wmx]
+"CLSID"="{D00DA9D6-97AF-47f3-AB30-97AAB6AC54F9}"
+
+[HKEY_CLASSES_ROOT\MIME\Database\Content Type\audio/x-mpegurl]
+"CLSID"="{D00DA9D6-97AF-47f3-AB30-97AAB6AC54F9}"
+
+[HKEY_CLASSES_ROOT\MIME\Database\Content Type\application/x-drm]
+"CLSID"="{D00DA9D6-97AF-47f3-AB30-97AAB6AC54F9}"

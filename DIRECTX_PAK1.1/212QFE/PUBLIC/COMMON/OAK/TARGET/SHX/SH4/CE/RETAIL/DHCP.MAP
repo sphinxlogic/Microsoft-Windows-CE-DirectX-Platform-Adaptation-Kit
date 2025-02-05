@@ -1,0 +1,216 @@
+ dhcp
+
+ Timestamp is 3817840e (Wed Oct 27 16:00:30 1999)
+
+ Preferred load address is 10000000
+
+ Start         Length     Name                   Class
+ 0001:00000000 0000032cH .rdata                  CODE
+ 0001:0000032c 00002fe8H .text                   CODE
+ 0001:00003314 00000028H .idata$2                CODE
+ 0001:0000333c 00000014H .idata$3                CODE
+ 0001:00003350 000000e4H .idata$4                CODE
+ 0001:00003434 000000d6H .idata$6                CODE
+ 0001:00003510 0000006aH .edata                  CODE
+ 0002:00000000 000000e4H .idata$5                DATA
+ 0002:000000e4 0000000cH .data                   DATA
+ 0002:000000f0 00000040H .bss                    DATA
+ 0003:00000000 00000130H .pdata                  DATA
+
+  Address         Publics by Value              Rva+Base     Lib:Object
+
+ 0001:0000001c       ??_C@_19HPKI@?$AAC?$AAo?$AAm?$AAm?$AA?$AA@ 1000101c     init.obj
+ 0001:00000028       ??_C@_1M@EONE@?$AAG?$AAr?$AAo?$AAu?$AAp?$AA?$AA@ 10001028     init.obj
+ 0001:00000034       ??_C@_19OIGE@?$AAN?$AAD?$AAI?$AAS?$AA?$AA@ 10001034     init.obj
+ 0001:00000040       ??_C@_1BI@OODD@?$AAP?$AAa?$AAr?$AAm?$AAs?$AA?2?$AAT?$AAc?$AAp?$AAI?$AAp?$AA?$AA@ 10001040     init.obj
+ 0001:00000058       ??_C@_1BG@HOCG@?$AAE?$AAn?$AAa?$AAb?$AAl?$AAe?$AAD?$AAH?$AAC?$AAP?$AA?$AA@ 10001058     init.obj
+ 0001:00000070       ??_C@_1CG@HHNM@?$AAI?$AAP?$AAI?$AAn?$AAt?$AAe?$AAr?$AAf?$AAa?$AAc?$AAe?$AAC?$AAo?$AAn?$AAt?$AAe?$AAx?$AAt?$AA?$AA@ 10001070     init.obj
+ 0001:00000098       ??_C@_1M@NNCO@?$AAC?$AAo?$AAm?$AAm?$AA?2?$AA?$AA@ 10001098     packet.obj
+ 0001:000000a4       ??_C@_1DC@FPDL@?$AA?2?$AAP?$AAa?$AAr?$AAm?$AAs?$AA?2?$AAT?$AAc?$AAp?$AAI?$AAp?$AA?2?$AAD?$AAh?$AAc?$AAp?$AAO?$AAp?$AAt@ 100010a4     packet.obj
+ 0001:000000d8       ??_C@_1BE@HHPB@?$AAn?$AAe?$AAt?$AAu?$AAi?$AA?4?$AAd?$AAl?$AAl?$AA?$AA@ 100010d8     dhcp.obj
+ 0001:000000ec       ??_C@_1BK@CJFM@?$AAG?$AAe?$AAt?$AAN?$AAe?$AAt?$AAS?$AAt?$AAr?$AAi?$AAn?$AAg?$AA?$AA@ 100010ec     dhcp.obj
+ 0001:00000108       ??_C@_1BE@NCEK@?$AAN?$AAe?$AAt?$AAM?$AAs?$AAg?$AAB?$AAo?$AAx?$AA?$AA@ 10001108     dhcp.obj
+ 0001:0000011c       ??_C@_1BI@BFOG@?$AAD?$AAh?$AAc?$AAp?$AAO?$AAp?$AAt?$AAi?$AAo?$AAn?$AAs?$AA?$AA@ 1000111c     dhcp.obj
+ 0001:00000134       ??_C@_1BO@MMAD@?$AAP?$AAr?$AAe?$AAv?$AAR?$AAe?$AAq?$AAO?$AAp?$AAt?$AAi?$AAo?$AAn?$AAs?$AA?$AA@ 10001134     dhcp.obj
+ 0001:00000154       ??_C@_1CA@LJOI@?$AAD?$AAh?$AAc?$AAp?$AAS?$AAe?$AAn?$AAd?$AAO?$AAp?$AAt?$AAi?$AAo?$AAn?$AAs?$AA?$AA@ 10001154     dhcp.obj
+ 0001:00000174       ??_C@_1BK@CNHJ@?$AA?2?$AAP?$AAa?$AAr?$AAm?$AAs?$AA?2?$AAT?$AAc?$AAp?$AAI?$AAp?$AA?$AA@ 10001174     dhcp.obj
+ 0001:00000190       ??_C@_1BM@DFEG@?$AAD?$AAh?$AAc?$AAp?$AAI?$AAP?$AAA?$AAd?$AAd?$AAr?$AAe?$AAs?$AAs?$AA?$AA@ 10001190     dhcp.obj
+ 0001:000001ac       ??_C@_1BO@CCEO@?$AAD?$AAh?$AAc?$AAp?$AAS?$AAu?$AAb?$AAn?$AAe?$AAt?$AAM?$AAa?$AAs?$AAk?$AA?$AA@ 100011ac     dhcp.obj
+ 0001:000001cc       ??_C@_1BG@MBJG@?$AAD?$AAh?$AAc?$AAp?$AAS?$AAe?$AAr?$AAv?$AAe?$AAr?$AA?$AA@ 100011cc     dhcp.obj
+ 0001:000001e4       ??_C@_1CG@HHLB@?$AAD?$AAh?$AAc?$AAp?$AAD?$AAe?$AAf?$AAa?$AAu?$AAl?$AAt?$AAG?$AAa?$AAt?$AAe?$AAw?$AAa?$AAy?$AA?$AA@ 100011e4     dhcp.obj
+ 0001:0000020c       ??_C@_1BA@OIEN@?$AAD?$AAh?$AAc?$AAp?$AAD?$AAN?$AAS?$AA?$AA@ 1000120c     dhcp.obj
+ 0001:0000021c       ??_C@_1BC@HCBF@?$AAD?$AAh?$AAc?$AAp?$AAW?$AAI?$AAN?$AAS?$AA?$AA@ 1000121c     dhcp.obj
+ 0001:00000230       ??_C@_1CC@LLMC@?$AAL?$AAe?$AAa?$AAs?$AAe?$AAO?$AAb?$AAt?$AAa?$AAi?$AAn?$AAe?$AAd?$AAL?$AAo?$AAw?$AA?$AA@ 10001230     dhcp.obj
+ 0001:00000254       ??_C@_1CE@HJMD@?$AAL?$AAe?$AAa?$AAs?$AAe?$AAO?$AAb?$AAt?$AAa?$AAi?$AAn?$AAe?$AAd?$AAH?$AAi?$AAg?$AAh?$AA?$AA@ 10001254     dhcp.obj
+ 0001:00000278       ??_C@_1M@CGGJ@?$AAL?$AAe?$AAa?$AAs?$AAe?$AA?$AA@ 10001278     dhcp.obj
+ 0001:00000284       ??_C@_15LKDN@?$AAT?$AA1?$AA?$AA@ 10001284     dhcp.obj
+ 0001:0000028c       ??_C@_15EMAG@?$AAT?$AA2?$AA?$AA@ 1000128c     dhcp.obj
+ 0001:00000294       ??_C@_1BK@JKOL@?$AAD?$AAh?$AAc?$AAp?$AAM?$AAa?$AAx?$AAR?$AAe?$AAt?$AAr?$AAy?$AA?$AA@ 10001294     dhcp.obj
+ 0001:000002b0       ??_C@_1CM@CMFI@?$AAD?$AAh?$AAc?$AAp?$AAI?$AAn?$AAi?$AAt?$AAD?$AAe?$AAl?$AAa?$AAy?$AAI?$AAn?$AAt?$AAe?$AAr?$AAv?$AAa@ 100012b0     dhcp.obj
+ 0001:000002dc       ??_C@_1CE@FCMH@?$AAD?$AAh?$AAc?$AAp?$AAR?$AAe?$AAt?$AAr?$AAy?$AAD?$AAi?$AAa?$AAl?$AAo?$AAg?$AAu?$AAe?$AA?$AA@ 100012dc     dhcp.obj
+ 0001:00000300       ??_C@_1BI@KPCK@?$AAT?$AAc?$AAp?$AAI?$AAp?$AA?2?$AAP?$AAa?$AAr?$AAm?$AAs?$AA?$AA@ 10001300     dhcp.obj
+ 0001:00000318       ??_C@_1BE@EIFH@?$AAD?$AAN?$AAS?$AAD?$AAo?$AAm?$AAa?$AAi?$AAn?$AA?$AA@ 10001318     dhcp.obj
+ 0001:0000032c       _DhcpRegister              1000132c f   init.obj
+ 0001:00000348       _dllentry                  10001348 f   init.obj
+ 0001:0000034c       _CheckInitAdapters         1000134c f   init.obj
+ 0001:000004e0       _Dhcp                      100014e0 f   init.obj
+ 0001:000005a4       _BuildDhcpPkt              100015a4 f   packet.obj
+ 0001:00000874       _Tvert                     10001874 f   packet.obj
+ 0001:000008c4       _TranslatePkt              100018c4 f   packet.obj
+ 0001:00000d68       _DhcpSendDown              10001d68 f   packet.obj
+ 0001:00000ddc       _SendDhcpPkt               10001ddc f   packet.obj
+ 0001:00001024       _CallGetNetString          10002024 f i dhcp.obj
+ 0001:000010b8       _CallNetMsgBox             100020b8 f i dhcp.obj
+ 0001:000011c4       _mul64_32_64               100021c4 f   dhcp.obj
+ 0001:000012b8       _add64_64_64               100022b8 f   dhcp.obj
+ 0001:000013c4       _sub64_64_64               100023c4 f   dhcp.obj
+ 0001:000014d0       _div64_32_64               100024d0 f   dhcp.obj
+ 0001:00001540       _GetXid                    10002540 f   dhcp.obj
+ 0001:000015a4       _NewDhcpInfo               100025a4 f   dhcp.obj
+ 0001:000015dc       _FreeDhcpInfo              100025dc f   dhcp.obj
+ 0001:00001620       __FindDhcp                 10002620 f   dhcp.obj
+ 0001:000016a8       _StringToAddr              100026a8 f   dhcp.obj
+ 0001:00001760       _AddrToString              10002760 f   dhcp.obj
+ 0001:00001804       _InsSort                   10002804 f   dhcp.obj
+ 0001:00001840       _Convert                   10002840 f   dhcp.obj
+ 0001:00001888       _GetReqOptions             10002888 f   dhcp.obj
+ 0001:00001b4c       _GetDhcpConfig             10002b4c f   dhcp.obj
+ 0001:00001f70       _SetDhcpConfig             10002f70 f   dhcp.obj
+ 0001:00002368       _TakeNetDown               10003368 f   dhcp.obj
+ 0001:00002448       _PutInWorkerQ              10003448 f   dhcp.obj
+ 0001:0000249c       _ProcessExpire             1000349c f   dhcp.obj
+ 0001:00002528       _CalcMidwayTime            10003528 f   dhcp.obj
+ 0001:00002628       _CalcT1Time                10003628 f   dhcp.obj
+ 0001:00002684       _DhcpInitSock              10003684 f   dhcp.obj
+ 0001:00002764       _ProcessT2                 10003764 f   dhcp.obj
+ 0001:00002924       _ProcessT1                 10003924 f   dhcp.obj
+ 0001:00002ae4       _PutNetUp                  10003ae4 f   dhcp.obj
+ 0001:00002c00       _GetParams                 10003c00 f   dhcp.obj
+ 0001:00002ed4       _RequestDHCPAddr           10003ed4 f   dhcp.obj
+ 0001:00002fb0       _DhcpWorkerThread          10003fb0 f   dhcp.obj
+ 0001:000030bc       _RegOpenKeyExW             100040bc f   coredll:COREDLL.dll
+ 0001:000030c8       _RegEnumKeyExW             100040c8 f   coredll:COREDLL.dll
+ 0001:000030d4       _RegCloseKey               100040d4 f   coredll:COREDLL.dll
+ 0001:000030e0       _Random                    100040e0 f   coredll:COREDLL.dll
+ 0001:000030ec       _GetCurrentFT              100040ec f   coredll:COREDLL.dll
+ 0001:000030f8       _CloseHandle               100040f8 f   coredll:COREDLL.dll
+ 0001:00003104       _CreateThread              10004104 f   coredll:COREDLL.dll
+ 0001:00003110       _QueryPerformanceCounter   10004110 f   coredll:COREDLL.dll
+ 0001:0000311c       _InitializeCriticalSection 1000411c f   coredll:COREDLL.dll
+ 0001:00003128       _memcpy                    10004128 f   coredll:COREDLL.dll
+ 0001:00003134       _memset                    10004134 f   coredll:COREDLL.dll
+ 0001:00003140       __modls                    10004140 f   coredll:COREDLL.dll
+ 0001:0000314c       __divls                    1000414c f   coredll:COREDLL.dll
+ 0001:00003158       _memcmp                    10004158 f   coredll:COREDLL.dll
+ 0001:00003164       _RegQueryValueExW          10004164 f   coredll:COREDLL.dll
+ 0001:00003170       _LeaveCriticalSection      10004170 f   coredll:COREDLL.dll
+ 0001:0000317c       _GetTickCount              1000417c f   coredll:COREDLL.dll
+ 0001:00003188       __modlu                    10004188 f   coredll:COREDLL.dll
+ 0001:00003194       __divlu                    10004194 f   coredll:COREDLL.dll
+ 0001:000031a0       _EnterCriticalSection      100041a0 f   coredll:COREDLL.dll
+ 0001:000031ac       _SetLastError              100041ac f   coredll:COREDLL.dll
+ 0001:000031b8       _LoadLibraryW              100041b8 f   coredll:COREDLL.dll
+ 0001:000031c4       _FreeLibrary               100041c4 f   coredll:COREDLL.dll
+ 0001:000031d0       _GetProcAddressW           100041d0 f   coredll:COREDLL.dll
+ 0001:000031dc       _IsAPIReady                100041dc f   coredll:COREDLL.dll
+ 0001:000031e8       _FormatMessageW            100041e8 f   coredll:COREDLL.dll
+ 0001:000031f4       _LocalFree                 100041f4 f   coredll:COREDLL.dll
+ 0001:00003200       __uitoi64                  10004200 f   coredll:COREDLL.dll
+ 0001:0000320c       __muli64                   1000420c f   coredll:COREDLL.dll
+ 0001:00003218       __lshi64                   10004218 f   coredll:COREDLL.dll
+ 0001:00003224       __rshi64                   10004224 f   coredll:COREDLL.dll
+ 0001:00003230       __i64toui                  10004230 f   coredll:COREDLL.dll
+ 0001:0000323c       __bandi64                  1000423c f   coredll:COREDLL.dll
+ 0001:00003248       _LocalAlloc                10004248 f   coredll:COREDLL.dll
+ 0001:00003254       _DeleteCriticalSection     10004254 f   coredll:COREDLL.dll
+ 0001:00003260       _RegEnumValueW             10004260 f   coredll:COREDLL.dll
+ 0001:0000326c       _RegDeleteValueW           1000426c f   coredll:COREDLL.dll
+ 0001:00003278       _CompareFileTime           10004278 f   coredll:COREDLL.dll
+ 0001:00003284       _GetLastError              10004284 f   coredll:COREDLL.dll
+ 0001:00003290       _Sleep                     10004290 f   coredll:COREDLL.dll
+ 0001:0000329c       _GetRegSZValue             1000429c f   cxport:CXPORT.dll
+ 0001:000032a8       _GetRegDWORDValue          100042a8 f   cxport:CXPORT.dll
+ 0001:000032b4       _SetRegBinaryValue         100042b4 f   cxport:CXPORT.dll
+ 0001:000032c0       _CTEStopFTimer             100042c0 f   cxport:CXPORT.dll
+ 0001:000032cc       _GetRegBinaryValue         100042cc f   cxport:CXPORT.dll
+ 0001:000032d8       _GetRegMultiSZValue        100042d8 f   cxport:CXPORT.dll
+ 0001:000032e4       _SetRegDWORDValue          100042e4 f   cxport:CXPORT.dll
+ 0001:000032f0       _SetRegSZValue             100042f0 f   cxport:CXPORT.dll
+ 0001:000032fc       _SetRegMultiSZValue        100042fc f   cxport:CXPORT.dll
+ 0001:00003308       _CTEStartFTimer            10004308 f   cxport:CXPORT.dll
+ 0001:00003314       __IMPORT_DESCRIPTOR_COREDLL 10004314     coredll:COREDLL.dll
+ 0001:00003328       __IMPORT_DESCRIPTOR_CXPORT 10004328     cxport:CXPORT.dll
+ 0001:0000333c       __NULL_IMPORT_DESCRIPTOR   1000433c     coredll:COREDLL.dll
+ 0002:00000000       __imp__IsAPIReady          10005000     coredll:COREDLL.dll
+ 0002:00000004       __imp__RegOpenKeyExW       10005004     coredll:COREDLL.dll
+ 0002:00000008       __imp__RegEnumKeyExW       10005008     coredll:COREDLL.dll
+ 0002:0000000c       __imp__wcscmp              1000500c     coredll:COREDLL.dll
+ 0002:00000010       __imp__wcscpy              10005010     coredll:COREDLL.dll
+ 0002:00000014       __imp__RegCloseKey         10005014     coredll:COREDLL.dll
+ 0002:00000018       __imp__Random              10005018     coredll:COREDLL.dll
+ 0002:0000001c       __imp__GetCurrentFT        1000501c     coredll:COREDLL.dll
+ 0002:00000020       __imp__CloseHandle         10005020     coredll:COREDLL.dll
+ 0002:00000024       __imp__CreateThread        10005024     coredll:COREDLL.dll
+ 0002:00000028       __imp__QueryPerformanceCounter 10005028     coredll:COREDLL.dll
+ 0002:0000002c       __imp__InitializeCriticalSection 1000502c     coredll:COREDLL.dll
+ 0002:00000030       __imp__memcpy              10005030     coredll:COREDLL.dll
+ 0002:00000034       __imp__memset              10005034     coredll:COREDLL.dll
+ 0002:00000038       __imp___modls              10005038     coredll:COREDLL.dll
+ 0002:0000003c       __imp___divls              1000503c     coredll:COREDLL.dll
+ 0002:00000040       __imp__memcmp              10005040     coredll:COREDLL.dll
+ 0002:00000044       __imp__RegQueryValueExW    10005044     coredll:COREDLL.dll
+ 0002:00000048       __imp__wcscat              10005048     coredll:COREDLL.dll
+ 0002:0000004c       __imp__LeaveCriticalSection 1000504c     coredll:COREDLL.dll
+ 0002:00000050       __imp__GetTickCount        10005050     coredll:COREDLL.dll
+ 0002:00000054       __imp___modlu              10005054     coredll:COREDLL.dll
+ 0002:00000058       __imp___divlu              10005058     coredll:COREDLL.dll
+ 0002:0000005c       __imp__EnterCriticalSection 1000505c     coredll:COREDLL.dll
+ 0002:00000060       __imp__SetLastError        10005060     coredll:COREDLL.dll
+ 0002:00000064       __imp__LoadLibraryW        10005064     coredll:COREDLL.dll
+ 0002:00000068       __imp__FreeLibrary         10005068     coredll:COREDLL.dll
+ 0002:0000006c       __imp__GetProcAddressW     1000506c     coredll:COREDLL.dll
+ 0002:00000070       __imp__wcslen              10005070     coredll:COREDLL.dll
+ 0002:00000074       __imp__FormatMessageW      10005074     coredll:COREDLL.dll
+ 0002:00000078       __imp__LocalFree           10005078     coredll:COREDLL.dll
+ 0002:0000007c       __imp___uitoi64            1000507c     coredll:COREDLL.dll
+ 0002:00000080       __imp___muli64             10005080     coredll:COREDLL.dll
+ 0002:00000084       __imp___lshi64             10005084     coredll:COREDLL.dll
+ 0002:00000088       __imp___rshi64             10005088     coredll:COREDLL.dll
+ 0002:0000008c       __imp___i64toui            1000508c     coredll:COREDLL.dll
+ 0002:00000090       __imp___bandi64            10005090     coredll:COREDLL.dll
+ 0002:00000094       __imp__LocalAlloc          10005094     coredll:COREDLL.dll
+ 0002:00000098       __imp__DeleteCriticalSection 10005098     coredll:COREDLL.dll
+ 0002:0000009c       __imp__RegEnumValueW       1000509c     coredll:COREDLL.dll
+ 0002:000000a0       __imp__mbstowcs            100050a0     coredll:COREDLL.dll
+ 0002:000000a4       __imp__RegDeleteValueW     100050a4     coredll:COREDLL.dll
+ 0002:000000a8       __imp__CompareFileTime     100050a8     coredll:COREDLL.dll
+ 0002:000000ac       __imp__GetLastError        100050ac     coredll:COREDLL.dll
+ 0002:000000b0       __imp__Sleep               100050b0     coredll:COREDLL.dll
+ 0002:000000b4       \177COREDLL_NULL_THUNK_DATA 100050b4     coredll:COREDLL.dll
+ 0002:000000b8       __imp__GetRegMultiSZValue  100050b8     cxport:CXPORT.dll
+ 0002:000000bc       __imp__GetRegDWORDValue    100050bc     cxport:CXPORT.dll
+ 0002:000000c0       __imp__SetRegBinaryValue   100050c0     cxport:CXPORT.dll
+ 0002:000000c4       __imp__CTEStopFTimer       100050c4     cxport:CXPORT.dll
+ 0002:000000c8       __imp__GetRegBinaryValue   100050c8     cxport:CXPORT.dll
+ 0002:000000cc       __imp__GetRegSZValue       100050cc     cxport:CXPORT.dll
+ 0002:000000d0       __imp__SetRegDWORDValue    100050d0     cxport:CXPORT.dll
+ 0002:000000d4       __imp__SetRegSZValue       100050d4     cxport:CXPORT.dll
+ 0002:000000d8       __imp__SetRegMultiSZValue  100050d8     cxport:CXPORT.dll
+ 0002:000000dc       __imp__CTEStartFTimer      100050dc     cxport:CXPORT.dll
+ 0002:000000e0       \177CXPORT_NULL_THUNK_DATA 100050e0     cxport:CXPORT.dll
+ 0002:000000e4       _v_aDftReqOptions          100050e4     dhcp.obj
+ 0002:000000f0       _v_fXidInit                100050f0     <common>
+ 0002:000000f4       _v_pWaitingList            100050f4     <common>
+ 0002:00000100       _v_GlobalListLock          10005100     <common>
+ 0002:00000114       _v_pEstablishedList        10005114     <common>
+ 0002:00000118       _v_fWorkerThread           10005118     <common>
+ 0002:0000011c       _v_cXid                    1000511c     <common>
+ 0002:00000120       _v_apSocketFns             10005120     <common>
+ 0002:00000124       _pfnSetDHCPNTE             10005124     <common>
+ 0002:00000128       _pfnIPSetNTEAddr           10005128     <common>
+ 0002:0000012c       _v_apAfdFns                1000512c     <common>
+
+ entry point at        0001:00000348
+
+ Static symbols
+

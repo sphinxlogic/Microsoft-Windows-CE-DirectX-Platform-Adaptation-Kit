@@ -1,0 +1,49 @@
+//==========================================================================;
+//
+//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
+//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
+//  PURPOSE.
+//
+//  Copyright (c) 1998 - 2000  Microsoft Corporation.  All Rights Reserved.
+//
+//--------------------------------------------------------------------------;
+// wmphlpr.idl : IDL source for wmphlpr.dll
+
+// This file will be processed by the MIDL tool to
+// produce the type library (wmphlpr.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+import "urlmon.idl";
+	
+	[
+		object,
+		uuid(3478A2DE-B06F-4e2a-9C30-7002A8B75C97),
+		helpstring("IWMPHelper Interface"),
+		pointer_default(unique)
+	]
+	interface IWMPHelper : IUnknown
+	{
+	};
+
+[
+	uuid(0984B40D-FE16-484d-9810-CE0B6466A4D5),
+	version(1.0),
+	helpstring("wmphlpr 1.0 Type Library")
+]
+library WMPHLPRLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	
+	[
+		uuid(D00DA9D6-97AF-47f3-AB30-97AAB6AC54F9),
+		helpstring("WMPHelper Class")
+	]
+	coclass WMPHelper
+	{
+		[default] interface IWMPHelper;
+	};
+};

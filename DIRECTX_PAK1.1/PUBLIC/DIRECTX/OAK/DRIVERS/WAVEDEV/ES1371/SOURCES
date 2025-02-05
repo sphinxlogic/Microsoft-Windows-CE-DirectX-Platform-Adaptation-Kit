@@ -1,0 +1,36 @@
+
+TARGETNAME=es1371
+
+CDEFINES=-D$(_TGTPLAT)
+
+!ifdef DOSYSGEN
+
+TARGETTYPE=LIBRARY
+TARGETDEFNAME=$(TARGETNAME)
+WINCETARGETFILE0=$(_RELEASELIBDIR)\$(TARGETDEFNAME).def
+
+!else
+
+TARGETTYPE=DYNLINK
+
+TARGETLIBS=$(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\coredll.lib
+SOURCELIBS= \
+   $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\wavemdd.lib \
+   $(_COMMONOAKROOT)\lib\$(_CPUINDPATH)\ceddk.lib \
+   $(_COMMONSDKROOT)\lib\$(_CPUINDPATH)\ntcompat.lib \
+   $(_PUBLICROOT)\directx\oak\lib\$(_CPUINDPATH)\IrqMap.lib 
+
+
+DLLENTRY=dllentry
+
+!endif
+
+
+INCLUDES=..\..\inc
+
+SOURCES=wavepdd.cpp     \
+        es1371.cpp      \
+        hw_uart.cpp     \
+        hw_ac97.cpp     \
+        hw_pwr.cpp      
+

@@ -1,0 +1,12 @@
+LIBRARY	MIXERAPI
+
+EXPORTS mixerClose  
+	mixerGetControlDetails 
+	mixerGetDevCaps 
+	mixerGetID 
+	mixerGetLineControls 
+	mixerGetLineInfo 
+	mixerGetNumDevs 
+	mixerMessage 
+	mixerOpen 
+	mixerSetControlDetails 
